@@ -1,0 +1,16 @@
+Django
+python-dotenv
+pymysql
+mysqlclient
+drf-yasg
+django-rest-swagger
+setuptools
+djangorestframework-gis
+chromadb
+langchain 
+llama_index 
+openai 
+chromadb 
+PyMuPDF
+langchain-community
+selenium

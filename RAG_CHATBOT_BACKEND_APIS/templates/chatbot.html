@@ -1,0 +1,23 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chatbot</title>
+
+    <!-- Load jQuery First -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script>
+        window.addEventListener("load", function() {
+            var script = document.createElement("script");
+            script.src = "http://127.0.0.1:8000/static/chat-widget/chat-loader.js";
+            document.head.appendChild(script);
+        });
+    </script>
+
+</head>
+<body>
+  <h1>Chatbot Integration</h1>
+</body>
+</html>

@@ -1,0 +1,1274 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block title %}Admin Create Chat bot{% endblock %}
+
+{% block content %}
+<style>
+    .darkmode {
+      background-color: black !important;
+      color: black !important;
+    }
+  
+    .chat-input-changer {
+      background-color: black !important;
+      color: white !important;
+    }
+  
+    .chat-display-name-changer {
+      color: white !important;
+    }
+  
+    .chatbot-footer {
+      background-color: gray;
+    }
+  
+    .color-fields {
+      padding: 0 !important;
+    }
+  
+    .chat-history-footer-changer {
+      background-color: black !important;
+      color: white !important;
+    }
+  
+    .color-field-helper {
+      margin-left: 0px !important;
+      width: 2.25em !important;
+      height: 2.25em !important;
+    }
+  
+    .chat-height {
+      height: calc(94vh - 19.8rem) !important;
+    }
+    .sticky-suggestion {
+      position: relative;
+      bottom: 100px;
+  }
+  
+  #sticky {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 5rem !important;
+  }
+  /* Chatbot pattern image */
+  {% if cfg.chatbot_background_pattern  %}
+    .chatbot-pattern {
+    background-image: url({{ cfg.chatbot_background_pattern.url }}) !important;
+  }
+  {% endif %}
+  
+  .top-bar-background {
+      background-color: {{ cfg.top_bar_background }} !important;
+  }
+  
+  .chatbot-background {
+    background-color : {{cfg.chatbot_background_color}} ;
+  }
+  
+  .chatbot-msg-background {
+      background-color: {{ cfg.bot_message_background }};
+      height: auto;
+      width: auto;
+          border-radius: 0 10px 10px 10px;
+  }
+  
+  .user-msg-background {
+      background-color: {{ cfg.user_message_background }};
+      height: auto;
+      width: auto;
+          border-radius: 10px 0px 10px 10px;
+  }
+  #chat-display-name{
+    color: {{ cfg.top_bar_textcolor }};
+  }
+  
+  
+  .chatbot-font-family {
+        font-family: {{ cfg.font_family }} !important;
+  }
+  
+  .chatbot-font-size {
+        font-family: {{ cfg.font_size }} !important;
+  }
+  
+  #chatbot-initial-messages{
+    color: {{ cfg.bot_message_color }} !important;
+    padding: 20px;
+    font-size:15px;
+    font-weight: 400;
+    font-weight: 400;
+  }
+  .user-msg-color{
+    color: {{ cfg.user_message_color }};
+     padding: 20px;
+     font-size:15px;
+     font-weight: 400;
+  }
+  
+  .avatar {
+      width: 3rem !important;
+      height: 3rem !important;
+      cursor: pointer;
+  }
+  .sticky-powerdby {
+      background: lightgray;
+  }
+   #footerContainer {
+          width: 420px;
+          min-height: 100px;
+          border: 1px solid #ccc;
+          padding: 10px;
+          box-sizing: border-box;
+          overflow: hidden;
+      }
+  </style>
+  
+   <style>
+  .d-flex.overflow-hidden {
+      margin-top: 20px;
+      margin-left: 10px;
+  }
+  
+  .chat-message-wrapper.flex-grow-1 {
+      margin-right: 10px;
+  }
+          #chat-container {
+              position: sticky;
+          top:20px;
+              width: auto;
+          }
+  
+          #chat-header {
+          height: 100px;
+              background-color: purple;
+              color: #fff;
+              padding: 5px 5px 5px 5px;
+              text-align: center;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+          }
+  
+          #close-button {
+              cursor: pointer;
+              background: none;
+              border: none;
+              font-size: 1.2em;
+              color: #fff;
+          }
+  
+          #chat-window {
+              height: 68vh;
+              overflow-y: auto;
+              padding: 10px;
+          }
+  
+          .chat-history-body {
+              display: flex;
+              margin-bottom: 15px;
+              justify-content: flex-start;
+          }
+          .message-container2{
+              display: flex;
+              margin-bottom: 15px;
+              justify-content: flex-end;
+          }
+  
+          .message.left {
+              justify-content: flex-start;
+          }
+  
+          .message.right {
+              justify-content: flex-end;
+          }
+  
+          .message-content {
+              background-color: #e5e5e5;
+              border-radius: 10px;
+              padding: 10px;
+              max-width: 70%;
+          }
+  
+          .double-tick-time {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              color: #777;
+              font-size: 0.8em;
+              margin-top: 5px;
+          }
+          .double-tick-time2 {
+              display: flex;
+              justify-content: flex-end;
+              align-items: center;
+              color: #777;
+              font-size: 0.8em;
+              margin-top: 5px;
+          }
+  
+          .double-tick {
+              margin-right: 5px;
+              color: #4CAF50;
+          }
+  
+          .profile-icon {
+              width: 30px;
+              height: 30px;
+              border-radius: 50%;
+              margin-right: 10px;
+              background-color: #4CAF50; /* Sample color for receiver profile */
+          }
+  
+          #chat-input {
+              display: flex;
+              padding: 10px;
+              background-color: #eee;
+              align-items: center;
+          }
+  
+          #message-input {
+          height: 60px;
+              flex: 1;
+              padding: 8px;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              margin-right: 10px;
+          }
+  
+          #send-button {
+              background-color: {{ cfg.chatbot_theme }} !important;;
+              color: #fff;
+              padding: 8px 15px;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+          width: 160px;
+          height: 60px;
+          }
+          .bottom-tab{
+          height: auto;
+          padding: 5px 5px 5px 5px;
+              background-color: rgb(175, 174, 168);
+              color: #000;
+           display: flex;
+          justify-content: flex-start;
+          }
+  #chat-display-name {
+      font-size: 18px;
+      padding-left: 20px;
+  }
+  
+          .bottom-icon{
+              display: flex;
+              justify-content: flex-end;
+              position: relative;
+              padding-right: 25px;
+              margin: 13px 0 0 0;
+                  }
+          .img-bottom{
+  
+              height: 60px;
+              border-radius: 60px;
+          }
+          .message-number{
+              color: #fff;
+              background-color: #666cff;
+            height: 20px;
+            width: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0px -9px -11px -12px;
+  
+          }
+      </style>
+    {% include 'admin/page/chatbot/ChatbotMenu/chat-head.html' %}
+    {% include 'admin/page/chatbot/ChatbotMenu/chatbot-settings-menu.html' %}
+    <div class="row">
+        <div class="col-md-12">
+          <div class="card mb-4">
+            <h4 class="card-header">Appearance</h4>
+            <!-- Appearance -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm">
+      
+                  <form action="/chatbot-appearance-save/{{ data.chatbot_id }}" method="post" enctype="multipart/form-data" id="chatbot-form">
+                    {% csrf_token %}
+                    <div class="form-floating form-floating-outline mb-4">
+                      <input type="text" id="display-name" class="form-control form-control-sm" placeholder="Enter display name" name="display-name"
+                             value="{% if cfg.display_name %}{{ cfg.display_name }}{% else%}John{% endif %}"  maxlength="40">
+                      <label for="display-name">Display Name</label>
+                    </div>
+                    <div class="form-floating form-floating-outline mb-4">
+                      <textarea id="initial-messages" class="form-control form-control-sm"
+                                placeholder="Enter your initial message" rows="1" name="initial-messsage"
+                                maxlength="255">{% if cfg.initial_message %}{{ cfg.initial_message }}{% else%}Hi! What can I help with you ?{% endif %}</textarea>
+                      <label for="initial-messages">Initial message</label>
+                    </div>
+      
+                       <div class="form-floating form-floating-outline mb-4">
+      
+      
+                        <input type="text" id="footer_name" class="form-control form-control-sm" placeholder="Enter display name" name="footer_name"
+                               value="{% if cfg.footer_name %}{{ cfg.footer_name }}{% else%}Powered by My AI Solutions{% endif %}" maxlength="150">
+                        <label for="display-name">Footer Text </label>
+                      </div>
+      
+                    <!-- Chatbot color changes -->
+                    <div class="row mb-4">
+                      <div class="col-12">
+                        <div class="card">
+                          <div class="d-flex justify-content-between">
+                            <span class="card-header h6">Chatbot Color Customization</span>
+                            <span class="cursor-pointer color-reset d-flex align-items-center me-3" id="theme-reset"><i class="mdi mdi-restore text-danger"></i></span>
+                          </div>
+                          <div class="card-body">
+                            <!-- Theme Color -->
+                            <div class="row">
+                              <div class="col-6 mb-4">
+                                <p class="mb-2">
+                                  <small>Theme color</small>
+                                </p>
+                                <div class="input-group">
+                                  <div class="input-group-text color-fields form-check mb-0">
+                                    <input class="form-check-input m-auto color-field-helper" type="color" value="{% if cfg.chatbot_theme %}{{ cfg.chatbot_theme }}{% else%}#8d54a2{% endif %}"
+                                           id="chatbot-theme-input" name="chatbot-theme-input" connecter="theme-color">
+                                  </div>
+                                  <input type="text" class="form-control" id="theme-color"
+                                         placeholder="Select your theme color" value="{% if cfg.chatbot_theme %}{{ cfg.chatbot_theme }}{% else%}#8d54a2{% endif %}">
+                                </div>
+                              </div>
+                              <div class="col-6 mb-4">
+                                <p class="mb-2">
+                                  <small>Chatbot Background Color</small>
+                                </p>
+                                <div class="input-group">
+                                  <div class="input-group-text color-fields form-check mb-0">
+                                    <input class="form-check-input m-auto color-field-helper" type="color" value="{% if cfg.chatbot_background_color %}{{ cfg.chatbot_background_color }}{% else%}#e6e6e6{% endif %}" name="chatbot-bg-color-input"
+                                           id="chatbot-bg-color-input" connecter="chatbot-bg-color">
+                                  </div>
+                                  <input type="text" class="form-control" id="chatbot-bg-color" value="{% if cfg.chatbot_background_color %}{{ cfg.chatbot_background_color }}{% else%}#e6e6e6{% endif %}"
+                                         placeholder="Select your Chatbot background color">
+                                  <label for="chatbot-bg-color"></label>
+                                  <span class="input-group-text cursor-pointer color-reset d-none"><i class="mdi mdi-restore text-danger"></i></span>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- Theme Color -->
+      
+      
+                            <!-- Top color -->
+                            <div class="row">
+                              <div class="col-6 mb-4">
+                                <p class="mb-2">
+                                  <small>Top bar background color</small>
+                                </p>
+                                <div class="input-group">
+                                  <div class="input-group-text color-fields form-check mb-0">
+                                    <input class="form-check-input m-auto color-field-helper" type="color" value="{% if cfg.top_bar_background %}{{ cfg.top_bar_background }}{% else%}#8d54a2{% endif %}" name="top-bar-background-color-input"
+                                           id="top-bar-background-color-input" connecter="top-bar-background-color">
+                                  </div>
+                                  <input type="text" class="form-control" id="top-bar-background-color" value="{% if cfg.top_bar_background %}{{ cfg.top_bar_background }}{% else%}#8d54a2{% endif %}"
+                                         placeholder="Select your top background color">
+                                  <label for="top-bar-background-color"></label>
+                                  <span class="input-group-text cursor-pointer color-reset d-none"><i class="mdi mdi-restore text-danger"></i></span>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-4">
+                                <p class="mb-2">
+                                  <small>Top bar text color</small>
+                                </p>
+                                <div class="input-group">
+                                  <div class="input-group-text color-fields form-check mb-0">
+                                    <input class="form-check-input m-auto color-field-helper" type="color" value="{% if cfg.top_bar_textcolor %}{{ cfg.top_bar_textcolor }}{% else%}#000001{% endif %}" name="top-bar-text-color-input"
+                                           id="top-bar-text-color-input" connecter="top-bar-text-color">
+                                  </div>
+                                  <input type="text" class="form-control" id="top-bar-text-color"  value="{% if cfg.top_bar_textcolor %}{{ cfg.top_bar_textcolor }}{% else %}#000001{% endif %}"
+                                         placeholder="Select your top text color">
+                                  <label for="top-bar-text-color"></label>
+                                  <span class="input-group-text cursor-pointer color-reset d-none"><i class="mdi mdi-restore text-danger"></i></span>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- Top color -->
+      
+                            <!-- Chatbot color -->
+                            <div class="row">
+                              <div class="col-6 mb-4">
+                                <p class="mb-2">
+                                  <small>Chatbot Message background color</small>
+                                </p>
+                                <div class="input-group">
+                                  <div class="input-group-text color-fields form-check mb-0">
+                                    <input class="form-check-input m-auto color-field-helper" type="color" value="{% if cfg.bot_message_background %}{{ cfg.bot_message_background }}{% else%}#ffffff{% endif %}" name="chatbot-msg-background-color-input"
+                                           id="chatbot-msg-background-color-input" connecter="chatbot-msg-background-color">
+                                  </div>
+                                  <input type="text" class="form-control" id="chatbot-msg-background-color" value="{% if cfg.bot_message_background %}{{ cfg.bot_message_background }}{% else%}#ffffff{% endif %}"
+                                         placeholder="Select chatbot msg background color">
+                                  <label for="chatbot-msg-background-color"></label>
+                                  <span class="input-group-text cursor-pointer color-reset d-none"><i class="mdi mdi-restore text-danger"></i></span>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-4">
+                                <p class="mb-2">
+                                  <small>Chatbot Message text color</small>
+                                </p>
+                                <div class="input-group">
+                                  <div class="input-group-text color-fields form-check mb-0">
+                                    <input class="form-check-input m-auto color-field-helper" type="color" value="{% if cfg.bot_message_color %}{{ cfg.bot_message_color }}{% else%}#9797a4{% endif %}" name="chatbot-msg-text-color-input"
+                                           id="chatbot-msg-text-color-input" connecter="chatbot-msg-text-color">
+                                  </div>
+                                  <input type="text" class="form-control" id="chatbot-msg-text-color" value="{% if cfg.bot_message_color %}{{ cfg.bot_message_color }}{% else%}#9797a4{% endif %}"
+                                         placeholder="Select Chatbot text color">
+                                  <label for="chatbot-msg-text-color"></label>
+                                  <span class="input-group-text cursor-pointer color-reset d-none"><i class="mdi mdi-restore text-danger"></i></span>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- Chatbot color -->
+      
+                            <!-- User color -->
+                            <div class="row">
+                              <div class="col-6 mb-4">
+                                <p class="mb-2">
+                                  <small>User's Message background color</small>
+                                </p>
+                                <div class="input-group">
+                                  <div class="input-group-text color-fields form-check mb-0">
+                                    <input class="form-check-input m-auto color-field-helper" type="color" value="{% if cfg.user_message_background %}{{ cfg.user_message_background }}{% else%}#ffffff{% endif %}" name="user-msg-background-color-input"
+                                           id="user-msg-background-color-input" connecter="user-msg-background-color">
+                                  </div>
+                                  <input type="text" class="form-control" id="user-msg-background-color" value="{% if cfg.user_message_background %}{{ cfg.user_message_background }}{% else%}#ffffff{% endif %}"
+                                         placeholder="Select user's msg background color">
+                                  <label for="user-msg-background-color"></label>
+                                  <span class="input-group-text cursor-pointer color-reset d-none"><i class="mdi mdi-restore text-danger"></i></span>
+                                </div>
+                              </div>
+                              <div class="col-6 mb-4">
+                                <p class="mb-2">
+                                  <small>User's Message text color</small>
+                                </p>
+                                <div class="input-group">
+                                  <div class="input-group-text color-fields form-check mb-0">
+                                    <input class="form-check-input m-auto color-field-helper" type="color" value="{% if cfg.user_message_color %}{{ cfg.user_message_color }}{% else%}#000001{% endif %}" name="user-msg-text-color-input"
+                                           id="user-msg-text-color-input" connecter="user-msg-text-color">
+                                  </div>
+                                  <input type="text" class="form-control" id="user-msg-text-color" value="{% if cfg.user_message_color %}{{ cfg.user_message_color }}{% else%}#000001{% endif %}"
+                                         placeholder="Select user's text color">
+                                  <label for="user-msg-text-color"></label>
+                                  <span class="input-group-text cursor-pointer color-reset d-none"><i class="mdi mdi-restore text-danger"></i></span>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- User color -->
+      
+      
+      
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Chatbot color changes -->
+      
+                    <!-- Chatbot images -->
+                    <div class="row mb-4">
+                      <div class="col-12">
+                        <div class="card">
+                          <h5 class="card-header h6">Chatbot Images</h5>
+                          <div class="card-body">
+      
+                            <div class="row">
+                              <div class="d-flex flex-wrap mb-3 gap-2">
+                                <div class="col-12">
+                                  <div class="mb-3">
+                                    <label for="formFile" class="form-label">Chatbot Profile</label>
+                                    <input type="file" class="form-control" id="chatbot-image" accept="image/png, image/gif, image/jpeg" name="chatbot-image">
+                                    <input class="form-control" type="hidden" id="chatbot-image-url" name="chatbot-image-url" value="{% if cfg.chatbot_image is None %}{% static 'backend/img/avatars/1.png' %}{% endif %}">
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mb-2">
+                                <small>Select Chatbot Profile</small>
+                              </p>
+                              <div class="d-flex flex-wrap mb-3 gap-2" id="image-list-1">
+                                <button type="button" id="chatbot-image-remove" class="btn btn-icon rounded-pill btn-label-pinterest waves-effect align-self-center mt-1">
+                                  <i class="tf-icons mdi mdi-restore" data-bs-toggle="tooltip" data-bs-placement="top"
+                                     data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Default"></i>
+                                </button>
+      
+                                <div class="avatar d-inline-flex position-relative me-3">
+                                  <img class="rounded-circle drag-item cursor-pointer" src="{% static 'backend/images/user/avatar-8.jpg' %}"
+                                       alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top"
+                                       data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Profile">
+                                </div>
+      
+                                <div class="avatar d-inline-flex position-relative me-3">
+                                  <img class="rounded-circle drag-item cursor-pointer" src="{% static 'backend/img/avatars/1.png' %}"
+                                       alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top"
+                                       data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Profile">
+                                </div>
+      
+                                <div class="avatar d-inline-flex position-relative me-3">
+                                  <img class="rounded-circle drag-item cursor-pointer" src="{% static 'backend/images/user/avatar-3.jpg' %}"
+                                       alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top"
+                                       data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Profile">
+                                </div>
+      
+                                <div class="avatar d-inline-flex position-relative me-3" id="default-profile">
+                                  <img class="rounded-circle drag-item cursor-pointer"  src="{% static 'backend/images/user/avatar-4.jpg' %}"
+                                       alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top"
+                                       data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Profile">
+                                </div>
+      
+                                <div class="avatar d-inline-flex position-relative me-3">
+                                  <img class="rounded-circle drag-item cursor-pointer" src="{% static 'backend/images/user/avatar-5.jpg' %}"
+                                       alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top"
+                                       data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Profile">
+                                </div>
+      
+                                <div class="avatar d-inline-flex position-relative me-3">
+                                  <img class="rounded-circle drag-item cursor-pointer" src="{% static 'backend/images/user/avatar-6.jpg' %}"
+                                       alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top"
+                                       data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Profile">
+                                </div>
+      
+                              </div>
+                            </div>
+      
+                            <!-- // Chatbot background pattern -->
+                            <div class="row mb-4">
+                              <div class="col-12">
+                                <div class="mb-3">
+                                  <label for="formFile" class="form-label">Chatbot Pattern</label>
+                                  <input class="form-control" type="file" id="chatbot-bg-pattern" name="chatbot-bg-pattern"  accept=".jpg,.jpeg,.png,.gif" >
+                                  <input class="form-control" type="hidden" id="chatbot-bg-pattern-url" name="chatbot-bg-pattern-url">
+                                </div>
+                              </div>
+                              <p class="mb-2">
+                                <small>Select Background Pattern</small>
+                              </p>
+                              <div class="col-12">
+                                <div class="d-flex flex-wrap gap-2" id="image-list-2">
+                                  <button type="button" id="chatbot-bg-pattern-remove" class="btn btn-icon rounded-pill btn-label-pinterest waves-effect align-self-center mt-1">
+                                    <i class="tf-icons mdi mdi-restore" data-bs-toggle="tooltip" data-bs-placement="top"
+                                       data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Default"></i>
+                                  </button>
+                                  <div class="avatar d-inline-flex position-relative me-3">
+                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/img/pattern/pattern_1.jpg' %}" src_data="{% static 'backend/img/pattern/pattern_1.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                  </div>
+      
+                                  <div class="avatar d-inline-flex position-relative me-3">
+                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/img/pattern/pattern_2.jpg' %}" src_data="{% static 'backend/img/pattern/pattern_2.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                  </div>
+      
+                                  <div class="avatar d-inline-flex position-relative me-3">
+                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/img/pattern/pattern_3.jpg' %}" src_data="{% static 'backend/img/pattern/pattern_3.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                  </div>
+      
+                                  <div class="avatar d-inline-flex position-relative me-3">
+                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/img/pattern/pattern_4.jpg' %}" src_data="{% static 'backend/img/pattern/pattern_4.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                  </div>
+      
+                                  <div class="avatar d-inline-flex position-relative me-3">
+                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/img/pattern/pattern_5.jpg' %}" src_data="{% static 'backend/img/pattern/pattern_5.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                  </div>
+      
+                                  <div class="avatar d-inline-flex position-relative me-3">
+                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/img/pattern/pattern_7.png' %}" src_data="{% static 'backend/img/pattern/pattern_7.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                  </div>
+      
+      
+                                  <div class="avatar d-inline-flex position-relative me-3">
+                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/img/pattern/pattern_8.jpg' %}" src_data="{% static 'backend/img/pattern/pattern_8.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                  </div>
+                                  <div class="avatar d-inline-flex position-relative me-3">
+                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/img/pattern/pattern_9.jpg' %}" src_data="{% static 'backend/img/pattern/pattern_9.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                  </div>
+
+                                </div>
+                              </div>
+                            </div>
+                            <!-- Chatbot background pattern // -->
+                            <div class="row">
+                              <div class="col-12">
+                                <div class="mb-3">
+                                  <label for="formFile" class="form-label">Launcher Icon</label>
+                                  <input class="form-control" type="file" id="chatbot-launcher-icon" name="chatbot-launcher-icon"  accept=".jpg,.jpeg,.png,.gif" >
+                                  <input class="form-control" type="hidden" id="chatbot-launcher-icon-url" name="chatbot-launcher-icon-url">
+                                </div>
+                              </div>
+                              <p class="mb-2">
+                                <small>Select Launcher Icon</small>
+                              </p>
+                              <div class="col-12">
+                                <div class="d-flex flex-wrap gap-2" id="image-list-3">
+                                  <button type="button" id="chatbot-launcher-icon-remove" class="btn btn-icon rounded-pill btn-label-pinterest waves-effect align-self-center mt-1">
+                                    <i class="tf-icons mdi mdi-restore" data-bs-toggle="tooltip" data-bs-placement="top"
+                                       data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Default"></i>
+                                  </button>
+                                  <div class="avatar d-inline-flex position-relative me-3">
+                                    <img class="rounded-circle chatbot-launcher-icon cursor-pointer" src="{% static 'backend/img/launcher_icon/avatar-1.png' %}" src_data="{% static 'backend/img/launcher_icon/avatar-1.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                  </div>
+      
+                                  <div class="avatar d-inline-flex position-relative me-3">
+                                    <img class="rounded-circle chatbot-launcher-icon cursor-pointer" src="{% static 'backend/img/launcher_icon/avatar-2.png' %}" src_data="{% static 'backend/img/launcher_icon/avatar-2.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                  </div>
+      
+                                  <div class="avatar d-inline-flex position-relative me-3">
+                                    <img class="rounded-circle chatbot-launcher-icon cursor-pointer" src="{% static 'backend/img/launcher_icon/avatar-3.png' %}" src_data="{% static 'backend/img/launcher_icon/avatar-3.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                  </div>
+      
+                                  <div class="avatar d-inline-flex position-relative me-3">
+                                    <img class="rounded-circle chatbot-launcher-icon cursor-pointer" src="{% static 'backend/img/launcher_icon/avatar-4.png' %}" src_data="{% static 'backend/img/launcher_icon/avatar-4.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                  </div>
+      
+                                  <div class="avatar d-inline-flex position-relative me-3">
+                                    <img class="rounded-circle chatbot-launcher-icon cursor-pointer" src="{% static 'backend/img/launcher_icon/avatar-5.png' %}" src_data="{% static 'backend/img/launcher_icon/avatar-5.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                  </div>
+      
+                                </div>
+                              </div>
+                            </div>
+                            <!-- Chatbot launcher icon // -->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Chatbot images -->
+      
+                    <!-- // Chatbot Position -->
+                    <div class="row mb-4">
+                      <div class="col-12">
+                        <div class="card">
+                          <h5 class="card-header h6">Chatbot Size & Positions</h5>
+                          <div class="card-body">
+                            {% comment %}
+                            <div class="d-flex flex-wrap justify-content-start gap-5 mb-3">
+                              <div>
+                                <label for="widget-width" class="form-label"> Widget Width</label>
+                                <select id="widget-width" name="widget-width" class="form-select form-select-md" required>
+                                  <option value="20" {% if cfg.widget_width == 20 %}selected{% endif %}>Mini</option>
+                                  <option value="25" {% if cfg.widget_width == 25 %}selected{% endif %}>Medium</option>
+                                  <option value="30" {% if cfg.widget_width == 30 %}selected{% endif %}>XL</option>
+                                  <option value="35" {% if cfg.widget_width == 35 %}selected{% endif %}>XXL</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label for="widget-height" class="form-label"> Widget Height</label>
+                                <select id="widget-height" name="widget-height" class="form-select form-select-md" required>
+                                  <option value="20" {% if cfg.widget_width == 20 %}selected{% endif %}>Mini</option>
+                                  <option value="25" {% if cfg.widget_width == 25 %}selected{% endif %}>Medium</option>
+                                  <option value="30" {% if cfg.widget_width == 30 %}selected{% endif %}>XL</option>
+                                  <option value="35" {% if cfg.widget_width == 35 %}selected{% endif %}>XXL</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label for="widget-position" class="form-label">Widget Position</label>
+                                <select id="widget-position" name="widget-position" class="form-select form-select-md " required>
+                                  <option value="right" {% if cfg.widget_position == "right" %}selected{% endif %}>Right</option>
+                                  <option value="left" {% if cfg.widget_position == "left" %}selected{% endif %}>Left</option>
+                                </select>
+                              </div>
+                            </div>
+                            {% endcomment %}
+                            <div class="d-flex flex-wrap justify-content-start gap-5 mt-3">
+                              <div>
+                                <div class="m-0 pb-3 template-customizer-style w-100">
+                                  <label for="popup-notification" class="form-label d-block template-customizer-t-style_label">Popup Notifcations</label>
+                                  <label class="switch switch-sm">
+                                    <span class="switch-label template-customizer-t-style_switch_light">Off</span>
+                                    <input type="checkbox" class="switch-input" id="popup-notification" name="popup-notification" {% if cfg.show_popup_notification == True %}checked{% endif %} />
+                                    <span class="switch-toggle-slider">
+                                        <span class="switch-on"></span> <span class="switch-off"></span>
+                                      </span>
+                                    <span class="switch-label template-customizer-t-style_switch_dark">On</span>
+                                  </label>
+                                </div>
+                              </div>
+      
+                            {% comment %}
+                              <div>
+                                <label for="popup-notification-delay" class="form-label">Popup Notification Delay</label>
+                                <select id="popup-notification-delay" name="popup-notification-delay" class="form-control form-control-sm" disabled>
+                                  <option value="5" {% if cfg.delay_showing_popup_notification == 5 %}selected{% endif %}>5 Seconds</option>
+                                  <option value="10" {% if cfg.delay_showing_popup_notification == 10 %}selected{% endif %}>10 Seconds</option>
+                                  <option value="15" {% if cfg.delay_showing_popup_notification == 15 %}selected{% endif %}>15 Seconds</option>
+                                  <option value="20" {% if cfg.delay_showing_popup_notification == 20 %}selected{% endif %}>20 Seconds</option>
+                                  <option value="25" {% if cfg.delay_showing_popup_notification == 25 %}selected{% endif %}>25 Seconds</option>
+                                  <option value="30" {% if cfg.delay_showing_popup_notification == 30 %}selected{% endif %}>30 Seconds</option>
+                                </select>
+                              </div>
+                            {% endcomment %}
+                            </div>
+                          </div>
+                          <h5 class="card-header h6">Chatbot Font & Size</h5>
+                          <div class="card-body">
+                            <div class="d-flex flex-wrap mb-3 gap-5">
+                              <div>
+                                <label for="chatbot-font-style" class="form-label">Chatbot Font Style</label>
+                                <select id="chatbot-font-style" name="chatbot-font-style" class="form-select form-select-sm">
+                                  <option {% if cfg.font_family == "Arial, Helvetica, sans-serif" %}selected{% endif %} value="Arial, Helvetica, sans-serif">Arial</option>
+                                  <option {% if cfg.font_family == "Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif" %}selected{% endif %} value="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif">Default</option>
+                                  <option {% if cfg.font_family == "Arial Black, Gadget, sans-serif" %}selected{% endif %} value="Arial Black, Gadget, sans-serif">Arial Black</option>
+                                  <option {% if cfg.font_family == "Comic Sans MS, cursive, sans-serif" %}selected{% endif %} value="Comic Sans MS, cursive, sans-serif">Comic Sans MS</option>
+                                  <option {% if cfg.font_family == "Courier New, Courier, monospace" %}selected{% endif %} value="Courier New, Courier, monospace">Courier New</option>
+                                  <option {% if cfg.font_family == "Georgia, serif" %}selected{% endif %} value="Georgia, serif">Georgia</option>
+                                  <option {% if cfg.font_family == "Impact, Charcoal, sans-serif" %}selected{% endif %} value="Impact, Charcoal, sans-serif">Impact</option>
+                                  <option {% if cfg.font_family == "Lucida Console, Monaco, monospace" %}selected{% endif %} value="Lucida Console, Monaco, monospace">Lucida Console</option>
+                                  <option {% if cfg.font_family == "Lucida Sans Unicode, Lucida Grande, sans-serif" %}selected{% endif %} value="Lucida Sans Unicode, Lucida Grande, sans-serif">Lucida Sans Unicode</option>
+                                  <option {% if cfg.font_family == "MS Sans Serif, Geneva, sans-serif" %}selected{% endif %} value="MS Sans Serif, Geneva, sans-serif">MS Sans Serif</option>
+                                  <option {% if cfg.font_family == "MS Serif, New York, sans-serif" %}selected{% endif %} value="MS Serif, New York, sans-serif">MS Serif</option>
+                                  <option {% if cfg.font_family == "Palatino Linotype, Book Antiqua, Palatino, serif" %}selected{% endif %} value="Palatino Linotype, Book Antiqua, Palatino, serif">Palatino Linotype</option>
+                                  <option {% if cfg.font_family == "Tahoma, Geneva, sans-serif" %}selected{% endif %} value="Tahoma, Geneva, sans-serif">Tahoma</option>
+                                  <option {% if cfg.font_family == "Times New Roman, Times, serif" %}selected{% endif %} value="Times New Roman, Times, serif">Times New Roman</option>
+                                  <option {% if cfg.font_family == "Trebuchet MS, Helvetica, sans-serif" %}selected{% endif %} value="Trebuchet MS, Helvetica, sans-serif">Trebuchet MS</option>
+                                  <option {% if cfg.font_family == "Verdana, Geneva, sans-serif" %}selected{% endif %} value="Verdana, Geneva, sans-serif">Verdana</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label for="chatbot-font-size" class="form-label">Chatbot Font Size </label>
+                                <select id="chatbot-font-size" name="chatbot-font-size" class="form-control form-control-sm">
+                                  <option value="10" {% if cfg.font_size == 10 %}selected{% endif %}>10 px</option>
+                                  <option value="12" {% if cfg.font_size == 12 %}selected{% endif %}>12 px</option>
+                                  <option value="14" {% if cfg.font_size == 14 %}selected{% else %}selected{% endif %}>14 px</option>
+                                  <option value="16" {% if cfg.font_size == 16 %}selected{% endif %}>16 px</option>
+                                  <option value="18" {% if cfg.font_size == 18 %}selected{% endif %}>18 px</option>
+                                  <option value="20" {% if cfg.font_size == 20 %}selected{% endif %}>20 px</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="pt-4">
+                              <button type="submit" class="btn btn-primary me-sm-3 me-1 waves-effect waves-light">Save</button>
+                              <button type="reset" class="btn btn-label-secondary waves-effect">Reset</button>
+      
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Chatbot postion // -->
+                  </form>
+                </div>
+      
+      
+      
+                <!-- Chatbot page -->
+                <div class="col-sm">
+      
+            <div id="chat-container" class="chatbot-font-family chatbot-font-size">
+              <div id="chat-header" class="chat-history-header border-bottom theme-header top-bar-background theme-default chatbot-font-family chatbot-font-size">
+                <h6 class="m-0" id="chat-display-name">{% if cfg.display_name %}{{ cfg.display_name }}{% else%}John{% endif %}</h6>
+                <div class="d-flex align-items-center">
+                  <div class="dropdown">
+                    <button class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow"
+                            data-bs-toggle="dropdown" aria-expanded="true" id="chat-header-actions">
+                      <i class="mdi mdi-dots-vertical mdi-24px"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="chat-header-actions">
+                      <a class="dropdown-item" href="javascript:void(0);">Clear Chat</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+      
+              <div id="chat-window" class="chatbot-background chat-heigh chatbot-pattern">
+                <div class="chat-history-body ">
+      
+                          <div class="d-flex overflow-hidden" >
+                                      <div class="user-avatar flex-shrink-0 me-3">
+                                        <div class="avatar avatar-sm">
+                                          <img src="{% if cfg.chatbot_image %}{{ cfg.chatbot_image.url }}{% else %}{% static 'backend/image/avatars/1.png' %}{% endif %}" alt="Avatar"
+                                               class="rounded-circle chatbot-image" />
+                                        </div>
+                                      </div>
+                                      <div class="chat-message-wrapper flex-grow-1">
+                                        <div class="chat-message-text chatbot-text theme-right chatbot-msg-background user-default-msg-color">
+                                          <p class="mb-0" id="chatbot-initial-messages">{% if cfg.initial_message %}{{ cfg.initial_message|safe }}{% else %}Hi! What can I help with you?{% endif %}
+                                          </p>
+                                        </div>
+                                        &nbsp;
+                                        <div class="text-muted">
+                                          <small>{% now "M-d,Y P" %}</small>
+                                        </div>
+                                      </div>
+                                    </div>
+                  </div>
+                  <div class="message-container2 right">
+                            <div class="d-flex overflow-hidden">
+                                      <div class="chat-message-wrapper flex-grow-1">
+                                        <div id="user-msg-background-new" class="chat-message-text theme-left user-msg-background user-default-msg-color">
+                                          <p class="mb-0 user-msg-color">Hiii</p>
+                                        </div>
+                                        <div class="text-end text-muted">
+                                          <i class="mdi mdi-check-all mdi-14px text-success me-1"></i>
+                                          <small>{% now "M-d,Y P" %}</small>
+                                        </div>
+                                      </div>
+                                    </div>
+                  </div>
+              </div>
+              <div id="chat-input">
+                  <input type="text" id="message-input" placeholder="Type your message...">
+                  <button id="send-button">Send</button>
+              </div>
+           <div class="bottom-tab justify-content-between sticky-powerdby">
+              <small style="color:black" class="mx-auto" id="chat-footer-name">
+                  {% if cfg.footer_name %}{{ cfg.footer_name|safe }}{% else%}Powered by My AI Solutions{% endif %}
+              </small>
+          </div>
+      
+      
+         <div class="avata d-flex justify-content-end position-relative my-4">
+                        <img class="rounded-circle cursor-pointer launcher-icon" src="{% if cfg.chatbot_launcher_icon %}{{ cfg.chatbot_launcher_icon.url }}{% else %}{% static 'backend/img/launcher_icon/avatar-1.png' %}{% endif %}"
+                             alt="avatar" height="60" width="60">
+                        <span
+                                class="position-absolute top-0 start-100 translate-middle badge border rounded-pill bg-primary">1</span>
+                      </div>
+               </div>
+          </div>
+              </div>
+            </div>
+            <!-- Appearance -->
+          </div>
+        </div>
+      </div>
+      {% endblock %}
+      {% block script %}
+      <!-- Core JS -->
+      <!-- build:js backend/vendor/js/core.js -->
+      <script src="{% static 'backend/vendor/libs/jquery/jquery.js' %}"></script>
+      <script src="{% static 'backend/vendor/libs/popper/popper.js' %}"></script>
+      <script src="{% static 'backend/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+      <script src="{% static 'backend/vendor/libs/node-waves/node-waves.js' %}"></script>
+      
+      <script src="{% static 'backend/vendor/libs/hammer/hammer.js' %}"></script>
+      <script src="{% static 'backend/vendor/libs/i18n/i18n.js' %}"></script>
+      <script src="{% static 'backend/vendor/libs/typeahead-js/typeahead.js' %}"></script>
+      
+      <script src="{% static 'backend/vendor/js/menu.js' %}"></script>
+      <!-- endbuild -->
+      
+      <!-- Vendors JS -->
+      <script src="{% static 'backend/vendor/libs/select2/select2.js' %}"></script>
+      <script src="{% static 'backend/vendor/libs/formvalidation/dist/js/FormValidation.min.j' %}s"></script>
+      <script src="{% static 'backend/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js' %}"></script>
+      <script src="{% static 'backend/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js' %}"></script>
+      <script src="{% static 'backend/vendor/libs/cleavejs/cleave.js' %}"></script>
+      <script src="{% static 'backend/vendor/libs/cleavejs/cleave-phone.js' %}"></script>
+      <script src="{% static 'backend/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+      <script src="{% static 'backend/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js' %}">
+      </script>
+      <script src="{% static 'backend/vendor/libs/sortablejs/sortable.js' %}"></script>
+      <!-- Main JS -->
+      <script src="{% static 'backend/js/main.js' %}"></script>
+      
+      <!-- Page JS -->
+      <script src="{% static 'backend/js/app-chat.js' %}"></script>
+      <script src="{% static 'backend/js/extended-ui-drag-and-drop.js' %}"></script>
+      
+      <script>
+        $(document).ready(function () {
+      
+          // all changes will work onload
+          $(window).on('load', function() {
+             $("#chatbot-mode").trigger('change');
+             $('input[type="color"]').not('#chatbot-theme-input').trigger('change');
+             $('#chatbot-font-style').trigger('change');
+             $("#popup-notification").trigger('change');
+             $('#chatbot-font-size').trigger('change');
+      });
+      
+          // Input color changes
+          $(document).on('change', 'input[type="color"]', function () {
+            var color_val = $(this).val();
+            var connecter = $(this).attr('connecter');
+            var change_ele = '#' + connecter
+            $(change_ele).val(color_val);
+          });
+      
+          ////  Chat heading
+          //$(document).on('input', '#heading', function () {
+          //  var heading_raw = $(this).val();
+          //  var arrayOfLines = $(this).val().split('\n');
+          //  var heading_data = heading_raw.trim()
+          //  $("#chat-heading").html(heading_data);
+          //});
+      
+          // Chatbot name
+          $(document).on('input', '#display-name', function () {
+            var display_raw = $(this).val();
+            var display_data = display_raw.trim()
+            $("#chat-display-name").html(display_data);
+          });
+      
+          // Chatbot Footer
+          $(document).on('input', '#footer_name', function () {
+            var footer_raw = $(this).val();
+            var footer_data = footer_raw.trim()
+            $("#chat-footer-name").html(footer_data);
+          });
+      
+          // Chatbot initial messages
+          $(document).on('input', '#initial-messages', function () {
+            var initial_raw = $(this).val();
+            var arrayOfLines = $(this).val().split('\n');
+      
+            if ((arrayOfLines.length == 1 ) && (initial_raw.includes("\n") !== -1)){
+              var display = initial_raw.trim()
+              $("#chatbot-initial-messages").html(display);
+            }
+          });
+      
+      
+      
+          //  Chatbot mode
+          $(document).on('change', '#chatbot-mode', function () {
+            if (this.checked) {
+              $('.chat-history-wrapper').addClass('darkmode')
+            } else {
+              $('.chat-history-wrapper').removeClass('darkmode')
+            }
+          });
+      
+          //  Chatbot profile change
+          $('#chatbot-image').on('change', function (e) {
+            // Get the selected file
+            var file = e.target.files[0];
+      
+            // Create a new FileReader
+            var reader = new FileReader();
+      
+            // Define the onload event handler
+            reader.onload = function (event) {
+              // Retrieve the base64 image string
+              var base64Image = event.target.result;
+              $(".chatbot-image").attr("src", base64Image);
+              $(".chatbot-icon").attr("src", base64Image);
+            };
+      
+            // Read the file as a data URL (base64)
+            reader.readAsDataURL(file);
+          });
+      
+          //  Clicked image src attribute change
+          $(document).on('click', '.drag-item', function () {
+            var img_attr = $(this).attr("src");
+            $('.chatprofile-selected').remove()
+            $(this).parent().append(`<span class="position-absolute top-0 start-100 translate-middle badge badge-dot p-2 border border-2 rounded-pill bg-primary chatprofile-selected"></span>`);
+            $(".chatbot-image").attr("src", img_attr);
+            $(".chatbot-icon").attr("src", img_attr);
+            $("#chatbot-image-url").val(img_attr);
+          });
+      
+          // reset default chatbot image
+          $(document).on('click', '#chatbot-image-remove', function () {
+            $('.chatprofile-selected').remove()
+            var img_attr = "{% static 'backend/img/avatars/1.png' %}"
+            $('#default-profile').append(`<span class="position-absolute top-0 start-100 translate-middle badge badge-dot p-2 border border-2 rounded-pill bg-primary chatprofile-selected"></span>`);
+            $(".chatbot-image").attr("src", img_attr);
+            $(".chatbot-icon").attr("src", img_attr);
+            $(".chatbot-launcher-icon").attr("src", img_attr);
+            $("#chatbot-image-url").val(img_attr);
+          });
+      
+          // Chatbot background changer
+          $(document).on('change', '#chatbot-bg-color-input', function () {
+            var cl_value = $(this).val();
+            $(".chatbot-background").css('background-color', cl_value);
+          });
+      
+          // Top and right side theme changer
+          $(document).on('change', '#chatbot-theme-input', function () {
+            var cl_value = $(this).val();
+            $("#chat-header").attr('style', `background: ` + cl_value + ` !important`);
+            $("#send-button").attr('style', `background: ` + cl_value + ` !important`);
+            $("#chat-display-name").css('color', 'white');
+          });
+      
+          // Top side only background change
+          $(document).on('change', '#top-bar-background-color-input', function () {
+            var cl_value = $(this).val();
+            $(".theme-header").attr('style', `background: ` + cl_value + ` !important`)
+          });
+          // Top side only text change
+          $(document).on('change', '#top-bar-text-color-input', function () {
+            var cl_value = $(this).val();
+            $(".theme-header").css('color', cl_value)
+            $("#chat-display-name").css('color', cl_value)
+          });
+      
+      
+          // Chatbot Message background color
+          $(document).on('change', '#chatbot-msg-background-color-input', function () {
+            var cl_value = $(this).val();
+            $(".theme-right").css('background', cl_value)
+          });
+      
+          // Chatbot Message text color
+          $(document).on('change', '#chatbot-msg-text-color-input', function () {
+            var cl_value = $(this).val();
+            $("#chatbot-initial-messages").attr('style', `color: ` + cl_value + ` !important`);
+          });
+      
+      
+          // User's background color only change
+          $(document).on('change', '#user-msg-background-color-input', function () {
+            var cl_value = $(this).val();
+            $(".user-msg-background").attr('style', `background-color: ` + cl_value + ` !important`);
+          });
+      
+          // User's text color only change
+          $(document).on('change', '#user-msg-text-color-input', function () {
+            var cl_value = $(this).val();
+            $(".user-msg-color").attr('style', `color: ` + cl_value + ` !important`);
+          });
+      
+          // Chatbot bg pattern
+          $('#chatbot-bg-pattern').on('change', function (e) {
+            var file = e.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function (event) {
+              var base64Image = event.target.result;
+              $(".chatbot-background").css({
+              "background-image": 'url('+ base64Image + ')',
+              // "background-size": "contain",
+          })
+            };
+            reader.readAsDataURL(file);
+          });
+      
+          // Chatbot click each image to change bg pattern
+          $(document).on('click', '.chatbot-pattern-img', function () {
+            $('.chatpattern-selected').remove()
+            $(this).parent().append(`<span class="position-absolute top-0 start-100 translate-middle badge badge-dot p-2 border border-2 rounded-pill bg-primary chatpattern-selected"></span>`);
+            var img_attr = $(this).attr("src");
+            var img_data = $(this).attr("src_data");
+            $("#chatbot-bg-pattern-url").val(img_data);
+            $("#chatbot-bg-pattern").val("");
+            $(".chatbot-background").css({
+              'background-image': 'url(' + img_attr + ')'
+            });
+            $(".chatbot-pattern").css({
+              'background-image': 'url(' + img_attr + ')'
+            });
+          });
+      
+          $(document).on('click', '#chatbot-bg-pattern-remove', function () {
+            $('.chatpattern-selected').remove()
+            $(".chatbot-pattern").css("background-image", "none");
+            $(".chatbot-background").css("background-image","none");
+            $(".chatbot-background").css("background-color","#e6e6e6");
+            $("#chatbot-bg-pattern-url").val('empty');
+          });
+      
+          // Popup notification disable and enable
+          $(document).on('change', '#popup-notification', function () {
+            if (this.checked) {
+             $("#popup-notification-delay").removeAttr('disabled');
+            } else {
+              $("#popup-notification-delay").attr('disabled', true);
+      
+            }
+          });
+      
+          // Initial messages
+          $('#initial-messages').keydown(function (event) {
+                if (event.keyCode === 13) {
+                  createNewElement();
+                }
+              });
+      
+          function createNewElement() {
+            var arrayOfLines = $('#initial-messages').val().split('\n');
+            var last_item = arrayOfLines[arrayOfLines.length - 1]
+            if ((arrayOfLines.length >= 2) && (last_item.length != 0)){
+            // Create a new paragraph element
+            var newElement =` <li class="chat-message">
+                              <div class="d-flex overflow-hidden">
+                                <div class="user-avatar flex-shrink-0 me-3">
+                                  <div class="avatar avatar-sm">
+                                    <img src="{% if cfg.chatbot_image %}{{ cfg.chatbot_image.url }}{% else %}{% static 'backend/img/avatars/1.png' %}{% endif %}" alt="Avatar" class="rounded-circle chatbot-image">
+                                  </div>
+                                </div>
+                                <div class="chat-message-wrapper flex-grow-1">
+                                  <div class="chat-message-text chatbot-text">
+                                    <p class="mb-0" id="chatbot-initial-messages">`+last_item+`</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </li>`
+      
+            // Append the new element to the container
+            $(newElement).insertBefore('.chat-message.chat-message-right');
+          }
+          };
+      
+          //  Suggested messages
+          $('#suggested-messages').keydown(function (event) {
+                if (event.keyCode === 13) {
+                  NewElement();
+                }
+              });
+      
+          function NewElement() {
+                var arrayOfLines = $('#suggested-messages').val().split('\n');
+                var last_item = arrayOfLines[arrayOfLines.length - 1]
+                if ((arrayOfLines.length >= 0) && (last_item.length != 0)){
+                // Create a new paragraph element
+                var newElement =`<li class="nav-item" role="presentation">
+                                <div class="ms-3 badge bg-label-success rounded-pill py-3">`+last_item+`</div>
+                              </li>`
+      
+                // Append the new element to the container
+                $(".sticky-suggestion").append(newElement);
+              }
+              };
+      
+          //  Chatbot font change
+          $(document).on('change', '#chatbot-font-style', function () {
+            var font_value = $(this).val();
+            $('.chatbot-font-family').css('font-family', font_value);
+          });
+          $(document).on('change', '#chatbot-font-size', function () {
+            var font_value = $(this).val();
+            $('.chatbot-font-size').attr('style', `font-size: ` + font_value +`px !important`);
+          });
+          //  Chatbot theme clone for both top bar and user message background
+          $(document).on('change', '#chatbot-theme-input', function () {
+            var color_value = $(this).val();
+            $('#top-bar-background-color-input').val(color_value);
+            $('#top-bar-background-color').val(color_value);
+            //$('#user-msg-background-color-input').val(color_value);
+            //$('#user-msg-background-color').val(color_value);
+          });
+      
+          $(document).on('click', '#theme-reset', function () {
+            var top_color = '#8d54a2'
+            var msg_color = '#000001'
+            var top_bar_text = '#000001'
+            var chatbot_bg_color = "#e6e6e6"
+      
+            var chatbot_msg_bg_color = "#ffffff"
+            var chatbot_msg_text = '#9797a4'
+      
+            var user_msg_bg_color = "#ffffff"
+            var user_msg_text = '#9797a4'
+      
+      
+            $('#send-button').attr('style', `background-color: ` + top_color + ` !important`);
+            //$('#user-msg-background-new').attr('style', `background-color: ` + top_color + ` !important`);
+      
+            // Theme color
+            $('#chatbot-theme-input').val(top_color);
+            $('#theme-color').val(top_color);
+            $('input[type="color"]').not('#chatbot-theme-input').trigger('change');
+      
+            // Top bar background color
+            $('#top-bar-background-color-input').val(top_color);
+            $('#top-bar-background-color').val(top_color);
+      
+            // User's Message background color
+            //$('#user-msg-background-color-input').val(msg_color);
+            $('#user-msg-background-color').val(top_color);
+      
+      
+            $('#top-bar-text-color-input').val(top_bar_text);
+            $('#top-bar-text-color').val(top_bar_text);
+            $('#top-bar-text-color-input').trigger('change');
+      
+            $('#chatbot-bg-color-input').val(chatbot_bg_color);
+            $('#chatbot-bg-color').val(chatbot_bg_color);
+            $('#chatbot-bg-color-input').trigger('change');
+      
+            $('#chatbot-msg-text-color-input').val(chatbot_msg_text);
+            $('#chatbot-msg-text-color').val(chatbot_msg_text);
+            $('#chatbot-msg-text-color-input').trigger('change');
+      
+            $('#chatbot-msg-background-color-input').val(chatbot_msg_bg_color);
+            $('#chatbot-msg-background-color').val(chatbot_msg_bg_color);
+            $('#chatbot-msg-background-color-input').trigger('change');
+      
+            $('#user-msg-background-color-input').val(user_msg_bg_color);
+            $('#user-msg-background-color').val(user_msg_bg_color);
+            $('#user-msg-background-color-input').trigger('change');
+      
+            $('#user-msg-text-color-input').val(user_msg_text);
+            $('#user-msg-text-color').val(user_msg_text);
+            $('#user-msg-text-color-input').trigger('change');
+      
+            $('#user-msg-background-new').val(user_msg_bg_color);
+            $('#user-msg-background-new').trigger('change');
+      
+          });
+      
+      
+        //  Auto select  chatbot profile UI
+        var url = "{{ cfg.chatbot_image.url }}";
+        var filename = url.split('/').pop();
+        var parts = filename.split('_');
+      
+        $('#image-list-1 img').each(function() {
+          if ($(this).attr('src').includes(parts[1])) {
+            var newElementHTML = '<span class="position-absolute top-0 start-100 translate-middle badge badge-dot p-2 border border-2 rounded-pill bg-primary chatprofile-selected"></span>';
+            $(this).parent().append(newElementHTML);
+          }
+        });
+      
+          //  Auto select  chatbot bg UI
+        var Chat_bg_url = "{% if cfg.chatbot_background_pattern %}{{ cfg.chatbot_background_pattern.url }}{% else %}{% static 'backend/img/avatars/1.png' %}{% endif %}";
+        var filename = Chat_bg_url.split('/').pop();
+        var parts = filename.split('_');
+        console.log(parts[-1]);
+        lastElement = parts[parts.length - 1];
+      
+        $('#image-list-2 img').each(function() {
+          if ($(this).attr('src').includes(lastElement)) {
+            var newElementHTML = '<span class="position-absolute top-0 start-100 translate-middle badge badge-dot p-2 border border-2 rounded-pill bg-primary chatpattern-selected"></span>';
+            $(this).parent().append(newElementHTML);
+          }
+        });
+      
+        // Chatbot bg pattern
+        $('#chatbot-launcher-icon').on('change', function (e) {
+          var file = e.target.files[0];
+          var reader = new FileReader();
+          reader.onload = function (event) {
+          var base64Image = event.target.result;
+          $(".launcher-icon").attr("src", base64Image);
+          };
+          reader.readAsDataURL(file);
+        });
+        // Chatbot click each image to change chatbot-launcher-icon
+        $(document).on('click', '.chatbot-launcher-icon', function () {
+          $('.chatlauncher-selected').remove()
+          $(this).parent().append(`<span class="position-absolute top-0 start-100 translate-middle badge badge-dot p-2 border border-2 rounded-pill bg-primary chatlauncher-selected"></span>`);
+          var img_attr = $(this).attr("src");
+          var img_data = $(this).attr("src_data");
+          $("#chatbot-launcher-icon-url").val(img_data);
+          $("#chatbot-launcher-icon").val("");
+          $(".launcher-icon").attr("src", img_attr);
+        });
+      
+      
+        //  Auto select  chatbot launcher icon
+        var url = "{{ cfg.chatbot_launcher_icon.url }}";
+        var filename = url.split('/').pop();
+        var l_icon = filename.split('_');
+        lastElement = l_icon[l_icon.length - 1];
+      
+        $('#image-list-3 img').each(function() {
+          if ($(this).attr('src').includes(lastElement)) {
+            var newElementHTML = '<span class="position-absolute top-0 start-100 translate-middle badge badge-dot p-2 border border-2 rounded-pill bg-primary chatlauncher-selected"></span>';
+            $(this).parent().append(newElementHTML);
+          }
+        });
+      
+      });
+      </script>
+      
+      
+      
+
+{% endblock %}
