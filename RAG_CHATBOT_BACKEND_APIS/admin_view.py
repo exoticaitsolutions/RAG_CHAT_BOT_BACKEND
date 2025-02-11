@@ -38,3 +38,10 @@ def admin_dashborad_chatbot_delete(request, c_id):  # Add chatbot
 
 def admin_dashborad_chatbot_share(request, c_id):  # Add chatbot
     return render(request, 'admin/page/chatbot/pages/share_chat_bot.html')
+
+def website_list(request):
+    return render(request, 'admin/page/chatbot/pages/add-website-list.html')
+
+def chatbot_view(request):
+    return render(request, 'chatbot.html')  
+
