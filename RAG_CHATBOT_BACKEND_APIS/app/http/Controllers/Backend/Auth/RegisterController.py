@@ -35,5 +35,5 @@ class RegisterController(CreateView):
         user = User.objects.create_user(username=username, email=email, password=password1) # type: ignore
         user.save()
 
-        url = 'http://127.0.0.1:8000/login/'
+        url = '/login/'
         return JsonResponse({"status": "success", "message": "User registered successfully!", "redirect_url": url}, status=200)

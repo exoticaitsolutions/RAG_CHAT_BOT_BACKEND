@@ -137,7 +137,44 @@ class DocumentCollectionIds(models.Model):
     doc_id = models.CharField(default="", max_length=100)
     doc_name = models.CharField(default="", max_length=500)
     collection = models.CharField(default="", max_length=100)
-    chroma_dir = models.CharField(default="", max_length=100)
+    chroma_dir = models.TextField(default="")
     chatbot = models.ForeignKey("ChatBotDB", on_delete=models.CASCADE)
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     document = models.ForeignKey("Document", on_delete=models.CASCADE)
+
+
+class Chat(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    chatbot = models.ForeignKey("ChatBotDB", on_delete=models.CASCADE)
+    category = models.CharField(default="", max_length=50)
+    history = models.CharField(default="", max_length=50)
+    question = models.CharField(default="", max_length=500)
+    answer = models.TextField(default="", max_length=5000)
+    sent = models.DateTimeField(auto_now_add=True)
+    received = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class ChatHistory(models.Model):
+    FEEDBACK_CHOICE = (
+        ("thumbsup", 'Thumbs Up'),
+        ("thumbsdown", 'Thumbs Down')
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    chatbot = models.ForeignKey("ChatBotDB", on_delete=models.CASCADE)
+    # visitor = models.ForeignKey('VisitorVisits', on_delete=models.CASCADE, null=True)
+    question = models.CharField(default="", max_length=500)
+    answer = models.TextField(default="", max_length=5000)
+    question_datetime = models.DateTimeField(auto_now_add=True)
+    answer_datetime = models.DateTimeField(auto_now_add=True)
+    feedback_flag = models.CharField(choices=FEEDBACK_CHOICE, null=True, max_length=50)
+    feedback_datetime = models.DateTimeField(null=True)
+    positive_comment = models.TextField(null=True)
+    negative_comment = models.TextField(null=True)
+    category = models.BooleanField(default=True)
+    name = models.CharField(max_length=50)
+    status = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    
