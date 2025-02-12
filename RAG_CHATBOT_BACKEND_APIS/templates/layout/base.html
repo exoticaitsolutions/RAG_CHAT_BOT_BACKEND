@@ -326,6 +326,28 @@ for (var i = 0; i <= getToggle.length; i++) {
     });
 }
 </script>
+{% if messages %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let messages = [];
+
+        {% for message in messages %}
+            messages.push({text: "{{ message }}", type: "{{ message.tags }}"});
+        {% endfor %}
+
+        let messageText = messages.map(m => m.text).join("\n");
+
+        Swal.fire({
+            title: "📢 Notifications",
+            text: messageText,
+            icon: messages.some(m => m.type === 'error') ? 'error' :
+                  messages.some(m => m.type === 'success') ? 'success' :
+                  messages.some(m => m.type === 'warning') ? 'warning' : 'info',
+            confirmButtonText: "OK"
+        });
+    });
+</script>
+{% endif %}
 {% block script %}
 {% endblock %}
 

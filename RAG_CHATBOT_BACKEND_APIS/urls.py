@@ -4,6 +4,8 @@ from django.conf.urls.static import static
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from RAG_CHATBOT_BACKEND_APIS import admin_view
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.API.APIDocumentController import APIDocumentController
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.ChatBot.ChatBotController import ChatBotController
 from . import views
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.RegisterController import RegisterController
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.LoginController import LoginController
@@ -24,7 +26,6 @@ schema_view = get_schema_view(
 urlpatterns = [
   
 ]
-
 # Admin Authentication
 admin_auth_urls = [
     # Login Routes 
@@ -32,13 +33,28 @@ admin_auth_urls = [
     # Register Routes
     path('register/', RegisterController.as_view(), name='register.get'),
 ]
+# API Endpoints
+api_urls = [
+    path("api/v1/upload/pdf/", APIDocumentController.as_view(), name="upload_pdf"),
+    # path("pdf/api/v1/upload-pdf/", views.upload_pdf_with_loader, name="upload_pdf_with_loader"),
+    path("url/api/v1/upload-url/", views.upload_url_with_loader, name="upload_url_with_loader"),
+    path("pdf/api/v1/query/", views.ChromaQueryAPIView, name="ChromaQueryAPIView"),
+]
+
 
 # Admin Dashboard
 admin_dashboard_urls = [
+    # CHAT Bot Intergation
+    path("dashboard/services/chatbot/create/", ChatBotController().create_chatbot_assistant, name="admin_dashborad_add_assistant_page"),
+    path("dashboard/services/chatbot/get/<str:c_id>", ChatBotController().get_chatbot_assistant_by_chat_id, name="document-list"),
+    path('upload-document/<str:c_id>', ChatBotController().upload_and_train, name="upload-document"), # type: ignore
+    path("dashboard/services/chatbot/preview/<str:c_id>/", admin_view.admin_dashboard_preview_chat_bot, name="preview-chatbot"),
+    
+    
     path("dashboard/home/", admin_view.admin_dashborad_page, name="admin_dashborad_page"),
     path("dashboard/services/chatbot/create/", admin_view.admin_dashborad_add_assistant_page, name="admin_dashborad_add_assistant_page"),
-    path("dashboard/services/chatbot/get/<str:c_id>/", admin_view.admin_dashborad_document_list, name="document-list"),
-    path("dashboard/services/chatbot/preview/<str:c_id>/", admin_view.admin_dashboard_preview_chat_bot, name="preview-chatbot"),
+    
+    
     path("dashboard/services/chatbot/history/<str:c_id>/", admin_view.admin_dashborad_chatbot_history, name="chat-history"),
     path("dashboard/services/chatbot/setting/<str:c_id>/", admin_view.admin_dashborad_chatbot_setting, name="chat-setting"),
     path("dashboard/services/chatbot/chatbot-appearance/<str:c_id>/", admin_view.admin_dashborad_chatbot_setting_apperence, name="chat-setting-apperence"),
@@ -58,12 +74,6 @@ chatbot_urls = [
    #  path("chatbot/chatbot-history/<str:c_id>/", admin_view.admin_dashborad_chatbot_history, name="chat-history"),
 ]
 
-# API Endpoints
-api_urls = [
-    path("pdf/api/v1/upload-pdf/", views.upload_pdf_with_loader, name="upload_pdf_with_loader"),
-    path("url/api/v1/upload-url/", views.upload_url_with_loader, name="upload_url_with_loader"),
-    path("pdf/api/v1/query/", views.ChromaQueryAPIView, name="ChromaQueryAPIView"),
-]
 
 # Swagger Documentation
 swagger_urls = [
