@@ -50,7 +50,7 @@ class ChatBotController:
         """ Upload document and train chatbot """
         user_id = request.user.id
         chat_id = c_id
-        url = f"{BASE_API_URL}/api/v1/upload/pdf/?chat_id={chat_id}&user_id={user_id}"
+        url = f"{BASE_API_URL}/api/v2/upload/pdf/?chat_id={chat_id}&user_id={user_id}"
         if request.method == 'POST' and request.FILES:
             files = []
             for file_key in request.FILES:

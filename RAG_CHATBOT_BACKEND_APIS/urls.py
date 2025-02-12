@@ -5,6 +5,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from RAG_CHATBOT_BACKEND_APIS import admin_view
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.API.APIDocumentController import APIDocumentController
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.API.ChromaQueryAPIViewController import ChromaQueryAPIViewController
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.ChatBot.ChatBotController import ChatBotController
 from . import views
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.RegisterController import RegisterController
@@ -35,10 +36,10 @@ admin_auth_urls = [
 ]
 # API Endpoints
 api_urls = [
-    path("api/v1/upload/pdf/", APIDocumentController.as_view(), name="upload_pdf"),
+    path("api/v2/upload/pdf/", APIDocumentController.as_view(), name="upload_pdf"),
     # path("pdf/api/v1/upload-pdf/", views.upload_pdf_with_loader, name="upload_pdf_with_loader"),
-    path("url/api/v1/upload-url/", views.upload_url_with_loader, name="upload_url_with_loader"),
-    path("pdf/api/v1/query/", views.ChromaQueryAPIView, name="ChromaQueryAPIView"),
+    path("api/v2/query/", ChromaQueryAPIViewController.as_view(), name="chroma_query"),
+
 ]
 
 
