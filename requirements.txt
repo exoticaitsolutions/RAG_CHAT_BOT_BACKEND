@@ -14,3 +14,10 @@ chromadb
 PyMuPDF
 langchain-community
 selenium
+pysqlite3
+langchain_openai
+langchain_chroma
+webdriver-manager
+pyyaml 
+ua-parser 
+user-agents

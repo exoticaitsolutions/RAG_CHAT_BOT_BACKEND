@@ -15,6 +15,10 @@
     <meta name="keywords"
           content="Bootstrap admin template, Dashboard UI Kit, Dashboard Template, Backend Panel, react dashboard, angular dashboard">
     <meta name="author" content="Meraphic  LLC">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- [Favicon] icon -->
     <link rel="icon" href="{% static '' %}backend/image/ai_logo-favicon.png" type="image/x-icon">
     <!-- [Font] Family -->
@@ -322,6 +326,28 @@ for (var i = 0; i <= getToggle.length; i++) {
     });
 }
 </script>
+{% if messages %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let messages = [];
+
+        {% for message in messages %}
+            messages.push({text: "{{ message }}", type: "{{ message.tags }}"});
+        {% endfor %}
+
+        let messageText = messages.map(m => m.text).join("\n");
+
+        Swal.fire({
+            title: "📢 Notifications",
+            text: messageText,
+            icon: messages.some(m => m.type === 'error') ? 'error' :
+                  messages.some(m => m.type === 'success') ? 'success' :
+                  messages.some(m => m.type === 'warning') ? 'warning' : 'info',
+            confirmButtonText: "OK"
+        });
+    });
+</script>
+{% endif %}
 {% block script %}
 {% endblock %}
 

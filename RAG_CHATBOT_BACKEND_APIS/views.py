@@ -266,28 +266,3 @@ def chatbot_appearance_form_view(request):
         return JsonResponse({"success": True, "message": "Chatbot appearance updated successfully!"})
 
     return JsonResponse({"success": False, "message": "Invalid request method."}, status=400)
-
-# from django.http import JsonResponse
-# from django.views.decorators.csrf import csrf_exempt
-# from .models import ChatbotAppearance
-
-# @csrf_exempt  # CSRF token ke bina AJAX request allow karne ke liye
-# def chatbot_appearance_form_view(request):
-#     """
-#     Handle chatbot appearance settings - Insert or Update without chatbot_id.
-#     """
-#     chatbot_appearance, created = ChatbotAppearance.objects.get_or_create(id=1)
-
-#     if request.method == "POST":
-#         chatbot_appearance.display_name = request.POST.get("display-name", chatbot_appearance.display_name)
-#         chatbot_appearance.initial_message = request.POST.get("initial-message", chatbot_appearance.initial_message)
-
-#         # Handle image upload
-#         if "chatbot_image" in request.FILES:
-#             chatbot_appearance.chatbot_image = request.FILES["chatbot_image"]
-
-#         chatbot_appearance.save()
-        
-#         return JsonResponse({"success": True, "message": "Chatbot appearance updated successfully!"})
-
-#     return JsonResponse({"success": False, "message": "Invalid request method."}, status=400)
