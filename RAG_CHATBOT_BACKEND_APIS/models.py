@@ -5,7 +5,7 @@ from django.contrib.auth.models import User  # Update if using a custom model
 
 
 class ChatbotAppearance(models.Model):
-    chatbot_id = models.CharField(max_length=50)
+    chatbot_id = models.CharField(max_length=50)      
     display_name = models.TextField(max_length=2000)
     footer_name = models.TextField(max_length=2000, default="Powered by My AI Solutions.")
     # chatbot_title = models.CharField(max_length=255, default="Welcome")
@@ -98,7 +98,7 @@ class Document(models.Model):
     size = models.CharField(default="", max_length=250)
     no_of_characters = models.PositiveIntegerField(default=0, blank=True)
     no_of_chunks = models.PositiveIntegerField(default=0, blank=True)
-    status = models.CharField(default="pending", max_length=10)
+    status = models.CharField(default="pending", max_length=10)      
     created_at = models.DateField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now_add=True, blank=True)
     def __str__(self):

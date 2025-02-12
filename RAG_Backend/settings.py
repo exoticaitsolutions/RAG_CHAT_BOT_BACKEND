@@ -100,10 +100,10 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 # 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-__import__('pysqlite3')
-import sys
+# __import__('pysqlite3')
+# import sys
 
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+# sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 
 if DB_TYPE == 'sqlite3':
