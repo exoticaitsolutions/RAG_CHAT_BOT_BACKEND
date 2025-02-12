@@ -177,4 +177,13 @@ class ChatHistory(models.Model):
     status = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    
+
+class WebsiteDB(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    chatbot = models.ForeignKey("ChatBotDB", on_delete=models.CASCADE)
+    url = models.TextField(default="")
+    no_of_characters = models.PositiveIntegerField(default=0, blank=True)
+    no_of_chunks = models.PositiveIntegerField(default=0, blank=True)
+    status = models.CharField(default="pending", max_length=10)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now_add=True, blank=True)

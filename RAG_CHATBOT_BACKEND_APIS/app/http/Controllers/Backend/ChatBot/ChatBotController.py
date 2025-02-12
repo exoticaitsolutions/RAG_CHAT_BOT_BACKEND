@@ -6,11 +6,12 @@ from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.http import JsonResponse
+from rest_framework.views import csrf_exempt
 from user_agents import parse
 from RAG_Backend.settings import BASE_API_URL
 from RAG_CHATBOT_BACKEND_APIS.app.services.ChatbotService import ChatbotDetails
 from RAG_CHATBOT_BACKEND_APIS.models import *
-import tempfile
+
 logger = logging.getLogger(__name__)
 
 
@@ -45,14 +46,15 @@ class ChatBotController:
         user_id = request.user.id
         logger.info(f"📩 Received request  c_id: {c_id} and user id = {user_id}")
         data = ChatbotDetails(c_id,user_id)
-        return render(request, 'admin/page/chatbot/GetChatBotData.html',locals())
+        return render(request, 'admin/page/chatbot/Uploader/add_document_in_chatbot.html',locals())
     
     def upload_and_train(self, request, c_id):
         """ Upload document and train chatbot """
         user_id = request.user.id
+        print('user_id',user_id)
         chat_id = c_id
         
-        url = f"{BASE_API_URL}/api/v2/upload/pdf/?chat_id={chat_id}&user_id={user_id}"
+        url = f"{BASE_API_URL}/api/v2/upload/?chat_id={chat_id}&user_id={user_id}"
         if request.method == 'POST' and request.FILES:
             files = []
             temp_dir = tempfile.gettempdir()
@@ -75,3 +77,12 @@ class ChatBotController:
             except requests.exceptions.RequestException as e:
                 return JsonResponse({"status": "failed", "message": "Error making request", "error_details": str(e)}, status=500)
         return JsonResponse({"status": "failed", "message": "No files uploaded"}, status=400)
+    
+    
+    @csrf_exempt
+    def RefreshDiv(self, request):
+        c_id = request.GET.get('chat_id')
+        u_id = request.GET.get('user_id')
+        documents = Document.objects.filter(chatbot=c_id, user=u_id)
+        print(f'documents == {documents}')
+        return render(request, 'admin/Ajax/Chatbot/GetChatBotinfoAndRefreshContent.html', {'documents': documents})

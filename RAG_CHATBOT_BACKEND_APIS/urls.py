@@ -5,8 +5,12 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from RAG_CHATBOT_BACKEND_APIS import admin_view
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.API.APIDocumentController import APIDocumentController
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.API.ApiWebsiteSiteConroller import ApiWebsiteSiteConroller
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.API.ChromaQueryAPIViewController import ChromaQueryAPIViewController
+
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.ChatBot.ChatBotController import ChatBotController
+
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.ChatBot.ChatBotURLIntegrationController import ChatBotURLIntegrationController
 from . import views
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.RegisterController import RegisterController
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.LoginController import LoginController
@@ -36,7 +40,11 @@ admin_auth_urls = [
 ]
 # API Endpoints
 api_urls = [
-    path("api/v2/upload/pdf/", APIDocumentController.as_view(), name="upload_pdf"),
+    # Api for Upload Documents 
+    path("api/v2/upload/", APIDocumentController.as_view(), name="upload_pdf"),
+    # Api for Insert  URLs and Trainedand link with chat gpt   
+    path("api/v2/add-urls/", ApiWebsiteSiteConroller.as_view(), name="upload_website_urls"),
+
     path("api/v2/query/", ChromaQueryAPIViewController.as_view(), name="chroma_query"),
     path("url/api/v1/upload-url/", views.upload_url_with_loader, name='upload_url'),
     path("pdf/api/v1/upload-pdf/", views.upload_pdf_with_loader, name="upload_pdf_with_loader"),
@@ -45,10 +53,17 @@ api_urls = [
 
 # Admin Dashboard
 admin_dashboard_urls = [
-    # CHAT Bot Intergation
+    # CHAT Bot  Documents Uplaod Intergation
     path("dashboard/services/chatbot/create/", ChatBotController().create_chatbot_assistant, name="admin_dashborad_add_assistant_page"),
-    path("dashboard/services/chatbot/get/<str:c_id>", ChatBotController().get_chatbot_assistant_by_chat_id, name="document-list"),
     path('upload-document/<str:c_id>', ChatBotController().upload_and_train, name="upload-document"), # type: ignore
+    path("dashboard/services/chatbot/get/<str:c_id>", ChatBotController().get_chatbot_assistant_by_chat_id, name="document-list"),
+    # CHAT Bot  Website Site  URLS Intergation Rotes
+    path('dashboard/services/chatbot/website-list/', ChatBotURLIntegrationController().render_the_webiste_url, name='website-list'),
+    # Uploading Views
+    
+    # Refresh Div
+    path('refresh_div/', ChatBotController().RefreshDiv, name="refresh_div"), # type: ignore
+
     path("dashboard/services/chatbot/preview/<str:c_id>/", admin_view.admin_dashboard_preview_chat_bot, name="preview-chatbot"),
     
     
@@ -62,7 +77,7 @@ admin_dashboard_urls = [
     path("dashboard/services/chatbot/delete/<str:c_id>/", admin_view.admin_dashborad_chatbot_delete, name="chat-setting-delete"),
     path("dashboard/services/chatbot/intergation/<str:c_id>/", admin_view.admin_dashborad_chatbot_share, name="chat-setting-intergation"),
 
-    path('dashboard/services/chatbot/website-list/', admin_view.website_list, name='website-list'),
+    # path('dashboard/services/chatbot/website-list/', admin_view.website_list, name='website-list'),
     
     path('chatbot/', admin_view.chatbot_view, name='chatbot'),
     
