@@ -131,7 +131,7 @@ def store_url_data_in_chromadb(url):
     documents = text_splitter.create_documents(extracted_texts)
     embeddings = OpenAIEmbeddings()
     vectordb = Chroma.from_documents(documents, embedding=embeddings, persist_directory=website_persist_directory)
-    vectordb.persist()
+    # vectordb.persist()
 
     message = f"Website data for {url} stored in ChromaDB at {website_persist_directory}"
     logger.info(message)

@@ -10,6 +10,7 @@ from user_agents import parse
 from RAG_Backend.settings import BASE_API_URL
 from RAG_CHATBOT_BACKEND_APIS.app.services.ChatbotService import ChatbotDetails
 from RAG_CHATBOT_BACKEND_APIS.models import *
+import tempfile
 logger = logging.getLogger(__name__)
 
 
@@ -54,9 +55,10 @@ class ChatBotController:
         url = f"{BASE_API_URL}/api/v2/upload/pdf/?chat_id={chat_id}&user_id={user_id}"
         if request.method == 'POST' and request.FILES:
             files = []
+            temp_dir = tempfile.gettempdir()
             for file_key in request.FILES:
                 uploaded_file = request.FILES[file_key]
-                file_path = f'/tmp/{uploaded_file.name}'
+                file_path = os.path.join(temp_dir, uploaded_file.name)
                 with open(file_path, 'wb') as f:
                     for chunk in uploaded_file.chunks():
                         f.write(chunk)

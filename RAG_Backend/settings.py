@@ -42,7 +42,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 APPEND_SLASH =False
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/uploads/')
+MEDIA_URL = '/media/'
 
+# Ensure the directory exists
+if not os.path.exists(MEDIA_ROOT):
+    os.makedirs(MEDIA_ROOT)
 # Ensure this is added in DEBUG mode only
 if DEBUG:
     from django.conf.urls.static import static
