@@ -4,6 +4,9 @@ import logging
 import time
 import shutil
 import hashlib
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import ChatbotAppearance
 
 from urllib.parse import urljoin
 from django.http import JsonResponse
@@ -20,10 +23,65 @@ from drf_yasg import openapi
 
 from RAG_CHATBOT_BACKEND_APIS.serializers import FileUploadSerializer, UrlUploadSerializer
 from RAG_CHATBOT_BACKEND_APIS.utils import query_chroma, save_pdf_to_chroma,save_url_to_chromadb_threaded 
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from .models import ChatbotAppearance
+from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
+from RAG_CHATBOT_BACKEND_APIS.models import ChatbotAppearance
+from RAG_CHATBOT_BACKEND_APIS.serializers import ChatbotAppearanceSerializer
+
+# Logger setup
+logger = logging.getLogger(__name__)
+
+# @api_view(['GET', 'PUT'])
+# def chatbot_appearance_view(request, chatbot_id):
+#     """
+#     Get or update chatbot appearance settings.
+#     """
+#     try:
+#         chatbot_appearance = get_object_or_404(ChatbotAppearance, chatbot_id=chatbot_id)
+
+#         if request.method == 'GET':
+#             serializer = ChatbotAppearanceSerializer(chatbot_appearance)
+#             return Response({
+#                 "code": status.HTTP_200_OK,
+#                 "message": "Chatbot appearance retrieved successfully.",
+#                 "data": serializer.data
+#             }, status=status.HTTP_200_OK)
+
+#         elif request.method == 'PUT':
+#             serializer = ChatbotAppearanceSerializer(chatbot_appearance, data=request.data, partial=True)
+
+#             if serializer.is_valid():
+#                 serializer.save()
+#                 logger.info(f"Chatbot appearance updated: {chatbot_id}")
+#                 return Response({
+#                     "code": status.HTTP_200_OK,
+#                     "message": "Chatbot appearance updated successfully.",
+#                     "data": serializer.data
+#                 }, status=status.HTTP_200_OK)
+
+#             logger.warning(f"Validation failed for chatbot appearance update: {serializer.errors}")
+#             return Response({
+#                 "code": status.HTTP_400_BAD_REQUEST,
+#                 "message": "Invalid data provided.",
+#                 "errors": serializer.errors
+#             }, status=status.HTTP_400_BAD_REQUEST)
+
+#     except Exception as e:
+#         logger.error(f"Error in chatbot appearance API: {str(e)}")
+#         return Response({
+#             "code": status.HTTP_500_INTERNAL_SERVER_ERROR,
+#             "message": "Internal server error.",
+#             "error": str(e)
+#         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # Configure logging
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
 
 
 
@@ -181,3 +239,30 @@ def chatbot_view(request):
     return render(request, 'chatbot.html')  
 
 
+
+from django.http import JsonResponse
+from django.contrib import messages
+from .models import ChatbotAppearance
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
+def chatbot_appearance_form_view(request):
+    """
+    Handle chatbot appearance settings - Insert or Update without chatbot_id.
+    """
+    chatbot_appearance, created = ChatbotAppearance.objects.get_or_create(id=1)
+
+    if request.method == "POST":
+        chatbot_appearance.display_name = request.POST.get("display-name", chatbot_appearance.display_name)
+        chatbot_appearance.footer_name = request.POST.get("footer-name", chatbot_appearance.footer_name)
+        chatbot_appearance.initial_message = request.POST.get("initial-message", chatbot_appearance.initial_message)
+        chatbot_appearance.chatbot_theme = request.POST.get("chatbot-theme", chatbot_appearance.chatbot_theme)
+
+        # Handle image upload
+        if "chatbot_image" in request.FILES:
+            chatbot_appearance.chatbot_image = request.FILES["chatbot_image"]
+
+        chatbot_appearance.save()
+        
+        return JsonResponse({"success": True, "message": "Chatbot appearance updated successfully!"})
+
+    return JsonResponse({"success": False, "message": "Invalid request method."}, status=400)

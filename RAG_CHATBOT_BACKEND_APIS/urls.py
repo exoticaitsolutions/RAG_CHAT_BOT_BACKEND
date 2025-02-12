@@ -1,8 +1,11 @@
-from django.urls import path
+from django.urls import path, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from rest_framework import permissions
+
+# Import Controllers
 from RAG_CHATBOT_BACKEND_APIS import admin_view
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.API.APIDocumentController import APIDocumentController
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.API.ChromaQueryAPIViewController import ChromaQueryAPIViewController
@@ -23,16 +26,27 @@ schema_view = get_schema_view(
     public=True,
 )
 
-# Grouped URL patterns
+# ======================================
+#               URL Patterns
+# ======================================
+
+# Core URLs
 urlpatterns = [
-  
+    path('chatbot/', views.chatbot_view, name='chatbot'),
+    path("chatbot/appearance/", views.chatbot_appearance_form_view, name="chatbot-appearance-save"),
+    # API Endpoints
+    path("api/v1/upload/pdf/", APIDocumentController.as_view(), name="upload_pdf"),
+    path("api/v1/query/", ChromaQueryAPIViewController.as_view(), name="chroma_query"),
+    # API Documentation
+    path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-docs'),
+    path('api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='redoc-docs'),
+    re_path(r"^swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),
+    
 ]
 # Admin Authentication
 admin_auth_urls = [
-    # Login Routes 
-    path('login/', LoginController.as_view(), name='login.get'),
-    # Register Routes
-    path('register/', RegisterController.as_view(), name='register.get'),
+    path('login/', LoginController.as_view(), name='login'),
+    path('register/', RegisterController.as_view(), name='register'),
 ]
 # API Endpoints
 api_urls = [
@@ -45,6 +59,7 @@ api_urls = [
 
 # Admin Dashboard
 admin_dashboard_urls = [
+    
     # CHAT Bot Intergation
     path("dashboard/services/chatbot/create/", ChatBotController().create_chatbot_assistant, name="admin_dashborad_add_assistant_page"),
     path("dashboard/services/chatbot/get/<str:c_id>", ChatBotController().get_chatbot_assistant_by_chat_id, name="document-list"),
@@ -60,6 +75,7 @@ admin_dashboard_urls = [
     path("dashboard/services/chatbot/setting/<str:c_id>/", admin_view.admin_dashborad_chatbot_setting, name="chat-setting"),
     path("dashboard/services/chatbot/chatbot-appearance/<str:c_id>/", admin_view.admin_dashborad_chatbot_setting_apperence, name="chat-setting-apperence"),
     path("dashboard/services/chatbot/delete/<str:c_id>/", admin_view.admin_dashborad_chatbot_delete, name="chat-setting-delete"),
+
     path("dashboard/services/chatbot/intergation/<str:c_id>/", admin_view.admin_dashborad_chatbot_share, name="chat-setting-intergation"),
 
     path('dashboard/services/chatbot/website-list/', admin_view.website_list, name='website-list'),
