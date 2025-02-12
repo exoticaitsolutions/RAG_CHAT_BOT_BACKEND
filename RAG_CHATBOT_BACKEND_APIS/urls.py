@@ -46,7 +46,7 @@ api_urls = [
     path("api/v2/add-urls/", ApiWebsiteSiteConroller.as_view(), name="upload_website_urls"),
 
     path("api/v2/query/", ChromaQueryAPIViewController.as_view(), name="chroma_query"),
-    path("/url/api/v1/upload-url/", views.upload_url_with_loader, name='upload_url'),
+    path("url/api/v1/upload-url/", views.upload_url_with_loader, name='upload_url'),
     path("pdf/api/v1/upload-pdf/", views.upload_pdf_with_loader, name="upload_pdf_with_loader"),
 ]
 

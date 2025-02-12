@@ -37,7 +37,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 APPEND_SLASH =False
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/uploads/')
+MEDIA_URL = '/media/'
 
+# Ensure the directory exists
+if not os.path.exists(MEDIA_ROOT):
+    os.makedirs(MEDIA_ROOT)
 # Ensure this is added in DEBUG mode only
 if DEBUG:
     from django.conf.urls.static import static
@@ -98,10 +102,10 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 # 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-__import__('pysqlite3')
-import sys
+# __import__('pysqlite3')
+# import sys
 
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+# sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 
 if DB_TYPE == 'sqlite3':
