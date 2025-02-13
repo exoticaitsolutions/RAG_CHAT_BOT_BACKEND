@@ -1,6 +1,7 @@
 import logging
 import random
 import string
+import tempfile
 import requests
 from django.conf import settings
 from django.contrib import messages
