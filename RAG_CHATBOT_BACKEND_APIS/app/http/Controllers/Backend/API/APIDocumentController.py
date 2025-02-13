@@ -97,13 +97,13 @@ class APIDocumentController(APIView):
                     print("Document {file_name} uploaded successfully")
                     
                 #     # Start document processing in a separate thread
-                #     try:
-                #         threading.Thread(target=uploaded_document_and_train_llm, args=(serializer.data, media_file, chatbot, user)).start()
-                #         logger.info(f"Started LLM training thread for: {file_name}")
-                #     except Exception as e:
-                #         logger.error(f"Failed to start thread for document {file_name}: {str(e)}")
-                #         document_instance.status = "error"
-                #         document_instance.save()
+                    try:
+                        threading.Thread(target=uploaded_document_and_train_llm, args=(serializer.data, media_file, chatbot, user)).start()
+                        logger.info(f"Started LLM training thread for: {file_name}")
+                    except Exception as e:
+                        logger.error(f"Failed to start thread for document {file_name}: {str(e)}")
+                        document_instance.status = "error"
+                        document_instance.save()
 
                 else:
                     print(f"Document upload failed: {serializer.errors}")
