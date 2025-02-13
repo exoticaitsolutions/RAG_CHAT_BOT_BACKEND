@@ -37,7 +37,7 @@ admin_auth_urls = [
     # Login Routes 
     path('login/', LoginController.as_view(), name='login.get'),
     # Register Routes
-    path('register', RegisterController.as_view(), name='register.get'),
+    path('register/', RegisterController.as_view(), name='register.get'),
 ]
 # API Endpoints
 api_urls = [
