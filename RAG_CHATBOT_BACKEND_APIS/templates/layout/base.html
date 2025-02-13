@@ -114,7 +114,7 @@
                     <ul class="pc-submenu" style="overflow:auto;">
                         <li class="pc-item"><a class="pc-link" href="/dashboard/chatbot/create/">Create Chatbot</a></li>
                         {% for chatbot in data.user_chatbots %}
-                        <li class="pc-item text-capitalize"><a class="pc-link" href="{% url 'document-list' c_id=chatbot.chatbot_id%}">{{chatbot.chatbot_name}}</a>
+                        <li class="pc-item text-capitalize"><a class="pc-link" href="{% url 'document-list' c_id=chatbot.id%}">{{chatbot.chatbot_name}}</a>
                         </li>
                         {% endfor %}
                     </ul>

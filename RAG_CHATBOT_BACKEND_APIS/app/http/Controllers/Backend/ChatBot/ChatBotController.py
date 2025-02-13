@@ -68,7 +68,16 @@ class ChatBotController:
         user_id = request.user.id
         logger.info(f"📩 Received request  c_id: {c_id} and user id = {user_id}")
         data = ChatbotDetails(c_id,user_id)
-        return render(request, 'admin/page/chatbot/Uploader/add-website-list.html') 
+        return render(request, 'admin/page/chatbot/pages/preview-chat-page.html')
+    
+    @method_decorator(login_required(login_url='/login/'))
+    def render_website_share(self, request,c_id):
+        user_id = request.user.id
+        logger.info(f"📩 Received request  c_id: {c_id} and user id = {user_id}")
+        data = ChatbotDetails(c_id,user_id)
+        context = {'data': data }
+        print('context',context)
+        return render(request, 'admin/page/chatbot/Uploader/share_chat_bot.html',context=context)
 
     @csrf_exempt
     @method_decorator(login_required(login_url='/login/'))

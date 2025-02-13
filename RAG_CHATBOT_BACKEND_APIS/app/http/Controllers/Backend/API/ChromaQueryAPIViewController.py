@@ -48,38 +48,22 @@ class ChromaQueryAPIViewController(APIView):
         """Handles chatbot queries using ChromaDB and returns AI-generated responses."""
         query = request.data.get('query')
         chat_id = request.GET.get("chat_id")
-        user_id = request.GET.get("user_id")
+        # user_id = request.GET.get("user_id")
 
-        if not chat_id or not user_id:
+        if not chat_id :
             logger.error("Missing chat_id or user_id")
             return JsonResponse({"status": "failed", "message": "Missing chat_id or user_id"}, status=400)
         if not query:
             return JsonResponse({"error": "Query parameter is missing"}, status=400)
-
-        try:
-            chat_id = int(chat_id)
-            user_id = int(user_id)
-        except ValueError:
-            logger.error("Invalid format for chat_id or user_id")
-            return JsonResponse({"status": "failed", "message": "Invalid chat_id or user_id format"}, status=400)
-
-        # Validate chatbot existence
-        chatbot = ChatBotDB.objects.filter(id=chat_id, user_id=user_id).first()
+        chatbot = ChatBotDB.objects.filter(id=chat_id).first()
         if not chatbot:
-            logger.error(f"Chatbot with id {chat_id} not found for user {user_id}")
             return JsonResponse({"status": "failed", "message": "Invalid chat_id"}, status=404)
-
-        # Validate user existence
-        try:
-            user = CustomUser.objects.get(id=user_id)
-        except CustomUser.DoesNotExist:
-            logger.error(f"User with id {user_id} not found")
-            return JsonResponse({"status": "failed", "message": "Invalid user_id"}, status=404)
-
-        # Process query using ChatGPT
+        user = CustomUser.objects.get(id=chatbot.user.id) # type: ignore
+        # print('user',user)
         try:
             results = GetResponseFromQuery(chatbot, user, query)
             return JsonResponse({"results": results}, safe=False, status=200)
         except Exception as e:
             logger.error(f"Error processing query: {str(e)}")
             return JsonResponse({"error": "Internal server error"}, status=500)
+       

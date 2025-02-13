@@ -67,6 +67,8 @@ admin_dashboard_urls = [
    
     path("dashboard/chatbot/preview/<str:c_id>", ChatBotController().render_the_webiste_preview, name="preview-chatbot"),
 
+
+    path("dashboard/chatbot/intergation/<str:c_id>/", ChatBotController().render_website_share, name="chat-setting-intergation"),
     
      # Upload Documents Via CHat
     path('upload-document/<str:c_id>', ChatBotDataHandler().upload_and_train, name="upload-document"),
@@ -88,7 +90,7 @@ admin_dashboard_urls = [
     path("dashboard/services/chatbot/setting/<str:c_id>/", admin_view.admin_dashborad_chatbot_setting, name="chat-setting"),
     path("dashboard/chatbot/chatbot-appearance/<str:c_id>/", admin_view.admin_dashborad_chatbot_setting_apperence, name="chat-setting-apperence"),
     path("dashboard/chatbot/delete/<str:c_id>/", admin_view.admin_dashborad_chatbot_delete, name="chat-setting-delete"),
-    path("dashboard/chatbot/intergation/<str:c_id>/", admin_view.admin_dashborad_chatbot_share, name="chat-setting-intergation"),
+   
 
     # path('dashboard/services/chatbot/website-list/', admin_view.website_list, name='website-list'),
     
