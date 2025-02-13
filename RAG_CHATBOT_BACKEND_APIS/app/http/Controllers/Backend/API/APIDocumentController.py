@@ -12,7 +12,8 @@ from rest_framework.decorators import parser_classes
 from RAG_CHATBOT_BACKEND_APIS.app.http.Serializers.DocumentUpload import DocumentUploadSerializer
 from RAG_CHATBOT_BACKEND_APIS.app.services.training.train_document import uploaded_document_and_train_llm
 from RAG_CHATBOT_BACKEND_APIS.models import ChatBotDB, DocumentNamespaceIds
-
+from RAG_CHATBOT_BACKEND_APIS.models import CustomUser
+from RAG_CHATBOT_BACKEND_APIS.utils import format_name
 # Configure Logger
 logger = logging.getLogger(__name__)
 
@@ -44,7 +45,7 @@ class APIDocumentController(APIView):
             return JsonResponse({"status": "failed", "message": "Invalid chat_id"}, status=404)
 
         # Validate user existence
-        user = User.objects.filter(id=user_id).first()
+        user = CustomUser.objects.filter(id=user_id).first()
         if not user:
             logger.error(f"User with id {user_id} not found")
             return JsonResponse({"status": "failed", "message": "Invalid user_id"}, status=404)
@@ -62,9 +63,11 @@ class APIDocumentController(APIView):
                 file_name = uploaded_file.name  # Get file name
                 
                 logger.info(f"Processing file: {file_name}")
-
+                forment_username = format_name(str(user.username))
+                forment_chat_name = format_name(str(chatbot.chatbot_name))
                 # Construct file path
-                media_file = os.path.join(settings.MEDIA_ROOT, 'uploads', str(user.username), str(chatbot.chatbot_name), file_name)
+                media_file = os.path.join(settings.MEDIA_ROOT, 'uploads', forment_username, forment_chat_name, file_name)
+                print(f"Constructed media file path: {media_file}")
                 logger.debug(f"Constructed media file path: {media_file}")
 
                 # Remove existing file
@@ -84,23 +87,26 @@ class APIDocumentController(APIView):
                     "name": uploaded_file.name,
                     "size": uploaded_file.size
                 }
+                print(data)
 
                 serializer = DocumentUploadSerializer(data=data)
                 if serializer.is_valid():
                     document_instance = serializer.save()
                     uploaded_documents.append(serializer.data)
                     logger.info(f"Document {file_name} uploaded successfully")
+                    print("Document {file_name} uploaded successfully")
                     
-                    # Start document processing in a separate thread
-                    try:
-                        threading.Thread(target=uploaded_document_and_train_llm, args=(serializer.data, media_file, chatbot, user)).start()
-                        logger.info(f"Started LLM training thread for: {file_name}")
-                    except Exception as e:
-                        logger.error(f"Failed to start thread for document {file_name}: {str(e)}")
-                        document_instance.status = "error"
-                        document_instance.save()
+                #     # Start document processing in a separate thread
+                #     try:
+                #         threading.Thread(target=uploaded_document_and_train_llm, args=(serializer.data, media_file, chatbot, user)).start()
+                #         logger.info(f"Started LLM training thread for: {file_name}")
+                #     except Exception as e:
+                #         logger.error(f"Failed to start thread for document {file_name}: {str(e)}")
+                #         document_instance.status = "error"
+                #         document_instance.save()
 
                 else:
+                    print(f"Document upload failed: {serializer.errors}")
                     logger.error(f"Document upload failed: {serializer.errors}")
                     return JsonResponse({"status": "failed", "errors": serializer.errors}, status=400)
 

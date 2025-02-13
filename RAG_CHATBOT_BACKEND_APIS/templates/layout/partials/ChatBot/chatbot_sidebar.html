@@ -1,0 +1,26 @@
+<ul class="email-filter-folders list-unstyled">
+    <li class="d-flex justify-content-between align-items-center mrbt active">
+        <a href="{% url 'document-list' c_id=1 %}" class="d-flex flex-wrap align-items-center">
+
+        <i class="mdi mdi-file-document-outline mdi-20px me-1"></i>
+        <span class="align-middle ms-2">Document</span>
+      </a>
+      <div class="badge bg-label-primary rounded-pill badgecust" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="0 Characters / 0 Chunks" bis_skin_checked="1">0  </div>
+    </li>
+    <li class=" d-flex justify-content-between align-items-center mrbt ">
+      <a href="{% url 'website-list' c_id=1 %}" class="d-flex flex-wrap align-items-center">
+        <i class="mdi mdi-web mdi-20px me-1"></i>
+        <span class="align-middle ms-2">URL</span>
+      </a>
+      <div class="badge bg-label-secondary rounded-pill badgecust" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="0 Characters / 0 Chunks" bis_skin_checked="1">6</div>
+    </li>
+   
+    {% comment %} <li class=" d-flex justify-content-between align-items-center mrbt ">
+      <a href="/text-list/1" class="d-flex flex-wrap align-items-center">
+        <i class="mdi mdi-format-text mdi-20px me-1"></i>
+        
+        <span class="align-middle ms-2">Text</span>
+      </a>
+      <div class="badge bg-label-warning rounded-pill badgecust" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="0 Characters / 0 Chunks" bis_skin_checked="1">0</div>
+    </li> {% endcomment %}
+  </ul>

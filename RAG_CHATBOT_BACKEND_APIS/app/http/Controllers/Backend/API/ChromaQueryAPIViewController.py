@@ -1,5 +1,5 @@
 import logging
-from django.contrib.auth.models import User
+from RAG_CHATBOT_BACKEND_APIS.models import CustomUser
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -71,8 +71,8 @@ class ChromaQueryAPIViewController(APIView):
 
         # Validate user existence
         try:
-            user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
+            user = CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
             logger.error(f"User with id {user_id} not found")
             return JsonResponse({"status": "failed", "message": "Invalid user_id"}, status=404)
 

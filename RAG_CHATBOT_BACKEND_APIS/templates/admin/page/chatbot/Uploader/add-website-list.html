@@ -4,7 +4,6 @@
 
 {% block content %}
 <div class="row" bis_skin_checked="1">
-            
     <div class="row" bis_skin_checked="1">
       {% include 'admin/page/chatbot/ChatbotMenu/chat-head.html' %}
         </div>
@@ -14,37 +13,10 @@
         <div class="row g-0" bis_skin_checked="1">
           <!-- Email Sidebar -->
           <div class="col app-email-sidebar border-end flex-grow-0" id="app-email-sidebar" bis_skin_checked="1">
-            <div class="btn-compost-wrapper d-grid" bis_skin_checked="1">
-         
-            </div>
             <!-- Email Filters -->
             <div class="email-filters pt-2 pb-2 ps" bis_skin_checked="1">
               <!-- Email Filters: Folder -->
-              <ul class="email-filter-folders list-unstyled">
-                <li class="d-flex justify-content-between align-items-center mrbt active">
-                  <a href="/dashboard/services/chatbot/get/<str:c_id>/" class="d-flex flex-wrap align-items-center">
-                    <i class="mdi mdi-file-document-outline mdi-20px me-1"></i>
-                    <span class="align-middle ms-2">Document</span>
-                  </a>
-                  <div class="badge bg-label-primary rounded-pill badgecust" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="0 Characters / 0 Chunks" bis_skin_checked="1">0  </div>
-                </li>
-                <li class=" d-flex justify-content-between align-items-center mrbt ">
-                  <a href="/dashboard/services/chatbot/website-list/" class="d-flex flex-wrap align-items-center">
-                    <i class="mdi mdi-web mdi-20px me-1"></i>
-                    <span class="align-middle ms-2">URL</span>
-                  </a>
-                  <div class="badge bg-label-secondary rounded-pill badgecust" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="0 Characters / 0 Chunks" bis_skin_checked="1">6</div>
-                </li>
-               
-                <li class=" d-flex justify-content-between align-items-center mrbt ">
-                  <a href="/text-list/1" class="d-flex flex-wrap align-items-center">
-                    <i class="mdi mdi-format-text mdi-20px me-1"></i>
-                    
-                    <span class="align-middle ms-2">Text</span>
-                  </a>
-                  <div class="badge bg-label-warning rounded-pill badgecust" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="0 Characters / 0 Chunks" bis_skin_checked="1">0</div>
-                </li>
-              </ul>
+              {% include 'layout/partials/ChatBot/chatbot_sidebar.html' %}
               
               <!--/ Email Filters -->
             <div class="ps__rail-x" bis_skin_checked="1"><div class="ps__thumb-x" tabindex="0" bis_skin_checked="1"></div></div><div class="ps__rail-y" bis_skin_checked="1"><div class="ps__thumb-y" tabindex="0" bis_skin_checked="1"></div></div><div class="ps__rail-x" bis_skin_checked="1" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" bis_skin_checked="1" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" bis_skin_checked="1" style="top: 0px; right: 0px;"><div class="ps__thumb-y" tabindex="0" bis_skin_checked="1" style="top: 0px; height: 0px;"></div></div></div>
@@ -96,9 +68,8 @@
                             id="urlInput"
                             name="url"
                             placeholder="https://exoticaitsolutions.com/"
-                            required
-                            class="form-control mb-2"
-                          >
+required class="form-control mb-2">
+                          <input  type="hidden" id ="data_url_list" value ="http://127.0.0.1:8000/api/v2/add-urls/?chat_id={{data.chat_bot_id}}&user_id={{data.CustomUserdata_uuld}}">
                           <button type="submit" class="btn btn-primary me-sm-3 me-1 waves-effect waves-light">
                             Submit
                           </button>
@@ -115,13 +86,16 @@
                         
                                 // Get the URL value from the input field
                                 var urlValue = $('#urlInput').val();
-                        
+                                var data_url_list = $('#data_url_list').val();
                                 // Prepare the payload as a JSON string
-                                var payload = JSON.stringify({ "url": urlValue });
-                        
+                                const payload = JSON.stringify({
+                                  "urls": [
+                                    urlValue
+                                  ]
+                                });
                                 // Make the AJAX POST request to your API endpoint
                                 $.ajax({
-                                  url: 'http://127.0.0.1:8000/url/api/v1/upload-url/',
+                                  url: data_url_list,
                                   type: 'POST',
                                   contentType: 'application/json',
                                   data: payload,
