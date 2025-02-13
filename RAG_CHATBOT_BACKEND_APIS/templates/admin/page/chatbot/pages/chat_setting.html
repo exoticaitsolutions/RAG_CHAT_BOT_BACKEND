@@ -18,7 +18,7 @@
           <div class="card mb-4">
               <h4 class="card-header">AI Settings</h4>
               <div class="card-body">
-                  <form id="formAccountSettings" method="POST">
+                  <form id="formAccountSettings" method="POST">     
                       {% csrf_token %}
                       <div class="row mt-2 gy-4">
                           <div class="col-md-6">
@@ -105,8 +105,8 @@
                               </div>
   
                           </div>
-                      </div>
-                      <div class="mt-4">
+                        </div>
+                        <div class="mt-4">
                           <button type="submit" id="settings-submit" class="btn btn-primary me-2">Save changes</button>
                           <button type="reset" class="btn btn-outline-secondary">Cancel</button>
                       </div>
