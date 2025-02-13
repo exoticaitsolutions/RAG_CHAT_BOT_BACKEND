@@ -4,7 +4,7 @@
         <li class="nav-item">
             <a href="{% url 'document-list' c_id=1 %}"
             class="nav-link waves-effect waves-light 
-            {% if '/get-chat' in request.path or '/services/chatbot/get/' in request.path or 'qa-list' in request.path or 'text-list' in request.path %}active{% endif %}">
+            {% if '/get-chat' in request.path or '/chatbot/get/' in request.path or 'qa-list' in request.path or 'text-list' in request.path %}active{% endif %}">
             <i class="menu-icon tf-icons mdi mdi-bookshelf"></i>
             <div data-i18n="Source">Source</div>
          </a>

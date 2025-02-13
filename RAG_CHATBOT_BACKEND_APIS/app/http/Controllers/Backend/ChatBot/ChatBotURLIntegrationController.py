@@ -16,4 +16,4 @@ logger = logging.getLogger(__name__)
 class ChatBotURLIntegrationController(APIView):
     # Create Chat bot Api
     def render_the_webiste_url(self, request):
-        return render(request, 'admin/page/chatbot/pages/add-website-list.html')
+        return render(request, 'admin/page/chatbot/Uploader/add-website-list.html')

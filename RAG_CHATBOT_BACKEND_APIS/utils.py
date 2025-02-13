@@ -1,4 +1,5 @@
 import logging
+import re
 import time
 import os
 import shutil
@@ -8,7 +9,7 @@ from django.conf import settings
 from django.db import transaction
 
 from langchain_community.document_loaders import PyPDFLoader
-from langchain_openai import OpenAIEmbeddings
+from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
@@ -25,6 +26,10 @@ from langchain_community.vectorstores import Chroma
 
 # Create a logger instance
 logger = logging.getLogger(__name__)
+def format_name(name):
+    """Format names by converting to lowercase and replacing spaces with underscores."""
+    return name.strip().lower().replace(" ", "_")
+
 
 # Global variable declaration
 def ensure_directory_exists(directory_path):
@@ -132,7 +137,7 @@ def store_url_data_in_chromadb(url):
     embeddings = OpenAIEmbeddings()
     vectordb = Chroma.from_documents(documents, embedding=embeddings, persist_directory=website_persist_directory)
     # vectordb.persist()
-
+    
     message = f"Website data for {url} stored in ChromaDB at {website_persist_directory}"
     logger.info(message)
     return message

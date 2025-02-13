@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="row">
-    {% if request.path == "/dashboard/services/chatbot/create/" %}
+    {% if request.path == "/dashboard/chatbot/create/" %}
         <div class="col-xl-2 col-lg-3 col-sm-4 m-4">
           <div class="card">
             <div class="card-body" style="padding: 35px">
@@ -36,7 +36,7 @@
                 <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
                   <div class="avatar">
                     <div class="avatar-initial bg-label-primary rounded">
-                      <a href="/dashboard/services/chatbot/get/{{ chatbots.id }}">
+                      <a href="{% url 'document-list' c_id=chatbots.id%}">
                       <img class="rounded" src="{{ chatbots.icon_url }}" alt="{{ chatbots.chatbot_name }}">
                     </a>
                     </a>
@@ -52,12 +52,12 @@
                       {% endif %}
     
                       <a class="dropdown-item waves-effect deletechatbot" href="javascript:void(0);"
-                         data-item-id="{{ chatbots.id }}" chat-name="{{ chatbots.chatbot_name }}">Delete</a>
+                         data-item-id="{{ chatbots.chatbot_id }}" chat-name="{{ chatbots.chatbot_name }}">Delete</a>
                     </div>
                   </div>
                 </div>
                 <div class="card-info mt-4 pt-1">
-                  <a href="/dashboard/services/chatbot/get/{{chatbots.id}}"><h5 class="mb-2 text-truncate">{{ chatbots.chatbot_name }}</h5></a>
+                  <a href="{% url 'document-list' c_id=chatbots.id%}"><h5 class="mb-2 text-truncate">{{ chatbots.chatbot_name }}</h5></a>
                   <button type="button" class="btn btn-xs btn-primary waves-effect waves-light d-none" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="tooltip-success" data-bs-original-title="Edit Chatbot">
                     <span class="tf-icons mdi mdi-pencil"></span>
                   </button>
