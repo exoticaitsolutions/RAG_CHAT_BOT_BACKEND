@@ -33,6 +33,26 @@ STATICFILES_DIRS = [
     # os.path.join(BASE_DIR, "static"),
     os.path.join(BASE_DIR, 'RAG_CHATBOT_BACKEND_APIS/static'),
 ]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",  # Example: Frontend app
+    "https://yourdomain.com",
+]
+# CORS_ALLOW_METHODS = [
+#     "GET",
+#     "POST",
+#     "PUT",
+#     "PATCH",
+#     "DELETE",
+#     "OPTIONS"
+# ]
+CORS_ALLOW_ALL_ORIGINS = True  # Allows all domains to access the API
+
+CORS_ALLOW_HEADERS = [
+    "content-type",
+    "authorization",
+    "x-requested-with",
+    "accept",
+]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Application definition
 APPEND_SLASH =False
@@ -60,7 +80,8 @@ INSTALLED_APPS = [
     'RAG_CHATBOT_BACKEND_APIS',
     'rest_framework_swagger',
     'drf_yasg',
-    'django.contrib.humanize'
+    'django.contrib.humanize',
+    "corsheaders"
     
 ]
 
@@ -72,6 +93,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+      'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'RAG_Backend.urls'
