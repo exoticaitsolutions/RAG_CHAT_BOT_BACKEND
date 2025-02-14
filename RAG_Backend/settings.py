@@ -59,6 +59,7 @@ APPEND_SLASH =False
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/uploads/')
 MEDIA_URL = '/media/'
+COPY_ROOT = os.path.join(BASE_DIR, 'Copy_Records/')
 
 # Ensure the directory exists
 if not os.path.exists(MEDIA_ROOT):

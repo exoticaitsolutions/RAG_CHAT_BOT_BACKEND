@@ -1,4 +1,6 @@
 import os
+import random
+import string
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser, User
@@ -6,9 +8,7 @@ from django.contrib.auth.models import AbstractUser, User
 from RAG_CHATBOT_BACKEND_APIS.utils import format_name  # Update if using a custom model
 
 class CustomUser(AbstractUser):
-    # Add a UUID field if needed
-    # id = models.AutoField(primary_key=True, unique=True)
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    uuid = models.UUIDField(default=uuid.uuid4,max_length=10, editable=False, unique=True)
     pass
 
 class ChatbotAppearance(models.Model):
@@ -20,6 +20,7 @@ class ChatbotAppearance(models.Model):
     chatbot_theme = models.CharField(max_length=10, default="#8d54a2", blank=True)
     chatbot_mode = models.BooleanField(default=False)
     suggested_messages = models.TextField(blank=True)
+    destination = models.TextField(blank=True)
     chatbot_image = models.ImageField(upload_to='chatbot_images/', default='default_images/chatbot_image.png', null=True, blank=True)
     chatbot_launcher_icon = models.ImageField(upload_to='launcher_icon/', default='default_images/avatar-1.png', null=True, blank=True)
     top_bar_background = models.CharField(max_length=10, default="#8d54a2")
@@ -29,7 +30,7 @@ class ChatbotAppearance(models.Model):
     user_message_background = models.CharField(max_length=10, default="#ffffff")
     user_message_color = models.CharField(max_length=10, default="#46464e")
     chatbot_background_color = models.CharField(max_length=10, default="#e6e6e6")
-    chatbot_background_pattern = models.ImageField(upload_to='chatbot_background_patterns/', blank=True)
+    chatbot_background_pattern = models.ImageField(upload_to='chatbot_background_patterns/', blank=True,max_length=255,)
     font_family = models.CharField(max_length=255, default="Arial")
     font_size = models.PositiveIntegerField(blank=True, default=14)
     widget_width = models.PositiveIntegerField(blank=True, default=25)
@@ -68,6 +69,7 @@ class ChatBotDB(models.Model):
     )
 
     chatbot_name = models.CharField(max_length=200)
+    destination = models.TextField(blank=True)
     user = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null=True)
     llm_model = models.CharField(choices=LLM_MODEL, default="system openai", max_length=50)
     model = models.CharField(choices=MODEL, default="gpt-3.5-turbo", max_length=50)
@@ -83,7 +85,7 @@ class ChatBotDB(models.Model):
     seconds = models.PositiveIntegerField(default=60)
     visibility = models.CharField(max_length=50, default='private')
     login_status = models.CharField(max_length=20, choices=LOGIN_STATUS, default='login')
-    icon_url = models.ImageField(upload_to='chatbot', default='default_images/chatbot_image.png')
+    icon_url = models.ImageField(upload_to='chatbot', default='default_images/chatbot_image.png',max_length=255)
     chatbot_appearance = models.ForeignKey("ChatbotAppearance", on_delete=models.CASCADE)
     status = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)

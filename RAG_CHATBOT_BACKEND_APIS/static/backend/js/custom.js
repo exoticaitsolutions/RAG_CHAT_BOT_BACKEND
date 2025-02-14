@@ -1,5 +1,9 @@
 jQuery(document).ready(function(){
     console.log('helllo from the jquery............');
+    var $sidebar = $('nav');
+    $('.toggle').on('click', function () {
+        $sidebar.toggleClass('active');
+    });
     // signup_process Vaidationa and Ajax 
     jQuery("#signup_process").validate({
         messages: {
@@ -55,22 +59,8 @@ jQuery(document).ready(function(){
         },
         submitHandler: async function(_form, e) {
             e.preventDefault();
-            jQuery(`.theme_btn`).attr("disabled", true);
-            let ajax_value_list = $('form').serialize(), 
-            register_route_url = jQuery(`#register_route_url`).val();
-            console.log(ajax_value_list);
-            const [resPose] = await Promise.all([Ajax_response(register_route_url, "POST", ajax_value_list, '')]);
-            console.log(resPose);
-            if (resPose.status === 'success') {
-                console.log('TRUE');
-                NotyfMessage(resPose.message, 'success');
-                setTimeout(function() {
-                    window.location.href = resPose.redirect_url;
-                }, 4000);
-            }else{
-                // console.log('false');
-                NotyfMessage(resPose.message, 'error');
-            }
+            jQuery(".theme_btn").attr("disabled", false);
+            _form.submit(); // Allow normal form submission
         }
     });
 
@@ -107,22 +97,7 @@ jQuery(document).ready(function(){
         submitHandler: async function(_form, e) {
             e.preventDefault();
             jQuery(`.theme_btn`).attr("disabled", true);
-            let ajax_value_list = $('form').serialize(), 
-            register_route_url = jQuery(`#register_route_url`).val();
-            console.log(ajax_value_list);
-            const [resPose] = await Promise.all([Ajax_response(register_route_url, "POST", ajax_value_list, '')]);
-            console.log(resPose);
-            if (resPose.status === 'success') {
-                console.log('TRUE');
-                NotyfMessage(resPose.message, 'success');
-                console.log(resPose.redirect_url);
-                setTimeout(function() {
-                    window.location.href = resPose.redirect_url;
-                }, 3000);
-            }else{
-                // console.log('false');
-                NotyfMessage(resPose.message, 'error');
-            }
+            _form.submit(); // Allow normal form submission
         }
     });
 

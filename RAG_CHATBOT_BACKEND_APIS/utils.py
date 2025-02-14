@@ -26,6 +26,38 @@ from langchain_community.vectorstores import Chroma
 
 # Create a logger instance
 logger = logging.getLogger(__name__)
+
+import shutil
+import os
+
+def copy_directory_contents(source_dir, destination_dir):
+    """
+    Copies all files and subdirectories from source_dir to destination_dir.
+    
+    Args:
+        source_dir (str): Path to the source directory.
+        destination_dir (str): Path to the destination directory.
+    
+    Returns:
+        bool: True if the operation succeeds, False otherwise.
+    """
+    try:
+        # Ensure the destination directory exists
+        os.makedirs(destination_dir, exist_ok=True)
+        # Copy all files and directories
+        for item in os.listdir(source_dir):
+            source_item = os.path.join(source_dir, item)
+            destination_item = os.path.join(destination_dir, item)
+            if os.path.isdir(source_item):
+                shutil.copytree(source_item, destination_item, dirs_exist_ok=True)  # Copy directories
+            else:
+                shutil.copy2(source_item, destination_item)  # Copy files with metadata
+        print(f"✅ Successfully copied from {source_dir} to {destination_dir}")
+        return True
+    except Exception as e:
+        print(f"❌ Error copying files: {e}")
+        return False
+
 def format_name(name):
     """Format names by converting to lowercase and replacing spaces with underscores."""
     return name.strip().lower().replace(" ", "_")
