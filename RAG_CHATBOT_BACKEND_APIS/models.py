@@ -104,7 +104,7 @@ class Document(models.Model):
     size = models.CharField(default="", max_length=250)
     no_of_characters = models.PositiveIntegerField(default=0, blank=True)
     no_of_chunks = models.PositiveIntegerField(default=0, blank=True)
-    status = models.CharField(default="pending", max_length=10)
+    status = models.CharField(default="pending", max_length=10)      
     created_at = models.DateField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now_add=True, blank=True)
 

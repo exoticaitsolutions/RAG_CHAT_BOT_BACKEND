@@ -16,7 +16,7 @@
               {% csrf_token %}
               <h4 class="text-center f-w-500 mb-3">Login with your Username</h4>
               <div class="form-group mb-3">
-                <input type="text" class="form-control" hidden  name="login_route_url" id ="login_route_url" value="{% url 'login.get'%}">
+                <input type="text" class="form-control" hidden  name="login_route_url" id ="login_route_url" value="{% url 'login'%}">
                 <input type="text" class="form-control" id="username_or_address" name="username_or_address" placeholder="Enter the Username or Email Address" >
               </div>
               <div class="form-group mb-3">

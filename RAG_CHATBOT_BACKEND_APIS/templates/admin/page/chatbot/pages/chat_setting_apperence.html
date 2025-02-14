@@ -236,8 +236,8 @@
           }
   
           #send-button {
-              background-color: {{ cfg.chatbot_theme }} !important;;
-              color: #fff;
+              background-color: {{ cfg.chatbot_theme }} #1ce34e;;
+              color: #060606;
               padding: 8px 15px;
               border: none;
               border-radius: 5px;
@@ -280,7 +280,7 @@
             align-items: center;
             justify-content: center;
             margin: 0px -9px -11px -12px;
-  
+             
           }
       </style>
     {% include 'admin/page/chatbot/ChatbotMenu/chat-head.html' %}
@@ -288,13 +288,13 @@
     <div class="row">
         <div class="col-md-12">
           <div class="card mb-4">
-            <h4 class="card-header">Appearance</h4>
+            <h4 class="card-header">Appearance</h4>        
             <!-- Appearance -->
             <div class="card-body">
               <div class="row">
                 <div class="col-sm">
       
-                  <form action="/chatbot-appearance-save/{{ data.chatbot_id }}" method="post" enctype="multipart/form-data" id="chatbot-form">
+                  <form action="{% url 'chatbot-appearance-save' %}" method="post" enctype="multipart/form-data" id="chatbot-form">
                     {% csrf_token %}
                     <div class="form-floating form-floating-outline mb-4">
                       <input type="text" id="display-name" class="form-control form-control-sm" placeholder="Enter display name" name="display-name"
@@ -357,8 +357,7 @@
                               </div>
                             </div>
                             <!-- Theme Color -->
-      
-      
+          
                             <!-- Top color -->
                             <div class="row">
                               <div class="col-6 mb-4">
@@ -499,39 +498,39 @@
                                 </button>
       
                                 <div class="avatar d-inline-flex position-relative me-3">
-                                  <img class="rounded-circle drag-item cursor-pointer" src="{% static 'backend/images/user/avatar-8.jpg' %}"
+                                  <img class="rounded-circle drag-item cursor-pointer" src="{% static 'backend/image/user/avatar-1.jpg' %}"
                                        alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top"
                                        data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Profile">
                                 </div>
       
                                 <div class="avatar d-inline-flex position-relative me-3">
-                                  <img class="rounded-circle drag-item cursor-pointer" src="{% static 'backend/img/avatars/1.png' %}"
+                                  <img class="rounded-circle drag-item cursor-pointer" src="{% static 'backend/image/user/avatar-2.jpg' %}"
                                        alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top"
                                        data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Profile">
                                 </div>
       
                                 <div class="avatar d-inline-flex position-relative me-3">
-                                  <img class="rounded-circle drag-item cursor-pointer" src="{% static 'backend/images/user/avatar-3.jpg' %}"
+                                  <img class="rounded-circle drag-item cursor-pointer" src="{% static 'backend/image/user/avatar-3.jpg' %}"
                                        alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top"
                                        data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Profile">
                                 </div>
       
                                 <div class="avatar d-inline-flex position-relative me-3" id="default-profile">
-                                  <img class="rounded-circle drag-item cursor-pointer"  src="{% static 'backend/images/user/avatar-4.jpg' %}"
+                                  <img class="rounded-circle drag-item cursor-pointer"  src="{% static 'backend/image/user/avatar-4.jpg' %}"
+                                       alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top"
+                                       data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Profile">     
+                                </div>
+      
+                                <div class="avatar d-inline-flex position-relative me-3">
+                                  <img class="rounded-circle drag-item cursor-pointer" src="{% static 'backend/image/user/avatar-5.jpg' %}"
                                        alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top"
                                        data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Profile">
                                 </div>
       
                                 <div class="avatar d-inline-flex position-relative me-3">
-                                  <img class="rounded-circle drag-item cursor-pointer" src="{% static 'backend/images/user/avatar-5.jpg' %}"
-                                       alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top"
-                                       data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Profile">
-                                </div>
-      
-                                <div class="avatar d-inline-flex position-relative me-3">
-                                  <img class="rounded-circle drag-item cursor-pointer" src="{% static 'backend/images/user/avatar-6.jpg' %}"
-                                       alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top"
-                                       data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Profile">
+                                  <img class="rounded-circle drag-item cursor-pointer" src="{% static 'backend/image/user/avatar-6.jpg' %}"
+                                      alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top"
+                                      data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Profile">
                                 </div>
       
                               </div>
@@ -553,38 +552,38 @@
                                 <div class="d-flex flex-wrap gap-2" id="image-list-2">
                                   <button type="button" id="chatbot-bg-pattern-remove" class="btn btn-icon rounded-pill btn-label-pinterest waves-effect align-self-center mt-1">
                                     <i class="tf-icons mdi mdi-restore" data-bs-toggle="tooltip" data-bs-placement="top"
-                                       data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Default"></i>
+                                      data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Default"></i>
                                   </button>
                                   <div class="avatar d-inline-flex position-relative me-3">
-                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/img/pattern/pattern_1.jpg' %}" src_data="{% static 'backend/img/pattern/pattern_1.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/image/elements/1.jpg' %}" src_data="{% static 'backend/image/elements/1.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
                                   </div>
       
                                   <div class="avatar d-inline-flex position-relative me-3">
-                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/img/pattern/pattern_2.jpg' %}" src_data="{% static 'backend/img/pattern/pattern_2.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/image/elements/2.jpg' %}" src_data="{% static 'backend/image/elements/2.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
                                   </div>
       
                                   <div class="avatar d-inline-flex position-relative me-3">
-                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/img/pattern/pattern_3.jpg' %}" src_data="{% static 'backend/img/pattern/pattern_3.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/image/elements/3.jpg' %}" src_data="{% static 'backend/image/elements/3.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
                                   </div>
       
                                   <div class="avatar d-inline-flex position-relative me-3">
-                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/img/pattern/pattern_4.jpg' %}" src_data="{% static 'backend/img/pattern/pattern_4.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/image/elements/6.jpg' %}" src_data="{% static 'backend/image/elements/6.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
                                   </div>
       
                                   <div class="avatar d-inline-flex position-relative me-3">
-                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/img/pattern/pattern_5.jpg' %}" src_data="{% static 'backend/img/pattern/pattern_5.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/image/elements/7.jpg' %}" src_data="{% static 'backend/image/elements/7.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
                                   </div>
       
                                   <div class="avatar d-inline-flex position-relative me-3">
-                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/img/pattern/pattern_7.png' %}" src_data="{% static 'backend/img/pattern/pattern_7.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/image/elements/8.jpg' %}" src_data="{% static 'backend/image/elements/8.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
                                   </div>
       
       
                                   <div class="avatar d-inline-flex position-relative me-3">
-                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/img/pattern/pattern_8.jpg' %}" src_data="{% static 'backend/img/pattern/pattern_8.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/image/elements/9.jpg' %}" src_data="{% static 'backend/image/elements/9.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
                                   </div>
                                   <div class="avatar d-inline-flex position-relative me-3">
-                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/img/pattern/pattern_9.jpg' %}" src_data="{% static 'backend/img/pattern/pattern_9.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                    <img class="rounded-circle chatbot-pattern-img cursor-pointer" src="{% static 'backend/image/elements/10.jpg' %}" src_data="{% static 'backend/image/elements/10.jpg' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
                                   </div>
 
                                 </div>
@@ -609,23 +608,23 @@
                                        data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change Default"></i>
                                   </button>
                                   <div class="avatar d-inline-flex position-relative me-3">
-                                    <img class="rounded-circle chatbot-launcher-icon cursor-pointer" src="{% static 'backend/img/launcher_icon/avatar-1.png' %}" src_data="{% static 'backend/img/launcher_icon/avatar-1.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                    <img class="rounded-circle chatbot-launcher-icon cursor-pointer" src="{% static 'backend/image/launcher_icon/avatar-1.png' %}" src_data="{% static 'backend/img/launcher_icon/avatar-1.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
                                   </div>
       
                                   <div class="avatar d-inline-flex position-relative me-3">
-                                    <img class="rounded-circle chatbot-launcher-icon cursor-pointer" src="{% static 'backend/img/launcher_icon/avatar-2.png' %}" src_data="{% static 'backend/img/launcher_icon/avatar-2.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                    <img class="rounded-circle chatbot-launcher-icon cursor-pointer" src="{% static 'backend/image/launcher_icon/avatar-2.png' %}" src_data="{% static 'backend/img/launcher_icon/avatar-2.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
                                   </div>
       
                                   <div class="avatar d-inline-flex position-relative me-3">
-                                    <img class="rounded-circle chatbot-launcher-icon cursor-pointer" src="{% static 'backend/img/launcher_icon/avatar-3.png' %}" src_data="{% static 'backend/img/launcher_icon/avatar-3.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                    <img class="rounded-circle chatbot-launcher-icon cursor-pointer" src="{% static 'backend/image/launcher_icon/avatar-3.png' %}" src_data="{% static 'backend/img/launcher_icon/avatar-3.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
                                   </div>
       
                                   <div class="avatar d-inline-flex position-relative me-3">
-                                    <img class="rounded-circle chatbot-launcher-icon cursor-pointer" src="{% static 'backend/img/launcher_icon/avatar-4.png' %}" src_data="{% static 'backend/img/launcher_icon/avatar-4.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                    <img class="rounded-circle chatbot-launcher-icon cursor-pointer" src="{% static 'backend/image/launcher_icon/avatar-4.png' %}" src_data="{% static 'backend/img/launcher_icon/avatar-4.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
                                   </div>
       
                                   <div class="avatar d-inline-flex position-relative me-3">
-                                    <img class="rounded-circle chatbot-launcher-icon cursor-pointer" src="{% static 'backend/img/launcher_icon/avatar-5.png' %}" src_data="{% static 'backend/img/launcher_icon/avatar-5.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
+                                    <img class="rounded-circle chatbot-launcher-icon cursor-pointer" src="{% static 'backend/image/launcher_icon/avatar-5.png' %}" src_data="{% static 'backend/img/launcher_icon/avatar-5.png' %}" alt="avatar" height="70" width="70" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" data-bs-original-title="Click to Change pattern">
                                   </div>
       
                                 </div>
@@ -750,6 +749,8 @@
                     </div>
                     <!-- Chatbot postion // -->
                   </form>
+             
+                  {% comment %} {% endblock %} {% endcomment %}
                 </div>
       
       
@@ -821,7 +822,7 @@
       
       
          <div class="avata d-flex justify-content-end position-relative my-4">
-                        <img class="rounded-circle cursor-pointer launcher-icon" src="{% if cfg.chatbot_launcher_icon %}{{ cfg.chatbot_launcher_icon.url }}{% else %}{% static 'backend/img/launcher_icon/avatar-1.png' %}{% endif %}"
+                        <img class="rounded-circle cursor-pointer launcher-icon" src="{% if cfg.chatbot_launcher_icon %}{{ cfg.chatbot_launcher_icon.url }}{% else %}{% static 'backend/image/launcher_icon/avatar-1.png' %}{% endif %}"
                              alt="avatar" height="60" width="60">
                         <span
                                 class="position-absolute top-0 start-100 translate-middle badge border rounded-pill bg-primary">1</span>
@@ -867,6 +868,37 @@
       <!-- Page JS -->
       <script src="{% static 'backend/js/app-chat.js' %}"></script>
       <script src="{% static 'backend/js/extended-ui-drag-and-drop.js' %}"></script>
+      <p id="responseMessage"></p>
+
+      <!-- Script Form Ke Neeche -->
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script>
+      $(document).ready(function(){
+          $("#chatbot-form").submit(function(event){
+              event.preventDefault();  // Default form submit rokna hai
+
+              var formData = new FormData(this);
+
+              $.ajax({
+                  url: "{% url 'chatbot-appearance-save' %}",
+                  type: "POST",
+                  data: formData,
+                  processData: false,
+                  contentType: false,
+                  success: function(response){
+                      if(response.success) {
+                          $("#responseMessage").text(response.message).css("color", "green");
+                      } else {
+                          $("#responseMessage").text(response.message).css("color", "red");
+                      }
+                  },
+                  error: function(){
+                      $("#responseMessage").text("Something went wrong!").css("color", "red");
+                  }
+              });
+          });
+      });
+      </script>
       
       <script>
         $(document).ready(function () {
@@ -1089,7 +1121,7 @@
                               <div class="d-flex overflow-hidden">
                                 <div class="user-avatar flex-shrink-0 me-3">
                                   <div class="avatar avatar-sm">
-                                    <img src="{% if cfg.chatbot_image %}{{ cfg.chatbot_image.url }}{% else %}{% static 'backend/img/avatars/1.png' %}{% endif %}" alt="Avatar" class="rounded-circle chatbot-image">
+                                    <img src="{% if cfg.chatbot_image %}{{ cfg.chatbot_image.url }}{% else %}{% static 'backend/image/avatars/1.png' %}{% endif %}" alt="Avatar" class="rounded-circle chatbot-image">
                                   </div>
                                 </div>
                                 <div class="chat-message-wrapper flex-grow-1">

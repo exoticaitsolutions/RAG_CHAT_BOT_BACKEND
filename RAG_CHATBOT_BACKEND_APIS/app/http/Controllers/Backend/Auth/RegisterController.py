@@ -15,6 +15,7 @@ class RegisterController(CreateView):
 
     def get(self, request):
         return render(request, 'admin/auth/register.html')
+
     
     def post(self, request, *args, **kwargs):
         username = request.POST.get('username')

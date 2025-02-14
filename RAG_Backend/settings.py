@@ -72,7 +72,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'RAG_Backend.urls'
@@ -138,7 +137,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValgit idator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -210,3 +209,13 @@ LOGGING = {
         },
     },
 }
+LOGIN_URL = '/login/'
+# BASE_API_URL = "http://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.com"
+
+BASE_API_URL = "http://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.com"
+
+
+SESSION_ENGINE = "django.contrib.sessions.backends.db"  #  Ensure this is set
+SESSION_COOKIE_AGE = 1209600  # adjust as needed
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_SAVE_EVERY_REQUEST = True
