@@ -22,26 +22,26 @@ pymysql.install_as_MySQLdb()
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-4rui8%q0xhb&$s3ju5-yp^j0i5&@i(pyrople(9y^9g723q@5y'
-
+BASE_API_URL = os.getenv("BASE_API_URL", "http://127.0.0.1:8000")  # Default to localhost
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = ['*']
-
 BASE_DIR = Path(__file__).resolve().parent.parent
-print(BASE_DIR)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     # os.path.join(BASE_DIR, "static"),
     os.path.join(BASE_DIR, 'RAG_CHATBOT_BACKEND_APIS/static'),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # For `collectstatic`
 # Application definition
 APPEND_SLASH =False
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/uploads/')
+MEDIA_URL = '/media/'
 
+# Ensure the directory exists
+if not os.path.exists(MEDIA_ROOT):
+    os.makedirs(MEDIA_ROOT)
 # Ensure this is added in DEBUG mode only
 if DEBUG:
     from django.conf.urls.static import static
@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'RAG_CHATBOT_BACKEND_APIS',
     'rest_framework_swagger',
     'drf_yasg',
+    'django.contrib.humanize'
     
 ]
 
