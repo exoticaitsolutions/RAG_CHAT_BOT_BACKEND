@@ -18,6 +18,7 @@ from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.ChatBot.ChatBotURLInt
 from . import views
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.RegisterController import RegisterController
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.LoginController import LoginController
+
 # Define schema view for Swagger UI
 schema_view = get_schema_view(
     openapi.Info(
@@ -75,10 +76,13 @@ admin_dashboard_urls = [
     # CREATE Chat Bot and View the Chat Bot List  
     path("dashboard/chatbot/create/", ChatBotController().create_chatbot_assistant, name="admin_dashborad_add_assistant_page"),
     # Get the Chat view via ID 
-    path("dashboard/chatbot/get/<str:c_id>", ChatBotController().get_chatbot_assistant_by_chat_id, name="document-list"),
+    # path("dashboard/services/chatbot/get/<str:c_id>/", ChatBotController().get_chatbot_assistant_by_chat_id, name="document-list"),
+    path("dashboard/services/chatbot/get/<str:c_id>/", ChatBotController().get_chatbot_assistant_by_chat_id, name="document-list"),
+
+
+    # path("dashboard/services/chatbot/get/<int:c_id>/", ChatBotController.as_view(), name="document-list"),
 
     path('dashboard/chatbot/website-list/<str:c_id>', ChatBotController().render_the_webiste_url, name='website-list'),
-   
     path("dashboard/chatbot/preview/<str:c_id>", ChatBotController().render_the_webiste_preview, name="preview-chatbot"),
 
 
@@ -100,10 +104,10 @@ admin_dashboard_urls = [
     # path("dashboard/chatbot/create/", admin_view.admin_dashborad_add_assistant_page, name="admin_dashborad_add_assistant_page"),
     
     
-    path("dashboard/chatbot/history/<str:c_id>/", admin_view.admin_dashborad_chatbot_history, name="chat-history"),
+    path("dashboard/services/chatbot/history/<str:c_id>/", admin_view.admin_dashborad_chatbot_history, name="chat-history"),
     path("dashboard/services/chatbot/setting/<str:c_id>/", admin_view.admin_dashborad_chatbot_setting, name="chat-setting"),
-    path("dashboard/chatbot/chatbot-appearance/<str:c_id>/", admin_view.admin_dashborad_chatbot_setting_apperence, name="chat-setting-apperence"),
-    path("dashboard/chatbot/delete/<str:c_id>/", admin_view.admin_dashborad_chatbot_delete, name="chat-setting-delete"),
+    path("dashboard/services/chatbot/chatbot-appearance/<str:c_id>/", admin_view.admin_dashborad_chatbot_setting_apperence, name="chat-setting-apperence"),
+    path("chatbot-setting/", admin_view.admin_dashborad_chatbot_delete, name="chat-setting-delete"),
 
     # path('dashboard/services/chatbot/website-list/', admin_view.website_list, name='website-list'),
     

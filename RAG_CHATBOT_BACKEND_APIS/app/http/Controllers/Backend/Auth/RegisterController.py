@@ -11,6 +11,8 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from RAG_CHATBOT_BACKEND_APIS.models import CustomUser
 
+
+
 class RegisterController(CreateView):
 
     def get(self, request):

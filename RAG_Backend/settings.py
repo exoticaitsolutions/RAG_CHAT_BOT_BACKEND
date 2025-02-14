@@ -124,6 +124,7 @@ else:
         'PORT': os.getenv('DB_PORT'),
         'OPTIONS': {
             'charset': 'utf8mb4',
+            # 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }
     }
     }
@@ -219,3 +220,5 @@ SESSION_ENGINE = "django.contrib.sessions.backends.db"  #  Ensure this is set
 SESSION_COOKIE_AGE = 1209600  # adjust as needed
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = True
+
+# AUTH_USER_MODEL = 'rag_chatbot_backend_apis.CustomUser'
