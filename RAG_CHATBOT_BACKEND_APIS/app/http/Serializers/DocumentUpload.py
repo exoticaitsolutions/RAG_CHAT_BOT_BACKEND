@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from RAG_CHATBOT_BACKEND_APIS.models import Document, ChatBotDB
-
+from RAG_CHATBOT_BACKEND_APIS.models import *
 class DocumentUploadSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(write_only=True)
     chat_id = serializers.IntegerField(write_only=True)
@@ -21,7 +20,7 @@ class DocumentUploadSerializer(serializers.ModelSerializer):
         file_size = uploaded_file.size  # Get file size
 
         # Get user and chatbot
-        user = User.objects.get(id=user_id)
+        user = CustomUser.objects.get(id=user_id)
         chatbot = ChatBotDB.objects.get(id=chat_id, user=user)
 
         # Create and return the document instance

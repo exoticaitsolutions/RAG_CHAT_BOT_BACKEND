@@ -6,7 +6,9 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import logout, authenticate, login
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.contrib.auth.models import User  # Update if using a custom model
+from django.contrib.auth.models import User
+
+from RAG_CHATBOT_BACKEND_APIS.models import CustomUser  # Update if using a custom model
 # Set up logging
 logger = logging.getLogger(__name__)
 
@@ -25,7 +27,7 @@ class LoginController(View):
             return JsonResponse({"status": "failed", "message": "Username or Email and password are required."})
 
         # Check if input is email or username
-        if User.objects.filter(email=username_or_email).exists():
+        if CustomUser.objects.filter(email=username_or_email).exists():
             user = User.objects.get(email=username_or_email)
             username = user.username
         else:

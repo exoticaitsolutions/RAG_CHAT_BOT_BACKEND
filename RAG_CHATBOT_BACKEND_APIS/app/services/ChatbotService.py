@@ -1,22 +1,23 @@
 from RAG_CHATBOT_BACKEND_APIS.models import ChatBotDB
 from django.core.exceptions import ObjectDoesNotExist
-
+from RAG_CHATBOT_BACKEND_APIS.models import CustomUser
 def ChatbotDetails(c_id: int, user_id: int):
     """
     Fetches chatbot details based on chatbot ID (c_id) and user ID (user_id).
     Returns a dictionary with chatbot data or None if not found.
     """
     try:
+        CustomUserdata = CustomUser.objects.get(id=user_id)
         chatbot_data = ChatBotDB.objects.get(id=c_id, user_id=user_id)
         chatbot_count = ChatBotDB.objects.filter(user_id=user_id).count()
         user_chatbots = list(ChatBotDB.objects.filter(user_id=user_id))  # Convert QuerySet to list for safety
-        
         # Constructing the response dictionary
         data = {
             "user_chatbots": user_chatbots,
             "chatbot": chatbot_data,
             "chatbot_count": chatbot_count,
             "chatbot_id": chatbot_data.id, # type: ignore
+            "CustomUserdata_uuld" : CustomUserdata.uuid,
             "chat_bot_id": chatbot_data.chatbot_id,
             "chatbot_name": chatbot_data.chatbot_name,
             "llm_model": chatbot_data.llm_model,

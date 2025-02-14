@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- [Head] start -->
-
 <head>
     <!-- [Meta] -->
     {% load static %}
@@ -10,10 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="csrf-token" content="{% csrf_token %}">
+    <meta name="csrf-token" content="">
     <meta name="description" content="My AI Solutions">
-    <meta name="keywords"
-          content="Bootstrap admin template, Dashboard UI Kit, Dashboard Template, Backend Panel, react dashboard, angular dashboard">
+    <meta name="keywords"content="Bootstrap admin template, Dashboard UI Kit, Dashboard Template, Backend Panel, react dashboard, angular dashboard">
     <meta name="author" content="Meraphic  LLC">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -114,9 +112,9 @@
                         <span class="pc-mtext">Chatbot Assistant AI</span>
                     </a>
                     <ul class="pc-submenu" style="overflow:auto;">
-                        <li class="pc-item"><a class="pc-link" href="/dashboard/services/chatbot/create/">Create Chatbot</a></li>
+                        <li class="pc-item"><a class="pc-link" href="/dashboard/chatbot/create/">Create Chatbot</a></li>
                         {% for chatbot in data.user_chatbots %}
-                        <li class="pc-item text-capitalize"><a class="pc-link" href="/document-list/{{chatbot.id}}">{{chatbot.chatbot_name}}</a>
+                        <li class="pc-item text-capitalize"><a class="pc-link" href="{% url 'document-list' c_id=chatbot.id%}">{{chatbot.chatbot_name}}</a>
                         </li>
                         {% endfor %}
                     </ul>

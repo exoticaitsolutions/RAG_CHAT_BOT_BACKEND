@@ -9,6 +9,7 @@ from django.contrib.auth.models import User  # Update if using a custom model
 from django.views.generic.edit import CreateView
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from RAG_CHATBOT_BACKEND_APIS.models import CustomUser
 
 class RegisterController(CreateView):
 
@@ -26,14 +27,14 @@ class RegisterController(CreateView):
         if password1 != password2:
             return JsonResponse({"status": "Failed", "message": "Passwords do not match!"})
 
-        if User.objects.filter(username=username).exists():
+        if CustomUser.objects.filter(username=username).exists():
             return JsonResponse({"status": 'Failed', "message": "Username is already taken"})
 
-        if User.objects.filter(email=email).exists():
+        if CustomUser.objects.filter(email=email).exists():
             return JsonResponse({"status": 'Failed', "message": "Email is already registered"})
 
         # Save user
-        user = User.objects.create_user(username=username, email=email, password=password1) # type: ignore
+        user: User = CustomUser.objects.create_user(username=username, email=email, password=password1)  # type: ignore
         user.save()
 
         url = '/login/'
