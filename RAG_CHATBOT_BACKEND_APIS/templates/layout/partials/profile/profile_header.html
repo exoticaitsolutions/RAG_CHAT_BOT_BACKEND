@@ -1,0 +1,12 @@
+<ul class="nav nav-pills flex-column flex-md-row mb-3 gap-2 gap-lg-0">
+    <li class="nav-item">
+        <a class="nav-link {% if '/setting-account/' in request.path %}active{% endif %}" href="/setting-account/">
+            <i class="mdi mdi-account-outline mdi-20px me-1"></i>Account
+        </a>
+    </li>
+    {% comment %} <li class="nav-item">
+        <a class="nav-link {% if request.path == '/setting-security/' %}active{% endif %}" href="/setting-security/">
+            <i class="mdi mdi-lock-open-outline mdi-20px me-1"></i>Security
+        </a>
+    </li> {% endcomment %}
+</ul>

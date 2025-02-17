@@ -55,6 +55,8 @@ class AuthController:
 
         return render(request, "admin/auth/login.html")
     
+
+    
     def auth_logoutSession(self, request):
         logout(request)  # Logs out the user and removes session data
         request.session.flush()  # Completely clears the session

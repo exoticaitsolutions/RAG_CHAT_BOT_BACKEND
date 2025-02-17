@@ -27,9 +27,20 @@ from langchain_community.vectorstores import Chroma
 # Create a logger instance
 logger = logging.getLogger(__name__)
 
-import shutil
-import os
-
+def delete_folder(folder_path):
+    """
+    Deletes the folder at the given path and all its contents.
+    
+    :param folder_path: Path of the folder to be deleted.
+    """
+    if os.path.exists(folder_path) and os.path.isdir(folder_path):
+        try:
+            shutil.rmtree(folder_path)
+            print(f"Folder {folder_path} and its contents have been deleted.")
+        except Exception as e:
+            print(f"Error occurred while deleting the folder: {e}")
+    else:
+        print(f"The folder {folder_path} does not exist.")
 def copy_directory_contents(source_dir, destination_dir):
     """
     Copies all files and subdirectories from source_dir to destination_dir.

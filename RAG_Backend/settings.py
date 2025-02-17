@@ -59,8 +59,8 @@ APPEND_SLASH =False
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/uploads/')
 MEDIA_URL = '/media/'
-COPY_ROOT = os.path.join(BASE_DIR, 'Copy_Records/')
-
+COPY_ROOT = os.path.join(BASE_DIR, 'Copy_Records/chat_bot/')
+USER_PROFILE_ROOT = os.path.join(BASE_DIR, 'Copy_Records/user_profile/')
 # Ensure the directory exists
 if not os.path.exists(MEDIA_ROOT):
     os.makedirs(MEDIA_ROOT)
@@ -82,7 +82,8 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'drf_yasg',
     'django.contrib.humanize',
-    "corsheaders"
+    "corsheaders",
+    "cities_light"
     
 ]
 
@@ -111,6 +112,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                  'django.template.context_processors.media',
+                 'RAG_CHATBOT_BACKEND_APIS.app.http.context_processors.chatbot_context'
             ],
         },
     },
@@ -203,35 +205,24 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'console': {
-            'level': 'INFO',  # Log level (e.g., DEBUG, INFO, WARNING, ERROR, CRITICAL)
+            'level': 'INFO',  # Adjust this to DEBUG, INFO, WARNING, ERROR, or CRITICAL as needed
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
-        },
-        'file': {
-            'level': 'INFO',  # Log level
-            'class': 'logging.FileHandler',
-            'filename': 'django_debug.log',  # Log file location
-            'formatter': 'verbose',
-        },
-    },
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],  # Log to console and file
-            'level': 'INFO',  # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+            'handlers': ['console'],
+            'level': 'INFO',  # You can change this to a different level like 'INFO'
             'propagate': True,
+        },
+        'your_custom_logger': {  # For your custom loggers
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
         },
     },
 }
+
 LOGIN_URL = '/login/'
 # BASE_API_URL = "http://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.com"
 

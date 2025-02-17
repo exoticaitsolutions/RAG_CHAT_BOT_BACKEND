@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="{% static '' %}backend/css/style.css" id="main-style-link" />
     <link rel="stylesheet" href="{% static '' %}backend/css/style-preset.css" />
     <link rel="stylesheet" href="{% static '' %}backend/css/custom.css" />
-
+    <link rel="stylesheet" href="{% static 'backend/css/admin_custom_css.css' %}" />
     <!-- Icons -->
     <link rel="stylesheet" href="{% static '' %}backend/vendor/fonts/fontawesome.css" />
     <link rel="stylesheet" href="{% static '' %}backend/vendor/fonts/materialdesignicons.css" />
@@ -117,10 +117,10 @@
                         <ul class="pc-submenu" style="overflow:auto;">
                             <li class="pc-item">
                                 <a class="pc-link"
-                                    href="{% url 'admin.user.chatbot.create' user_uuid=request.user.uuid %}">
+                                    href="{% url 'admin.user.chatbot' user_uuid=request.user.uuid %}">
                                     Create Chatbot</a>
                             </li>
-                            {% for chatbot in data.user_chatbots %}
+                            {% for chatbot in global_chatbots.chatbot %}
                             <li class="pc-item text-capitalize"><a class="pc-link" href="">{{chatbot.chatbot_name}}</a>
                             </li>
                             {% endfor %}
@@ -172,18 +172,15 @@
                 </ul>
                 <footer style="position: fixed;padding: 10px 10px 0px 10px;bottom: 0; background: #f8f9fa;">
                     <div id="user-info" style="margin: 0 0 20px 33px;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {% comment %} <a href="/setting-account">
+                        <a href="{% url 'admin.profile.setting' user_uuid=request.user.uuid %}">
                             <img src="{{request.user.profile_pic.url}}" alt="user-image" class="user-avtar"
                                 style="border: 1px solid #9f9f9f;width: 44px; height: 44px; border-radius: 58px; color: var(--pc-header-color); overflow: hidden;" />
-                        </a> {% endcomment %}
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </a> 
                         <a href="/">
                             <img src="{% static 'backend/image/off.png' %}" alt="off" class="user-avtar"
                                 style="border: 1px solid #9f9f9f;width: 44px; height: 44px; border-radius: 58px; color: var(--pc-header-color); overflow: hidden;" />
                         </a>
                     </div>
-
                 </footer>
             </div>
         </div>
@@ -226,7 +223,9 @@
             </div>
         </div>
     </div>
-
+    {% for message in messages %}
+        <div class="django-message" data-text="{{ message }}" data-type="{{ message.tags }}"></div>
+    {% endfor %}
 </body>
 <!-- [Body] end -->
 
@@ -318,38 +317,17 @@
 <script src="{% static 'backend/js/main.js' %}"></script>
 
 <!-- Page JS -->
-<script src="{% static 'backend/js/app-chat.js' %}"></script>
-<script>
-    var getSidebar = document.querySelector('nav');
-    var getToggle = document.getElementsByClassName('toggle');
-    for (var i = 0; i <= getToggle.length; i++) {
-        getToggle[i].addEventListener('click', function () {
-            getSidebar.classList.toggle('active');
-        });
-    }
+{% comment %} <script src="{% static 'backend/js/app-chat.js' %}"></script> {% endcomment %}
+<script src="{% static 'backend/js/custom.js' %}"></script>
+<script src="{% static 'backend/js/commonjs.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"> </script>
+<script type="text/javascript">
+    var csrfToken1 = "{{ csrf_token }}";  // Embedding CSRF token from Django context
 </script>
-{% if messages %}
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let messages = [];
 
-        {% for message in messages %}
-        messages.push({ text: "{{ message }}", type: "{{ message.tags }}" });
-        {% endfor %}
 
-        let messageText = messages.map(m => m.text).join("\n");
-
-        Swal.fire({
-            title: "📢 Notifications",
-            text: messageText,
-            icon: messages.some(m => m.type === 'error') ? 'error' :
-                messages.some(m => m.type === 'success') ? 'success' :
-                    messages.some(m => m.type === 'warning') ? 'warning' : 'info',
-            confirmButtonText: "OK"
-        });
-    });
-</script>
-{% endif %}
 {% block script %}
 {% endblock %}
 

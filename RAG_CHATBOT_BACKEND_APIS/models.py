@@ -1,15 +1,35 @@
 import os
-import random
-import string
 import uuid
 from django.db import models
-from django.contrib.auth.models import AbstractUser, User
+from django.contrib.auth.models import AbstractUser
+import pytz
 
 from RAG_CHATBOT_BACKEND_APIS.utils import format_name  # Update if using a custom model
-
+Gender_Choices = [
+    ('male', 'male'),
+    ('female', 'female'),
+]
+TIMEZONES = tuple(zip(pytz.all_timezones, pytz.all_timezones))
 class CustomUser(AbstractUser):
     uuid = models.UUIDField(default=uuid.uuid4,max_length=10, editable=False, unique=True)
-    pass
+    slug = models.SlugField(default="", allow_unicode=True, blank=True, )
+    phone_code = models.CharField(max_length=10, default="", blank=True, )
+    phone_number = models.CharField(max_length=10, default="", blank=True, )
+    profile_pic = models.FileField(upload_to='profile_pic/', default="default_images/user_profile_pic.jpg", blank=True)
+    name = models.CharField(max_length=250, default="", blank=True)
+    gender = models.CharField(choices=Gender_Choices, max_length=20, default="", blank=True)
+    dob = models.DateField(blank=True, null=True)
+    zip_code = models.CharField(max_length=250, default="", blank=True)
+    time_zone = models.CharField(max_length=100, choices=TIMEZONES, default='EST', blank=True)
+    organization = models.CharField(max_length=250, default="", blank=True)
+    address = models.TextField(default="", blank=True)
+    state = models.CharField(max_length=250, default="", blank=True)
+    country = models.CharField(max_length=250, default="US", blank=True)
+    age = models.CharField(max_length=250, default="", blank=True)
+    language = models.CharField(max_length=250, default="", blank=True)
+    status = models.BooleanField(default=True)
+    is_paused = models.BooleanField(default=True)
+
 
 class ChatbotAppearance(models.Model):
     chatbot_id = models.CharField(max_length=50)
@@ -67,9 +87,10 @@ class ChatBotDB(models.Model):
         ("chroma", 'Chroma'),
         ("pinecone", 'Pinecone'),
     )
-
     chatbot_name = models.CharField(max_length=200)
     destination = models.TextField(blank=True)
+    chat_bot_media_url = models.TextField(blank=True)
+    chat_bot_media_path = models.TextField(blank=True)
     user = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null=True)
     llm_model = models.CharField(choices=LLM_MODEL, default="system openai", max_length=50)
     model = models.CharField(choices=MODEL, default="gpt-3.5-turbo", max_length=50)
