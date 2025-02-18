@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Admin Panel{% endblock %}</title>
-    {% load static %}
-    <!-- Corrected static paths -->
+    <link rel="icon" href="{% static 'backend/image/ai_logo-favicon.png' %}" type="image/x-icon">
     <link rel="icon" href="{% static 'backend/image/ai_logo-favicon.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'backend/fonts/inter/inter.css' %}" id="main-font-link" />
     <link rel="stylesheet" href="{% static 'backend/fonts/tabler-icons.min.css' %}" />
@@ -24,8 +24,6 @@
 <footer>
     <p>&copy; 2025 Your Company</p>
 </footer>
-
-<!-- Corrected static paths for JS files -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"> </script>
@@ -36,5 +34,30 @@
 <script src="{% static 'backend/js/plugins/bootstrap.min.js' %}"></script>
 <script src="{% static 'backend/js/fonts/custom-font.js' %}"></script>
 <script src="{% static 'backend/js/plugins/feather.min.js' %}"></script>
-</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var notyf = new Notyf();
+        
+        function NotyfMessage(text, type) {
+            if (type === 'success') {
+                notyf.success(text);
+            } else {
+                notyf.error(text);
+            }
+        }
+
+        let messages = [];
+        {% for message in messages %}
+            messages.push({text: "{{ message|escapejs }}", type: "{{ message.tags }}"});
+        {% endfor %}
+        
+        if (messages.length > 0) {
+            messages.forEach(m => {
+                
+                NotyfMessage(m.text, m.type);
+            });
+        }
+    });
+</script>
+
 </html>

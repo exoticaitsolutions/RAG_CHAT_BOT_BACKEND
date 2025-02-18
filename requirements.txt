@@ -23,3 +23,5 @@ pyyaml
 ua-parser 
 user-agents
 django-cors-headers
+django-countries 
+django-seed

@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from django.conf.urls.static import static
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 import pymysql
@@ -23,30 +25,20 @@ AUTH_USER_MODEL = 'RAG_CHATBOT_BACKEND_APIS.CustomUser'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-4rui8%q0xhb&$s3ju5-yp^j0i5&@i(pyrople(9y^9g723q@5y'
-BASE_API_URL = os.getenv("BASE_API_URL", "http://127.0.0.1:8000")  # Default to localhost
+BASE_APP_URL = os.getenv("BASE_APP_URL", "http://127.0.0.1:8000")  # Default to localhost
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = ['*']
 BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    # os.path.join(BASE_DIR, "static"),
     os.path.join(BASE_DIR, 'RAG_CHATBOT_BACKEND_APIS/static'),
 ]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",  # Example: Frontend app
     "https://yourdomain.com",
 ]
-# CORS_ALLOW_METHODS = [
-#     "GET",
-#     "POST",
-#     "PUT",
-#     "PATCH",
-#     "DELETE",
-#     "OPTIONS"
-# ]
 CORS_ALLOW_ALL_ORIGINS = True  # Allows all domains to access the API
-
 CORS_ALLOW_HEADERS = [
     "content-type",
     "authorization",
@@ -56,20 +48,12 @@ CORS_ALLOW_HEADERS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Application definition
 APPEND_SLASH =False
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/uploads/')
-MEDIA_URL = '/media/'
-
-# Ensure the directory exists
+MEDIA_URL = f'/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+COPY_ROOT = os.path.join(BASE_DIR, 'Copy_Records/')
 if not os.path.exists(MEDIA_ROOT):
     os.makedirs(MEDIA_ROOT)
-# Ensure this is added in DEBUG mode only
-if DEBUG:
-    from django.conf.urls.static import static
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-INSTALLED_APPS = [
+INSTALLED_APPS: list[str] = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -81,8 +65,7 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'drf_yasg',
     'django.contrib.humanize',
-    "corsheaders"
-    
+    "corsheaders"    
 ]
 
 MIDDLEWARE = [
@@ -110,6 +93,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                  'django.template.context_processors.media',
+                 'RAG_CHATBOT_BACKEND_APIS.app.http.context_processors.chatbot_context'
             ],
         },
     },
@@ -156,10 +140,7 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValgit idator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -167,7 +148,11 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
 ]
+
 
 
 # Internationalization
@@ -202,39 +187,24 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'console': {
-            'level': 'INFO',  # Log level (e.g., DEBUG, INFO, WARNING, ERROR, CRITICAL)
+            'level': 'INFO',  # Adjust this to DEBUG, INFO, WARNING, ERROR, or CRITICAL as needed
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
-        },
-        'file': {
-            'level': 'INFO',  # Log level
-            'class': 'logging.FileHandler',
-            'filename': 'django_debug.log',  # Log file location
-            'formatter': 'verbose',
-        },
-    },
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],  # Log to console and file
-            'level': 'INFO',  # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+            'handlers': ['console'],
+            'level': 'INFO',  # You can change this to a different level like 'INFO'
             'propagate': True,
+        },
+        'your_custom_logger': {  # For your custom loggers
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
         },
     },
 }
-LOGIN_URL = '/login/'
-# BASE_API_URL = "http://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.com"
 
-BASE_API_URL = "http://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.com"
 
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  #  Ensure this is set

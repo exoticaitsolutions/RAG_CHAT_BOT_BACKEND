@@ -1,6 +1,34 @@
 jQuery(document).ready(function(){
-    console.log('helllo from the jquery............');
-    // signup_process Vaidationa and Ajax 
+    console.log('hello from the jQuery script...');
+
+    let messages = [];
+    jQuery(".django-message").each(function () {
+        messages.push({ text: $(this).data("text"), type: $(this).data("type") });
+    });
+
+    if (messages.length > 0) {
+        let messageText = messages.map(m => m.text).join("\n");
+
+        Swal.fire({
+            title: "📢 Notifications",
+            text: messageText,
+            icon: messages.some(m => m.type === 'error') ? 'error' :
+                messages.some(m => m.type === 'success') ? 'success' :
+                    messages.some(m => m.type === 'warning') ? 'warning' : 'info',
+            confirmButtonText: "OK"
+        }).then(() => {
+            console.log("Notification displayed.");
+        });
+    }
+
+    // Toggle sidebar
+    var $sidebar = $('nav');
+    jQuery('.toggle').on('click', function () {
+        console.log('Toggling sidebar visibility');
+        $sidebar.toggleClass('active');
+    });
+
+    // Signup Validation and Ajax
     jQuery("#signup_process").validate({
         messages: {
             username: {
@@ -23,7 +51,8 @@ jQuery(document).ready(function(){
                 maxlength: "Password must not exceed 20 characters",
                 pattern: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
                 equalTo: "Password and confirmation must match"
-            }, agree_terms: {
+            },
+            agree_terms: {
                 required: "You must agree to the terms and conditions"
             }
         },
@@ -34,51 +63,38 @@ jQuery(document).ready(function(){
             },
             email: {
                 required: true,
-                email: true,  // Ensure a valid email format
+                email: true,
             },
             password1: {
                 required: true,
-                minlength: 8,  // Minimum length for password
+                minlength: 8,
                 maxlength: 20,
-                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/,  // Strong password regex
+                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/,
             },
             password2: {
                 required: true,
-                minlength: 8,  // Minimum length for password
-                maxlength: 20, // Maximum length fo
-                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/,  // Strong password regex
-                equalTo: "#password1"  // Ensure password2 matches password1,
-                
-            }, agree_terms: {
-                required: true  // This makes the checkbox required
+                minlength: 8,
+                maxlength: 20,
+                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/,
+                equalTo: "#password1",
+            },
+            agree_terms: {
+                required: true
             }
         },
         submitHandler: async function(_form, e) {
             e.preventDefault();
-            jQuery(`.theme_btn`).attr("disabled", true);
-            let ajax_value_list = $('form').serialize(), 
-            register_route_url = jQuery(`#register_route_url`).val();
-            console.log(ajax_value_list);
-            const [resPose] = await Promise.all([Ajax_response(register_route_url, "POST", ajax_value_list, '')]);
-            console.log(resPose);
-            if (resPose.status === 'success') {
-                console.log('TRUE');
-                NotyfMessage(resPose.message, 'success');
-                setTimeout(function() {
-                    window.location.href = resPose.redirect_url;
-                }, 4000);
-            }else{
-                // console.log('false');
-                NotyfMessage(resPose.message, 'error');
-            }
+            console.log("Form submitted successfully.");
+            jQuery(".theme_btn").attr("disabled", false);
+            _form.submit();
         }
     });
 
-    // loginin_Process  Vaidationa and Ajax 
+    // Login Validation and Ajax
     jQuery("#login_process").validate({
         messages: {
             username_or_address: {
-                required: "Please enter the username and Email address",
+                required: "Please enter the username or email address",
                 maxlength: "Username must be a maximum of 50 characters"
             },
             password1: {
@@ -95,35 +111,115 @@ jQuery(document).ready(function(){
             },
             email: {
                 required: true,
-                email: true,  // Ensure a valid email format
+                email: true,
             },
             password1: {
                 required: true,
-                minlength: 8,  // Minimum length for password
+                minlength: 8,
                 maxlength: 20,
-                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/,  // Strong password regex
+                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/,
             }
         },
         submitHandler: async function(_form, e) {
             e.preventDefault();
-            jQuery(`.theme_btn`).attr("disabled", true);
-            let ajax_value_list = $('form').serialize(), 
-            register_route_url = jQuery(`#register_route_url`).val();
-            console.log(ajax_value_list);
-            const [resPose] = await Promise.all([Ajax_response(register_route_url, "POST", ajax_value_list, '')]);
-            console.log(resPose);
-            if (resPose.status === 'success') {
-                console.log('TRUE');
-                NotyfMessage(resPose.message, 'success');
-                console.log(resPose.redirect_url);
-                setTimeout(function() {
-                    window.location.href = resPose.redirect_url;
-                }, 3000);
-            }else{
-                // console.log('false');
-                NotyfMessage(resPose.message, 'error');
-            }
+            console.log("Login form submitted.");
+            jQuery(".theme_btn").attr("disabled", true);
+            _form.submit();
         }
     });
 
-  });
+    // Profile image upload preview
+    var readURL = function(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.profile-pic').attr('src', e.target.result);
+                $(".file-upload").attr('value', e.target.result)
+                console.log("Profile image loaded.");
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $(".file-upload").on('change', function(){
+        console.log("File selected.");
+        readURL(this);
+    });
+
+    $(".upload-button").on('click', function() {
+        console.log("File upload button clicked.");
+        $(".file-upload").click();
+    });
+});
+
+// Chat Bot Modal Open
+$(document).on('click', '#chat_bot_modal_box', async function(event) {
+    let url = $(this).data("url");
+    let fullUrl = window.location.origin + url;
+    let ajax_value_list = {
+        user_id: $(this).data("login-user-id"),
+        chat_type: $(this).data("model-type"),
+        chat_id: $(this).data("chat_id")
+    };
+
+    console.log("Opening chat bot modal with URL: ", fullUrl);
+    const [resPose] = await Promise.all([Ajax_response(fullUrl, "POST", ajax_value_list, '')]);
+    
+    if (resPose.status === 'success') {
+        $("#modal_content").html(resPose.html);
+        $("#modalCenter").modal("show");
+        console.log("Modal displayed with content.");
+    }
+});
+
+// Chat Bot Delete Action
+$(document).on('click', '#chat_bot_delete', async function(event) {
+    const form = document.createElement("form");
+    let url = $(this).data("url");
+    form.method = "POST";
+    form.id = "chat_bot_modal_form";
+    form.action = url;
+
+    const csrfToken = document.createElement("input");
+    csrfToken.type = "hidden";
+    csrfToken.name = "csrfmiddlewaretoken";
+    csrfToken.value = csrfToken1; 
+    form.appendChild(csrfToken);
+
+    const userIdInput = document.createElement("input");
+    userIdInput.type = "hidden";
+    userIdInput.name = "user_id";
+    userIdInput.value = $(this).data("login-user-id");
+    form.appendChild(userIdInput);
+
+    const chatTypeInput = document.createElement("input");
+    chatTypeInput.type = "hidden";
+    chatTypeInput.name = "curd_type";
+    chatTypeInput.value = $(this).data("model-type");
+    form.appendChild(chatTypeInput);
+
+    document.body.appendChild(form);
+    
+    const botIdInput = document.createElement("input");
+    botIdInput.type = "hidden";
+    botIdInput.name = "chat_id";
+    botIdInput.value = $(this).data("chat_id");
+    form.appendChild(botIdInput);
+
+    Swal.fire({
+        title: "Do you want to delete the bot?",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel"
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            console.log("Bot deletion confirmed.");
+            form.submit();
+        } else {
+            console.log("Bot deletion canceled.");
+        }
+    });
+});
