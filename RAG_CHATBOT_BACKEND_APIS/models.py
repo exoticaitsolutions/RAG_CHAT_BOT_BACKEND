@@ -2,34 +2,82 @@ import os
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-import pytz
-
 from RAG_CHATBOT_BACKEND_APIS.utils import format_name  # Update if using a custom model
-Gender_Choices = [
-    ('male', 'male'),
-    ('female', 'female'),
-]
-TIMEZONES = tuple(zip(pytz.all_timezones, pytz.all_timezones))
+from django.db import models
+
+
+class Country(models.Model):
+    name = models.CharField(max_length=100)
+    iso3 = models.CharField(max_length=3, null=True, blank=True)
+    numeric_code = models.CharField(max_length=3, null=True, blank=True) 
+    iso2 = models.CharField(max_length=2, null=True, blank=True) 
+    phonecode = models.CharField(max_length=255, null=True, blank=True)  
+    currency_name = models.CharField(max_length=255, null=True, blank=True) 
+    currency_symbol = models.CharField(max_length=255, null=True, blank=True) 
+    tld = models.CharField(max_length=255, null=True, blank=True) 
+    native = models.CharField(max_length=255, null=True, blank=True)
+    region = models.CharField(max_length=255, null=True, blank=True) 
+    subregion = models.CharField(max_length=255, null=True, blank=True)
+    nationality = models.CharField(max_length=255, null=True, blank=True)
+    timezones = models.TextField(null=True, blank=True)
+    translations = models.TextField(null=True, blank=True)
+    latitude = models.DecimalField(max_digits=10, decimal_places=8, null=True, blank=True)  # latitude
+    longitude = models.DecimalField(max_digits=11, decimal_places=8, null=True, blank=True)  # longitude
+    emoji = models.CharField(max_length=191, null=True, blank=True)
+    emojiU = models.CharField(max_length=191, null=True, blank=True)  
+    created_at = models.DateTimeField(auto_now=True) 
+    updated_at = models.DateTimeField(auto_now=True)
+    flag = models.BooleanField(default=True)
+    wikiDataId = models.CharField(max_length=255, null=True, blank=True, help_text="Rapid API GeoDB Cities")  # wikiDataId
+
+class State(models.Model):
+    name = models.CharField(max_length=255)
+    country = models.ForeignKey('Country', on_delete=models.CASCADE, related_name='states')
+    country_code = models.CharField(max_length=2)
+    fips_code = models.CharField(max_length=255, null=True, blank=True)
+    iso2 = models.CharField(max_length=255, null=True, blank=True)
+    state_type = models.CharField(max_length=191, null=True, blank=True)
+    latitude = models.TextField(null=True, blank=True)
+    longitude = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    flag = models.BooleanField(default=True)
+    wikiDataId = models.CharField(max_length=255, null=True, blank=True, help_text="Rapid API GeoDB Cities")
+    def __str__(self):
+        return self.name
+def user_directory_path(instance, filename):
+    # Get the file extension
+    ext = filename.split('.')[-1]
+    # Rename the file to avoid name conflicts
+    filename = f"profile_pic.{ext}"
+    return os.path.join(instance.username, "user_profile", filename)
+
 class CustomUser(AbstractUser):
     uuid = models.UUIDField(default=uuid.uuid4,max_length=10, editable=False, unique=True)
     slug = models.SlugField(default="", allow_unicode=True, blank=True, )
     phone_code = models.CharField(max_length=10, default="", blank=True, )
-    phone_number = models.CharField(max_length=10, default="", blank=True, )
-    profile_pic = models.FileField(upload_to='profile_pic/', default="default_images/user_profile_pic.jpg", blank=True)
+    phone_number = models.CharField(max_length=15, default="", blank=True, )
+    profile_pic = models.FileField(upload_to=user_directory_path, blank=True, max_length=250)
+    def save(self, *args, **kwargs):
+        if self.pk:
+            old_profile_pic = CustomUser.objects.get(pk=self.pk).profile_pic
+            if self.profile_pic and self.profile_pic != old_profile_pic:
+                if old_profile_pic and os.path.exists(old_profile_pic.path):
+                    os.remove(old_profile_pic.path)
+        super(CustomUser, self).save(*args, **kwargs)
+    profile_url = models.TextField(default="", blank=True)
     name = models.CharField(max_length=250, default="", blank=True)
-    gender = models.CharField(choices=Gender_Choices, max_length=20, default="", blank=True)
-    dob = models.DateField(blank=True, null=True)
     zip_code = models.CharField(max_length=250, default="", blank=True)
-    time_zone = models.CharField(max_length=100, choices=TIMEZONES, default='EST', blank=True)
     organization = models.CharField(max_length=250, default="", blank=True)
     address = models.TextField(default="", blank=True)
     state = models.CharField(max_length=250, default="", blank=True)
     country = models.CharField(max_length=250, default="US", blank=True)
     age = models.CharField(max_length=250, default="", blank=True)
+    user_upload_dir = models.TextField(default="", blank=True)
+    user_upload_path = models.TextField(default="", blank=True)
+    user_chroma_db_dir = models.TextField(default="", blank=True)
     language = models.CharField(max_length=250, default="", blank=True)
     status = models.BooleanField(default=True)
-    is_paused = models.BooleanField(default=True)
-
 
 class ChatbotAppearance(models.Model):
     chatbot_id = models.CharField(max_length=50)

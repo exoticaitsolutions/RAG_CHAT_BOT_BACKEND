@@ -27,6 +27,9 @@ from langchain_community.vectorstores import Chroma
 # Create a logger instance
 logger = logging.getLogger(__name__)
 
+def create_folder(folder_name):
+    os.makedirs(folder_name, exist_ok=True)
+
 def delete_folder(folder_path):
     """
     Deletes the folder at the given path and all its contents.

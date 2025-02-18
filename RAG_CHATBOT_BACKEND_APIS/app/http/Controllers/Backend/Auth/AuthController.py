@@ -1,10 +1,7 @@
-import os
 from django.contrib import messages
 from django.shortcuts import redirect, render
-from RAG_CHATBOT_BACKEND_APIS.models import CustomUser
+from RAG_CHATBOT_BACKEND_APIS.app.services.Auth.AuthServices import AuthServices
 from django.contrib.auth import logout, authenticate, login
-from django.conf import settings
-from RAG_CHATBOT_BACKEND_APIS.utils import format_name
 
 class AuthController:
     def auth_register_page(self, request):
@@ -13,38 +10,32 @@ class AuthController:
             email = request.POST.get("email", "").strip()
             password1 = request.POST.get("password1", "")
             password2 = request.POST.get("password2", "")
-            formatted_username = format_name(str(username))
-            user_upload_dir = os.path.join(settings.MEDIA_ROOT, formatted_username)
-            user_chroma_db_dir = os.path.join(settings.MEDIA_ROOT, formatted_username)
-            os.makedirs(user_upload_dir, exist_ok=True)
-            os.makedirs(user_chroma_db_dir, exist_ok=True)
             if not all([username, email, password1, password2]):
                 messages.error(request, "All fields are required.")
             elif password1 != password2:
                 messages.error(request, "Passwords do not match!")
-            elif CustomUser.objects.filter(username=username).exists():
+            elif AuthServices.check_user_existence('username', username):
                 messages.error(request, "Username is already taken.")
-            elif CustomUser.objects.filter(email=email).exists():
+            elif AuthServices.check_user_existence('email', email):
                 messages.error(request, "Email is already registered.")
             else:
-                CustomUser.objects.create_user(username=username, email=email, password=password1)
-                messages.success(request, "User is Successfully  registered.")
+                status ,message= AuthServices.RegisterUser(username,email,password1)
+                if not status:
+                    messages.error(request, message)
+                messages.success(request, message)
                 return redirect("/login/")
             return redirect("/register/")
-
         return render(request, "admin/auth/register.html")
     
     def auth_login_page(self, request):
         if request.method == "POST":
             username_or_address = request.POST.get("username_or_address", "").strip()
             password = request.POST.get("password")
-
-            if CustomUser.objects.filter(email=username_or_address).exists():
-                user = CustomUser.objects.get(email=username_or_address)
-                username = user.username
+            if AuthServices.check_user_existence('email', username_or_address):
+                user = AuthServices.fetch_user_data('email', username_or_address)
+                username = user.username # type: ignore
             else:
                 username = username_or_address
-
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
@@ -55,7 +46,6 @@ class AuthController:
 
         return render(request, "admin/auth/login.html")
     
-
     
     def auth_logoutSession(self, request):
         logout(request)  # Logs out the user and removes session data

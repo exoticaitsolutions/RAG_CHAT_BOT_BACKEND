@@ -5,7 +5,6 @@ def chatbot_context(request):
     context = {"global_chatbots": None}  # Default structure
     
     if request.user.is_authenticated:
-        print("User ID:", request.user.id)  # Debugging
         chatbots = ChatBotDB.objects.filter(user=request.user)  # Fix filter
         context["global_chatbots"] = {"chatbot": chatbots, "data": {"user_chatbots": chatbots}} # type: ignore
     return context

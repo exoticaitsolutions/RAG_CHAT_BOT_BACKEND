@@ -13,7 +13,6 @@ from django.shortcuts import redirect, render
 from django.http import JsonResponse
 from rest_framework.views import csrf_exempt
 from user_agents import parse
-from RAG_Backend.settings import BASE_API_URL
 from RAG_CHATBOT_BACKEND_APIS.app.services.ChatbotService import ChatbotDetails
 from RAG_CHATBOT_BACKEND_APIS.models import *
 

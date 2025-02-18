@@ -18,7 +18,8 @@ admin_auth_urls = [
 ]
 
 admin_dashboard_urls = [
-path("dashboard/profile/<str:user_uuid>/setting-account/", ProfileSettingController().SettingProfileAccount, name="admin.profile.setting"),
+path("dashboard/profile/<str:user_uuid>/setting-account/", ProfileSettingController().SettingProfileAccount, name="admin.profile.setting.profile"),
+path("dashboard/profile/<str:user_uuid>/setting-security/", ProfileSettingController().SettingProfileSercurity, name="admin.profile.setting.security"),
 
 # Admin Dashboards 
 path("dashboard/", AdminDashboardController().admin_dashboard_page, name="admin.dashboard"),
