@@ -6,7 +6,10 @@ from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.AuthController i
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.AuthProfileController import ProfileSettingController
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.ForgetPasswordController import ForgetPasswordController
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.ChatBot.ChatBotController import ChatBotController
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.ResetPasswordController import ResetPasswordController
+
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.ChatBot.ChatbotDashboardController import ChatbotDashboardController
+
 
 urlpatterns = [
 
@@ -15,7 +18,11 @@ admin_auth_urls = [
     path('register/', AuthController().auth_register_page, name='register'),
     path('login/', AuthController().auth_login_page, name='login'),
     # Forget Password page 
+    # Forget Password
     path("forget-password/", ForgetPasswordController().forget_password_page, name="forget-password"),
+    
+    # Reset Password
+    path('reset-password/<uidb64>/<token>/', ResetPasswordController().reset_password_page,  name='reset_password'),
 ]
 
 admin_dashboard_urls = [
