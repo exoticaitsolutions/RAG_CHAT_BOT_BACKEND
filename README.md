@@ -113,6 +113,42 @@ python manage.py runserver
 Or, to run on a specific port:
 
 ```bash
+python manage.py runserver 8080  # Example: runs on port 8080
+```
+
+After successfully completing the setup (automatic or manual), you can start the development server using the command:
+
+```bash
 python manage.py runserver
 ```
 
+This will start the server at `http://127.0.0.1:8000/` (or the port you specified). You can then access your Django application in your web browser.  If you are running the server on a remote machine, you might need to configure your firewall and adjust the `BASE_API_URL` accordingly.
+
+## Troubleshooting
+
+* **Dependency Issues:** Ensure the correct Python version and activated virtual environment.  Try upgrading `pip` before installing requirements.  Check for conflicting package versions.
+* **Database Connection Errors:** Verify database credentials in `.env`. Ensure the database server is running and accessible. Check firewall rules if connecting remotely.
+* **Missing .env File:** Create the `.env` file and populate it.
+* **Port Conflicts:** Use a different port if 8000 is in use.
+* **`python` vs. `python3`:** Use `python3` if your default `python` points to Python 2.
+* **Migrations Issues:** If you have issues with migrations, you might need to delete migration files in your app's `migrations` directory (except `__init__.py`) and try again.  Ensure your database is in a consistent state.
+* **OpenAI API Key Issues:** Ensure your API key is valid and has the necessary permissions.  Check OpenAI's documentation for rate limits.
+
+
+##  Important Considerations
+
+* **Security:**  Never commit your `.env` file containing sensitive information to version control.
+* **Database:**  This guide uses MySQL as an example. Adjust the settings in `.env` if you are using a different database (PostgreSQL, SQLite, etc.).  Make sure the database is created before running migrations.
+* **OpenAI API Key:**  Obtain your OpenAI API key from the OpenAI website and replace the placeholder in the `.env` file.
+* **Virtual Environment:**  Always use a virtual environment to isolate your project's dependencies.
+* **Automatic Setup:** The automatic setup script is highly recommended for its simplicity.  Only resort to the manual method if you encounter problems with the script.
+
+
+```
+
+Key changes:
+
+* Added the crucial `python manage.py runserver` command *after* the setup instructions.  This makes it clear when and how to start the server.
+* Added a brief explanation of what the `runserver` command does and how to access the application in a browser.
+* Added a note about accessing the server on a remote machine.  This is important for deployment scenarios.
+* Minor wording improvements for clarity.
