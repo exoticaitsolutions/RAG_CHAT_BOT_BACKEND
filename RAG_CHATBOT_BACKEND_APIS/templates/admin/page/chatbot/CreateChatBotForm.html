@@ -33,8 +33,8 @@
                 <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
                   <div class="avatar">
                     <div class="avatar-initial bg-label-primary rounded">
-                      <a href="">
-                      <img class="rounded" src="{{ chatbots.icon_url }}" alt="{{ chatbots.chatbot_name }}">
+                      <a href="{% url 'admin.user.chatbot.dashboard' user_uuid=request.user.uuid  chatbot_id=chatbots.chatbot_id view_type='document-list' %}">
+                      <img class="rounded" src="{{ chatbots.icon_url.url }}" alt="{{ chatbots.chatbot_name }}">
                     </a>
                     </a>
                     </div>
@@ -46,7 +46,7 @@
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="salesOverview">
                       <a class="dropdown-item waves-effect" id ="chat_bot_modal_box" data-url ="{% url 'admin.fetch_modal_content_for_chat_bot'%}" data-login-user-id ={{request.user.uuid}} data-model-type="edit" data-chat_id ="{{ chatbots.chatbot_id }}"><span >Edit</span></a>
     
-                      <a class="dropdown-item waves-effect chat_bot_delete" href="javascript:void(0);"id ="chat_bot_delete" data-url ="{% url 'admin.user.chatbot.manage' user_uuid=request.user.uuid curd_type='delete' %}" data-login-user-id ={{request.user.uuid}} data-model-type="delete" data-chat_id ="{{ chatbots.chatbot_id }}">Delete</a>
+                      <a class="dropdown-item waves-effect chat_bot_delete" href="javascript:void(0);"id ="chat_bot_delete" data-url ="" data-login-user-id ={{request.user.uuid}} data-model-type="delete" data-chat_id ="{{ chatbots.chatbot_id }}">Delete</a>
                     </div>
                   </div>
                 </div>

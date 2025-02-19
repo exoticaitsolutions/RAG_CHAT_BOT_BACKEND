@@ -69,7 +69,8 @@ class AuthServices:
             os.makedirs(user_chroma_db_dir, exist_ok=True)
             os.makedirs(user_profile_dir, exist_ok=True)
             # User upload URL
-            user_upload_url = f"{settings.MEDIA_URL}{user_slug}/"
+            user_upload_url = f"{settings.MEDIA_URL}{user_slug}/uploads/"
+            user_chroma_db_url = f"{settings.MEDIA_URL}{user_slug}/uploads/"
             # Copy profile directory (Ensure `settings.COPY_ROOT` exists)
             original_path = os.path.join(settings.COPY_ROOT, "user_profile")
             logger.debug(f"original_path = {original_path}")
@@ -80,9 +81,8 @@ class AuthServices:
             # Create user
             user = CustomUser.objects.create_user(username=username, email=email, password=password)
             # Assign user directories
-            user.user_upload_dir = user_upload_dir
-            user.user_chroma_db_dir = user_chroma_db_dir
             user.user_upload_path = user_upload_url
+            user.user_chroma_path = user_chroma_db_url
             user.profile_pic = profile_pic_path  # type: ignore # Ensure correct path formatting
             user.profile_url = profile_url
             user.save()

@@ -143,12 +143,3 @@ This will start the server at `http://127.0.0.1:8000/` (or the port you specifie
 * **Virtual Environment:**  Always use a virtual environment to isolate your project's dependencies.
 * **Automatic Setup:** The automatic setup script is highly recommended for its simplicity.  Only resort to the manual method if you encounter problems with the script.
 
-
-```
-
-Key changes:
-
-* Added the crucial `python manage.py runserver` command *after* the setup instructions.  This makes it clear when and how to start the server.
-* Added a brief explanation of what the `runserver` command does and how to access the application in a browser.
-* Added a note about accessing the server on a remote machine.  This is important for deployment scenarios.
-* Minor wording improvements for clarity.

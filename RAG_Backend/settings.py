@@ -207,7 +207,7 @@ LOGGING = {
 
 
 
-SESSION_ENGINE = "django.contrib.sessions.backends.db"  #  Ensure this is set
-SESSION_COOKIE_AGE = 1209600  # adjust as needed
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_SAVE_EVERY_REQUEST = True
+# Session expires after 30 minutes of inactivity
+SESSION_COOKIE_AGE = 1800  # 30 minutes in seconds
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Logout on browser close
+SESSION_SAVE_EVERY_REQUEST = True  # Reset session timer on activity
