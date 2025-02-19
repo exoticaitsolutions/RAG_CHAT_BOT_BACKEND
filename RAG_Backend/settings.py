@@ -237,3 +237,7 @@ CSRF_TRUSTED_ORIGINS = [
 EMAIL_HOST_USER = "pythonweb@exoticaitsolutions.com"
 DEFAULT_FROM_EMAIL = "pythonweb@exoticaitsolutions.com"
 SERVER_EMAIL = "pythonweb@exoticaitsolutions.com"
+# Session expires after 30 minutes of inactivity
+SESSION_COOKIE_AGE = 1800  # 30 minutes in seconds
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Logout on browser close
+SESSION_SAVE_EVERY_REQUEST = True  # Reset session timer on activity
