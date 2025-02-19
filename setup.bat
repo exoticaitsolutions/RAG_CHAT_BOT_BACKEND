@@ -28,12 +28,10 @@ echo Virtual environment activated.
 
 :: Update pip, setuptools, and wheel
 echo Updating pip...
-pip install --upgrade pip setuptools wheel
-
+pip install --upgrade pip
 :: Install required packages
 echo Installing required packages...
-pip install -r requirements.txt 2>&1
-
+pip install -r requirements.txt
 :: Check if .env file exists and is non-empty
 if not exist .env (
     echo Configuring environment variables...

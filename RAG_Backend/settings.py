@@ -133,6 +133,21 @@ else:
         }
     }
     }
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.hostinger.com"
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True  # Since we use port 465
+EMAIL_USE_TLS = False  # Must be False when using SSL
+EMAIL_HOST_USER = "pythonweb@exoticaitsolutions.com"
+EMAIL_HOST_PASSWORD = "Webpython@123#"  # Ensure this is correct
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
+# EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
+# EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
+# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "pk@12gmail.com")
+# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "Prateek@123")
 
 
 # Password validation
@@ -211,3 +226,14 @@ SESSION_ENGINE = "django.contrib.sessions.backends.db"  #  Ensure this is set
 SESSION_COOKIE_AGE = 1209600  # adjust as needed
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = True
+APPEND_SLASH = True
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:8000",  # Localhost
+    "http://localhost:8000",
+    "https://yourdomain.com",  # Add your production domain if needed
+]
+
+
+EMAIL_HOST_USER = "pythonweb@exoticaitsolutions.com"
+DEFAULT_FROM_EMAIL = "pythonweb@exoticaitsolutions.com"
+SERVER_EMAIL = "pythonweb@exoticaitsolutions.com"

@@ -299,7 +299,11 @@
 <script type="text/javascript">
     var csrfToken1 = "{{ csrf_token }}";  // Embedding CSRF token from Django context
 </script>
-
+<script>
+    function getCSRFToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+    }
+</script>
 
 {% block script %}
 {% endblock %}
