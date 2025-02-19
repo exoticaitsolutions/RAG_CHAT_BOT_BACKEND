@@ -54,7 +54,6 @@ if [ ! -s ".env" ]; then
     DB_HOST=${DB_HOST:-localhost}
     DB_PORT=3306
     read -p "Enter OpenAI API Key: " OPENAI_API_KEY
-    BASE_APP_URL="http://127.0.0.1:8000"
 
     cat <<EOL > .env
 DB_TYPE=$DB_TYPE
@@ -64,7 +63,6 @@ DB_PASSWORD=$DB_PASSWORD
 DB_HOST=$DB_HOST
 DB_PORT=$DB_PORT
 OPENAI_API_KEY=$OPENAI_API_KEY
-BASE_APP_URL=$BASE_APP_URL
 EOL
 
     echo ".env file created successfully."
@@ -96,9 +94,9 @@ if [ -s ".env" ]; then
 else
     echo "Skipping database setup since .env is empty or missing."
 fi
-
 # Run Django migrations
 echo "Running migrations..."
 python manage.py makemigrations RAG_CHATBOT_BACKEND_APIS
 python manage.py migrate
+python manage.py seed_data
 echo "Setup complete!"
