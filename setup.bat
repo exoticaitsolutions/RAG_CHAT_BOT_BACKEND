@@ -1,30 +1,59 @@
 @echo off
-echo "Starting setup script..."
+echo Starting setup script...
 
-echo "Creating virtual environment..."
-python.exe -m venv .venv
-
-echo "Activating virtual environment in directory: %cd%"
-echo "Activating virtual environment..."
-call .\.venv\Scripts\activate.bat
+:: Check if virtual environment exists
+if exist venv (
+    echo Virtual environment found. Activating...
+    call .venv\Scripts\activate
+) else (
+    echo Virtual environment not found. Creating...
+    python -m venv venv
+    echo Activating virtual environment...
+    call .venv\Scripts\activate
+)
 
 if %errorlevel% neq 0 (
-    echo "Failed to activate virtual environment."
-    pause
+    echo Failed to activate virtual environment.
     exit /b 1
 )
 
-echo "Virtual environment activated in directory: %cd%"
+echo Virtual environment activated.
 
-echo.
-echo "Installing required packages..."
-python.exe -m pip install --upgrade pip setuptools wheel
-echo.
+:: Update pip, setuptools, and wheel
+echo Updating pip...
+pip install --upgrade pip setuptools wheel
 
-echo.
-echo "Installing required packages..."
-pip install -r requirements.txt > pip_install_log.txt 2>&1
-type pip_install_log.txt
+:: Install requirements
+echo Installing required packages...
+pip install -r requirements.txt
 
-echo "Setup complete."
-pause
+:: Create .env file
+echo Configuring environment variables...
+set /p DB_TYPE="Choose Database Type (mysql/sqlite/postgres): "
+set /p DB_NAME="Enter Database Name: "
+set /p DB_USER="Enter Database User (default: root): "
+if "%DB_USER%"=="" set DB_USER=root
+set /p DB_PASSWORD="Enter Database Password: "
+set /p DB_HOST="Enter Database Host (default: localhost): "
+if "%DB_HOST%"=="" set DB_HOST=localhost
+set DB_PORT=3306
+set /p OPENAI_API_KEY="Enter OpenAI API Key: "
+
+(
+echo DB_TYPE=%DB_TYPE%
+echo DB_NAME=%DB_NAME%
+echo DB_USER=%DB_USER%
+echo DB_PASSWORD=%DB_PASSWORD%
+echo DB_HOST=%DB_HOST%
+echo DB_PORT=%DB_PORT%
+echo OPENAI_API_KEY=%OPENAI_API_KEY%
+) > .env
+
+echo .env file created successfully.
+
+:: Wait for 3 seconds
+timeout /t 3 /nobreak
+
+:: Check MySQL connection
+if "%DB_TYPE%"=="mysql" (
+   
