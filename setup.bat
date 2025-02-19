@@ -46,6 +46,8 @@ if not exist .env (
     if "%DB_HOST%"=="" set DB_HOST=localhost
     set DB_PORT=3306
     set /p OPENAI_API_KEY="Enter OpenAI API Key: "
+    set BASE_APP_URL=http://127.0.0.1:8000
+
 
     (
         echo DB_TYPE=%DB_TYPE%
@@ -55,6 +57,7 @@ if not exist .env (
         echo DB_HOST=%DB_HOST%
         echo DB_PORT=%DB_PORT%
         echo OPENAI_API_KEY=%OPENAI_API_KEY%
+        echo BASE_APP_URL=%BASE_APP_URL% >> .env
     ) > .env
     
     echo .env file created successfully.
