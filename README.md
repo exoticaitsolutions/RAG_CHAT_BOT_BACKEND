@@ -74,8 +74,8 @@ pip install -r requirements.txt
 
 Create a `.env` file in the project's root directory.  **Do not commit this file to version control.**  Populate it with your settings:
 
-```
 BASE_API_URL=[invalid URL removed]  # Or your deployed URL
+
 
 # Database settings (Example: MySQL)
 DB_TYPE=mysql  # or postgresql, etc.
@@ -88,7 +88,6 @@ DB_PORT=3306  # Adjust if necessary
 # OpenAI API Key
 OPENAI_API_KEY="YOUR_OPENAI_API_KEY"  # Replace with your actual key
 ```
-
 **Important:** Replace placeholders like `"database_name"`, `"database_user_name"`, `"database_password"`, `"database_hostname"`, and `YOUR_OPENAI_API_KEY` with your actual credentials.
 
 5. **Database Migrations:**

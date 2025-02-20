@@ -1,0 +1,90 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+
+{% block content %}
+<div class="row" bis_skin_checked="1">
+    <div class="row" bis_skin_checked="1">
+        {% include 'layout/partials/ChatBot/chat-head.html' %}
+    </div>
+</div>
+<div class="app-email card shadow" bis_skin_checked="1">
+    <div class="border-0" bis_skin_checked="1">
+        <div class="row g-0" bis_skin_checked="1">
+            <!-- Email Sidebar -->
+            <div class="col app-email-sidebar border-end flex-grow-0" id="app-email-sidebar" bis_skin_checked="1">
+                <!-- Email Filters -->
+                <div class="email-filters pt-2 pb-2 ps" bis_skin_checked="1">
+                    <!-- Email Filters: Folder -->
+                    {% include 'layout/partials/ChatBot/chatbot_sidebar.html' %}
+
+                    <!--/ Email Filters -->
+                    <div class="ps__rail-x" bis_skin_checked="1">
+                        <div class="ps__thumb-x" tabindex="0" bis_skin_checked="1"></div>
+                    </div>
+                    <div class="ps__rail-y" bis_skin_checked="1">
+                        <div class="ps__thumb-y" tabindex="0" bis_skin_checked="1"></div>
+                    </div>
+                    <div class="ps__rail-x" bis_skin_checked="1" style="left: 0px; bottom: 0px;">
+                        <div class="ps__thumb-x" tabindex="0" bis_skin_checked="1" style="left: 0px; width: 0px;"></div>
+                    </div>
+                    <div class="ps__rail-y" bis_skin_checked="1" style="top: 0px; right: 0px;">
+                        <div class="ps__thumb-y" tabindex="0" bis_skin_checked="1" style="top: 0px; height: 0px;"></div>
+                    </div>
+                </div>
+            </div>
+            <!--/ Email Sidebar -->
+
+            <!-- Emails List -->
+            <div class="col app-emails-list" bis_skin_checked="1">
+                <div class="card shadow-none border-0" bis_skin_checked="1">
+                    <div class="card-body emails-list-header p-3 py-2" bis_skin_checked="1">
+                        <!-- Email List: Search -->
+                        <div class="d-flex justify-content-between align-items-center" bis_skin_checked="1">
+                            <div class="d-flex align-items-center w-100" bis_skin_checked="1">
+                                <i class="mdi mdi-menu mdi-24px cursor-pointer d-block d-lg-none me-3"
+                                    data-bs-toggle="sidebar" data-target="#app-email-sidebar" data-overlay=""></i>
+                                <div class="mb-0 mb-lg-1 w-100" bis_skin_checked="1">
+                                    <div class="input-group input-group-merge shadow-none" bis_skin_checked="1">
+                                        <span class="input-group-text border-0 ps-0" id="email-search">
+                                            <i class="mdi mdi-magnify mdi-20px text-muted"></i>
+                                        </span>
+                                        <input type="text" class="form-control email-search-input border-0"
+                                            placeholder="Search..." aria-label="Search..."
+                                            aria-describedby="email-search">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-0 mb-md-2" bis_skin_checked="1">
+                                <div class="dropdown" bis_skin_checked="1">
+                                    <button
+                                        class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow waves-effect waves-light"
+                                        data-bs-toggle="dropdown" aria-expanded="true" id="emailsActions">
+                                        <i class="mdi mdi-dots-vertical mdi-20px"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="emailsActions"
+                                        bis_skin_checked="1">
+
+                                        <a class="dropdown-item waves-effect" id="delete_multi">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <hr class="mx-n3 emails-list-header-hr"> -->
+                    </div>
+                    <hr class="container-m-nx m-0">
+                    <!-- URL input form -->
+                    <form id="uploadUrlForm" method="post">
+                        {% csrf_token %}
+                        <label for="urlInput" class="mt-3 mb-3 ml-3">Enter URL:</label>
+                        <input type="text" id="urlInput" name="url" placeholder="https://exoticaitsolutions.com/"
+                            required class="form-control mb-2">
+                        <input type="hidden" id="data_url_list"
+                            value="http://127.0.0.1:8000/api/v2/add-urls/?chat_id={{data.chat_bot_id}}&user_id={{data.CustomUserdata_uuld}}">
+                        <button type="submit" class="btn btn-primary me-sm-3 me-1 waves-effect waves-light">
+                            Submit
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endblock %}
