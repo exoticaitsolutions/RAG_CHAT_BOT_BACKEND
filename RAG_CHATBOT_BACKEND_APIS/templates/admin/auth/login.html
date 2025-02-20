@@ -12,7 +12,7 @@
         <!-- PC Content -->
         <div class="card my-5">
           <div class="card-body">
-            <form method="post" id="signup_process" action="/login/">
+            <form method="post" id="login_process" action="/login/">
               {% csrf_token %}
               <h4 class="text-center f-w-500 mb-3">Login with your Username</h4>
               <div class="form-group mb-3">
@@ -23,8 +23,9 @@
                 <input type="password" class="form-control" name="password" id="floatingInput1" placeholder="Password" required>
               </div>
               <div class="d-flex mt-1 justify-content-between align-items-center">
-                <h6 class="text-secondary f-w-400 mb-0"><a class="pc-link" href="/forget-password">Forgot Password?</a></h6>
-              </div>
+                <h6 class="text-secondary f-w-400 mb-0"><a class="pc-link" href="/forget-password/">Forgot Password?</a>
+                </h6>
+              </div>                                    
               <div class="d-grid mt-4">
                 <button type="submit" class="btn btn-primary" style="width:100%">Login</button>
               </div>

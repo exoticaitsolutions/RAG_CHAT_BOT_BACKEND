@@ -58,10 +58,8 @@
 
     // Function to send a message to the API
     function sendMessageToAPI(message) {
-        let chatbotId = $('script[chatbot-id]').attr('chatbot-id');
-        console.log('chatbotId');
-        
-        fetch("http://127.0.0.1:8000/pdf/api/v1/query/", {
+        let chatbotId = document.querySelector('script[chatbot-id]').getAttribute('chatbot-id');
+        fetch(`http://127.0.0.1:8000/api/v2/query/?chat_id=${chatbotId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
