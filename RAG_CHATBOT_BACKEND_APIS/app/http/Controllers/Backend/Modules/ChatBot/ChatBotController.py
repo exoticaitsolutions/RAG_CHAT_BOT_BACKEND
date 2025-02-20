@@ -21,7 +21,22 @@ logger = logging.getLogger(__name__)
 
 
 class ChatBotController:
+<<<<<<< HEAD:RAG_CHATBOT_BACKEND_APIS/app/http/Controllers/Backend/ChatBot/ChatBotController.py
     # Create Chat bot Api
+=======
+    # Create A Chat BOT Page
+    @method_decorator(login_required(login_url='/login/'))
+    def chatbot_dashboard_view(self, request, user_uuid):
+        user = request.user
+        logger.info(f"Rendering chatbot dashboard for user: {user_uuid}")
+        openai_key = getattr(settings, "OPENAI_API_KEY", "")
+        if not openai_key:
+            messages.error(request, "Please fill your OpenAI API key first.")
+        chatbots = ChatBotService.get_user_chatbots(user.id)
+        # Pass destination in context
+        context = {"chatbot": chatbots, "data": {"user_chatbots": chatbots}}
+        return render(request, 'admin/page/chatbot/CreateChatBotForm.html', context)
+>>>>>>> 4f2ff96ff6e59c1ed95fb7570ec6a2164f6e9406:RAG_CHATBOT_BACKEND_APIS/app/http/Controllers/Backend/Modules/ChatBot/ChatBotController.py
     
     @method_decorator(login_required(login_url='/login/'))
     def create_chatbot_assistant(self, request):
@@ -64,6 +79,7 @@ class ChatBotController:
         return render(request, 'admin/page/chatbot/Uploader/add-website-list.html', locals())
 
     @method_decorator(login_required(login_url='/login/'))
+<<<<<<< HEAD:RAG_CHATBOT_BACKEND_APIS/app/http/Controllers/Backend/ChatBot/ChatBotController.py
     def render_the_webiste_preview(self, request,c_id):
         user_id = request.user.id
         logger.info(f"📩 Received request  c_id: {c_id} and user id = {user_id}")
@@ -86,3 +102,23 @@ class ChatBotController:
         u_id = request.GET.get('user_id')
         documents = Document.objects.filter(chatbot=c_id) # type: ignore
         return render(request, 'admin/Ajax/Chatbot/GetChatBotinfoAndRefreshContent.html', {'documents': documents})
+=======
+    def handle_chatbot_action(self, request, user_uuid, curd_type):
+        formdata = request.POST
+        chatbot_name = formdata.get('chatbotname')
+        chat_id = formdata.get('chat_id')
+        user = request.user
+        if curd_type == 'create':
+            response = ChatBotService.create_chatbot(user, chatbot_name)
+        elif curd_type == 'edit':
+            response = ChatBotService.update_chatbot(user, chatbot_name, chat_id)
+        elif curd_type == 'delete':
+            response = ChatBotService.delete_chatbot(chat_id)
+        else:
+            response = {"error": "Invalid action."}
+        if "success" in response:
+            messages.success(request, response["success"])
+        else:
+            messages.error(request, response["error"])
+        return render(request, 'admin/page/chatbot/CreateChatBotForm.html')
+>>>>>>> 4f2ff96ff6e59c1ed95fb7570ec6a2164f6e9406:RAG_CHATBOT_BACKEND_APIS/app/http/Controllers/Backend/Modules/ChatBot/ChatBotController.py

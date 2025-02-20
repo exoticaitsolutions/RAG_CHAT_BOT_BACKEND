@@ -1,17 +1,14 @@
 from django.urls import path, re_path
-from django.conf import settings
-from django.conf.urls.static import static
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
-from rest_framework import permissions
 
-# Import Controllers
-from RAG_CHATBOT_BACKEND_APIS import admin_view
-from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.API.APIDocumentController import APIDocumentController
-from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.API.ApiWebsiteSiteConroller import ApiWebsiteSiteController
-from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.API.ChromaQueryAPIViewController import ChromaQueryAPIViewController
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.AdminDashboardController import AdminDashboardController
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.AuthController import AuthController
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.AuthProfileController import ProfileSettingController
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.ForgetPasswordController import ForgetPasswordController
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.ResetPasswordController import ResetPasswordController
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Modules.ChatBot.ChatBotController import ChatBotController
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Modules.ChatBot.ChatbotDashboardController import ChatbotDashboardController
 
-from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.ChatBot.ChatBotController import ChatBotController
+
 
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.ChatBot.ChatBotDataHandler import ChatBotDataHandler
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.ChatBot.ChatBotURLIntegrationController import ChatBotURLIntegrationController
@@ -51,86 +48,38 @@ urlpatterns = [
 ]
 # Admin Authentication
 admin_auth_urls = [
-    path('login/', LoginController.as_view(), name='login'),
-    path('register/', RegisterController.as_view(), name='register'),
-]
-# API Endpoints
-api_urls = [
-    # Api for Upload Documents 
-    path("api/v2/upload/", APIDocumentController.as_view(), name="upload_pdf"),
-    # Api for Insert  URLs and Trainedand link with chat gpt   
-    path("api/v2/add-urls/", ApiWebsiteSiteController.as_view(), name="upload_website_urls"),
-
-    path("url/api/v1/upload-url/", views.upload_url_with_loader, name='upload_url'),
-
-    path("api/v2/query/", ChromaQueryAPIViewController.as_view(), name="chroma_query"),
-
+    path('register/', AuthController().auth_register_page, name='register'),
+    path('login/', AuthController().auth_login_page, name='login'),
+    # Forget Password page 
+    # Forget Password
+    path("forget-password/", ForgetPasswordController().forget_password_page, name="forget-password"),
     
-    path("pdf/api/v1/upload-pdf/", views.upload_pdf_with_loader, name="upload_pdf_with_loader"),
+    # Reset Password
+    path('reset-password/<uidb64>/<token>/', ResetPasswordController().reset_password_page,  name='reset_password'),
 ]
 
 
 # Admin Dashboard
 admin_dashboard_urls = [
-    # CHAT Bot  Documents Uplaod Intergation
-    # CREATE Chat Bot and View the Chat Bot List  
-    path("dashboard/chatbot/create/", ChatBotController().create_chatbot_assistant, name="admin_dashborad_add_assistant_page"),
-    # Get the Chat view via ID 
-    # path("dashboard/services/chatbot/get/<str:c_id>/", ChatBotController().get_chatbot_assistant_by_chat_id, name="document-list"),
-    path("dashboard/services/chatbot/get/<str:c_id>/", ChatBotController().get_chatbot_assistant_by_chat_id, name="document-list"),
+# Dashboard URL 
+path("dashboard/", AdminDashboardController().admin_dashboard_page, name="admin.dashboard"),
+# Profile URLS 
+path("dashboard/profile/<str:user_uuid>/setting-account/", ProfileSettingController().SettingProfileAccount, name="admin.profile.setting.profile"),
+path("dashboard/profile/<str:user_uuid>/setting-security/", ProfileSettingController().SettingProfileSercurity, name="admin.profile.setting.security"),
 
-
-    # path("dashboard/services/chatbot/get/<int:c_id>/", ChatBotController.as_view(), name="document-list"),
-
-    path('dashboard/chatbot/website-list/<str:c_id>', ChatBotController().render_the_webiste_url, name='website-list'),
-    path("dashboard/chatbot/preview/<str:c_id>", ChatBotController().render_the_webiste_preview, name="preview-chatbot"),
-
-
-    path("dashboard/chatbot/intergation/<str:c_id>/", ChatBotController().render_website_share, name="chat-setting-intergation"),
-    
-     # Upload Documents Via CHat
-    path('upload-document/<str:c_id>', ChatBotDataHandler().upload_and_train, name="upload-document"),
-
-    # CHAT Bot  Website Site  URLS Intergation Rotes
-    
-    # Uploading Views
-    
-    # Refresh Div
-    path('refresh_div/', ChatBotController().RefreshDiv, name="refresh_div"), # type: ignore
-
-    
-    
-    path("dashboard/home/", admin_view.admin_dashborad_page, name="admin_dashborad_page"),
-    # path("dashboard/chatbot/create/", admin_view.admin_dashborad_add_assistant_page, name="admin_dashborad_add_assistant_page"),
-    
-    
-    path("dashboard/services/chatbot/history/<str:c_id>/", admin_view.admin_dashborad_chatbot_history, name="chat-history"),
-    path("dashboard/services/chatbot/setting/<str:c_id>/", admin_view.admin_dashborad_chatbot_setting, name="chat-setting"),
-    path("dashboard/services/chatbot/chatbot-appearance/<str:c_id>/", admin_view.admin_dashborad_chatbot_setting_apperence, name="chat-setting-apperence"),
-    path("chatbot-setting/", admin_view.admin_dashborad_chatbot_delete, name="chat-setting-delete"),
-
-    # path('dashboard/services/chatbot/website-list/', admin_view.website_list, name='website-list'),
-    
-    path('chatbot/', admin_view.chatbot_view, name='chatbot'),
-    
-
+# Create Chat Bot Functionaly 
+path("dashboard/user/<str:user_uuid>/chatbot/", ChatBotController().chatbot_dashboard_view, name="admin.user.chatbot"),
+path('dashboard/chatbot/fetch-modal-content/', ChatBotController().fetch_modal_content, name='admin.fetch_modal_content_for_chat_bot'),
+path("dashboard/user/<str:user_uuid>/chatbot/post/<str:curd_type>", ChatBotController().handle_chatbot_action, name="admin.user.chatbot.manage"),
+path("dashboard/user/<str:user_uuid>/chatbot/<str:chatbot_id>/<str:view_type>/", ChatbotDashboardController().view_chatbot_dashboard, name="admin.user.chatbot.dashboard"),
+]
+public_urls = [
 
 ]
+api_urls = [
 
-# Chatbot Services
-chatbot_urls = [
-   #  path("chatbot/chatbot-history/<str:c_id>/", admin_view.admin_dashborad_chatbot_history, name="chat-history"),
 ]
-
-
-# Swagger Documentation
-swagger_urls = [
-    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
-]
-
-# Combine all routes
-urlpatterns += admin_auth_urls + admin_dashboard_urls + chatbot_urls + api_urls + swagger_urls
-
+urlpatterns += admin_auth_urls + admin_dashboard_urls + public_urls + api_urls
 # Serve media files in development
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
