@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
-from RAG_CHATBOT_BACKEND_APIS.app.services.Chatbot.ChatBotService import ChatBotService
+from RAG_CHATBOT_BACKEND_APIS.app.services.Modules.Chatbot.ChatBotService import ChatBotService
 from RAG_CHATBOT_BACKEND_APIS.views import JsonResponse
 logger = logging.getLogger(__name__)
 
@@ -59,4 +59,5 @@ class ChatBotController:
             messages.success(request, response["success"])
         else:
             messages.error(request, response["error"])
-        return render(request, 'admin/page/chatbot/CreateChatBotForm.html')
+        return redirect(f"/dashboard/user/{user_uuid}/chatbot/")
+        # return render(request, 'admin/page/chatbot/CreateChatBotForm.html')

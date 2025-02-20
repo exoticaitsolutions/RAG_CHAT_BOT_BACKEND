@@ -2,14 +2,59 @@ import logging
 import os
 import random
 import string
+
+from rest_framework.fields import ObjectDoesNotExist
 from RAG_Backend import settings
-from RAG_CHATBOT_BACKEND_APIS.models import ChatBotDB, ChatbotAppearance
+from RAG_CHATBOT_BACKEND_APIS.models import ChatBotDB, ChatbotAppearance, CustomUser
 from RAG_CHATBOT_BACKEND_APIS.utils import copy_directory_contents, delete_folder, format_name
 
 logger = logging.getLogger(__name__)
 
 class ChatBotService:
-
+    @staticmethod
+    def ChatbotDetails(c_id: int, user_id: int):
+        """
+        Fetches chatbot details based on chatbot ID (c_id) and user ID (user_id).
+        Returns a dictionary with chatbot data or None if not found.
+        """
+        try:
+            CustomUserdata = CustomUser.objects.get(id=user_id)
+            chatbot_data = ChatBotDB.objects.get(id=c_id, user_id=user_id)
+            chatbot_count = ChatBotDB.objects.filter(user_id=user_id).count()
+            user_chatbots = list(ChatBotDB.objects.filter(user_id=user_id))  # Convert QuerySet to list for safety
+            # Constructing the response dictionary
+            data = {
+                "user_chatbots": user_chatbots,
+                "chatbot": chatbot_data,
+                "chatbot_count": chatbot_count,
+                "chatbot_id": chatbot_data.id, # type: ignore
+                "CustomUserdata_uuld" : CustomUserdata.uuid,
+                "chat_bot_id": chatbot_data.chatbot_id,
+                "chatbot_name": chatbot_data.chatbot_name,
+                "llm_model": chatbot_data.llm_model,
+                "model": chatbot_data.model,
+                "temperature": chatbot_data.temperature,
+                "context": chatbot_data.context,
+                "openai_key": chatbot_data.openai_key,
+                "vector_database": chatbot_data.vector_database,
+                "pinecone_key": chatbot_data.pinecone_key,
+                "pinecone_env": chatbot_data.pinecone_env,
+                "visibility": chatbot_data.visibility,
+                "hits": chatbot_data.hits,
+                "seconds": chatbot_data.seconds,
+                "pinecone_user_index": chatbot_data.pinecone_user_index,
+            }
+            return data
+        except ObjectDoesNotExist:
+            return None  # Returns None if no chatbot is found for the given user
+        
+    @staticmethod
+    def get_chatbot_by_user_and_id(chat_id, user_id):
+        try:
+            chatbot = ChatBotDB.objects.get(chatbot_id=chat_id, user_id=user_id)
+            return chatbot
+        except ChatBotDB.DoesNotExist:
+            return None
     @staticmethod
     def get_user_chatbots(user_id):
         """Fetch all chatbots for a given user."""

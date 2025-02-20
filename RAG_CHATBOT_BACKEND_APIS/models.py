@@ -177,13 +177,12 @@ class Document(models.Model):
         # Ensure user and chatbot are not None before accessing their attributes
         formatted_username = format_name(getattr(instance.user, "username", "unknown"))
         formatted_chatbot_name = format_name(getattr(instance.chatbot, "chatbot_name", "unknown"))
-        
-        return f'uploads/{formatted_username}/{formatted_chatbot_name}/{filename}'  # type: ignore
+        return f'{formatted_username}/uploads/{formatted_chatbot_name}/upload_Documents/{filename}'  # type: ignore
     filepath = models.FileField(upload_to=upload_path,default="")  # Use the function here
     size = models.CharField(default="", max_length=250)
     no_of_characters = models.PositiveIntegerField(default=0, blank=True)
     no_of_chunks = models.PositiveIntegerField(default=0, blank=True)
-    status = models.CharField(default="pending", max_length=10)      
+    status = models.CharField(default="pending", max_length=20)      
     created_at = models.DateField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now_add=True, blank=True)
 

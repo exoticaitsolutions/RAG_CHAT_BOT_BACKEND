@@ -68,16 +68,16 @@ def uploaded_document_and_train_llm(document_data, media_file, chat_data, user_d
 
         print(f"[INFO] Retrieved document from DB: {document.name}")
 
-        if not media_file.endswith('.pdf'):
-            print(f"[ERROR] Invalid file type: {media_file}")
-            document.status = "error"
-            document.save()
-            return False
+        # if not media_file.endswith('.pdf'):
+        #     print(f"[ERROR] Invalid file type: {media_file}")
+        #     document.status = "error"
+        #     document.save()
+        #     return False
 
-        print(f"[INFO] Loading PDF: {media_file}")
-        pdf_loader = PyPDFLoader(media_file)
-        reader_docs = pdf_loader.load()
-        print(f"[INFO] PDF successfully loaded with {len(reader_docs)} pages")
+        # print(f"[INFO] Loading PDF: {media_file}")
+        # pdf_loader = PyPDFLoader(media_file)
+        # reader_docs = pdf_loader.load()
+        # print(f"[INFO] PDF successfully loaded with {len(reader_docs)} pages")
 
         openai.api_key = chat_data.openai_key
 

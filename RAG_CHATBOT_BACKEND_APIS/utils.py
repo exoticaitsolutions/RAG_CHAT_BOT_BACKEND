@@ -29,6 +29,24 @@ logger = logging.getLogger(__name__)
 
 def create_folder(folder_name):
     os.makedirs(folder_name, exist_ok=True)
+    
+def create_directories(username, chat_bot_name):
+    """
+    Creates necessary directories for storing chatbot media and Chroma DB data.
+    
+    :param username: The username of the user.
+    :param chat_bot_name: The chatbot name.
+    :return: Paths of the created directories.
+    """
+    def format_name(name):
+        return name.replace(" ", "_").lower()
+    chat_bot_media_path = os.path.join(settings.MEDIA_ROOT, format_name(username), "uploads", format_name(chat_bot_name))
+    chat_bot_chroma_db_path = os.path.join(settings.MEDIA_ROOT, format_name(username), "chroma_db", format_name(chat_bot_name))
+    
+    os.makedirs(os.path.join(chat_bot_media_path, "upload_Documents"), exist_ok=True)
+    os.makedirs(chat_bot_chroma_db_path, exist_ok=True)
+    
+    return chat_bot_media_path, chat_bot_chroma_db_path
 
 def delete_folder(folder_path):
     """
