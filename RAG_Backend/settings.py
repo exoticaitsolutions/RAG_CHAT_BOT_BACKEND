@@ -124,7 +124,6 @@ else:
         'PORT': os.getenv('DB_PORT'),
         'OPTIONS': {
             'charset': 'utf8mb4',
-            # 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }
     }
     }
@@ -236,9 +235,12 @@ SESSION_COOKIE_AGE = 1209600  # adjust as needed
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = True
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 # AUTH_USER_MODEL = 'rag_chatbot_backend_apis.CustomUser'
 =======
+=======
+>>>>>>> d1b87efc5be916f959b1b61e0ae8fa5160a2637e
 APPEND_SLASH = True
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8000",  # Localhost
@@ -254,4 +256,7 @@ SERVER_EMAIL = "pythonweb@exoticaitsolutions.com"
 SESSION_COOKIE_AGE = 1800  # 30 minutes in seconds
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Logout on browser close
 SESSION_SAVE_EVERY_REQUEST = True  # Reset session timer on activity
+<<<<<<< HEAD
 >>>>>>> 4f2ff96ff6e59c1ed95fb7570ec6a2164f6e9406
+=======
+>>>>>>> d1b87efc5be916f959b1b61e0ae8fa5160a2637e

@@ -9,6 +9,7 @@ from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Modules.ChatBot.ChatB
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Modules.ChatBot.ChatbotDashboardController import ChatbotDashboardController
 
 
+<<<<<<< HEAD
 
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.ChatBot.ChatBotDataHandler import ChatBotDataHandler
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.ChatBot.ChatBotURLIntegrationController import ChatBotURLIntegrationController
@@ -28,6 +29,8 @@ schema_view = get_schema_view(
     ),
     public=True,
 )
+=======
+>>>>>>> d1b87efc5be916f959b1b61e0ae8fa5160a2637e
 
 # ======================================
 #               URL Patterns

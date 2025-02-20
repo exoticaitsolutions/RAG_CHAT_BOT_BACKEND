@@ -74,8 +74,8 @@ pip install -r requirements.txt
 
 Create a `.env` file in the project's root directory.  **Do not commit this file to version control.**  Populate it with your settings:
 
-```
 BASE_API_URL=[invalid URL removed]  # Or your deployed URL
+
 
 # Database settings (Example: MySQL)
 DB_TYPE=mysql  # or postgresql, etc.
@@ -88,7 +88,6 @@ DB_PORT=3306  # Adjust if necessary
 # OpenAI API Key
 OPENAI_API_KEY="YOUR_OPENAI_API_KEY"  # Replace with your actual key
 ```
-
 **Important:** Replace placeholders like `"database_name"`, `"database_user_name"`, `"database_password"`, `"database_hostname"`, and `YOUR_OPENAI_API_KEY` with your actual credentials.
 
 5. **Database Migrations:**
@@ -143,3 +142,12 @@ This will start the server at `http://127.0.0.1:8000/` (or the port you specifie
 * **Virtual Environment:**  Always use a virtual environment to isolate your project's dependencies.
 * **Automatic Setup:** The automatic setup script is highly recommended for its simplicity.  Only resort to the manual method if you encounter problems with the script.
 
+
+```
+
+Key changes:
+
+* Added the crucial `python manage.py runserver` command *after* the setup instructions.  This makes it clear when and how to start the server.
+* Added a brief explanation of what the `runserver` command does and how to access the application in a browser.
+* Added a note about accessing the server on a remote machine.  This is important for deployment scenarios.
+* Minor wording improvements for clarity.
