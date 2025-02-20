@@ -9,7 +9,6 @@ from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import parser_classes
 
-from RAG_CHATBOT_BACKEND_APIS.app.http.Serializers.DocumentUpload import DocumentUploadSerializer
 from RAG_CHATBOT_BACKEND_APIS.app.services.training.train_document import uploaded_document_and_train_llm
 from RAG_CHATBOT_BACKEND_APIS.models import ChatBotDB, DocumentNamespaceIds
 from RAG_CHATBOT_BACKEND_APIS.models import CustomUser
@@ -66,10 +65,10 @@ class APIDocumentController(APIView):
                 forment_username = format_name(str(user.username))
                 forment_chat_name = format_name(str(chatbot.chatbot_name))
                 # Construct file path
-                media_file = os.path.join(settings.MEDIA_ROOT, 'uploads', forment_username, forment_chat_name, file_name)
+                media_file = os.path.join(settings.MEDIA_ROOT, 'uploads', forment_username, forment_chat_name,'upload_Documents', file_name)
                 print(f"Constructed media file path: {media_file}")
                 logger.debug(f"Constructed media file path: {media_file}")
-
+                
                 # Remove existing file
                 if os.path.isfile(media_file):
                     logger.warning(f"Existing file found, removing: {media_file}")
