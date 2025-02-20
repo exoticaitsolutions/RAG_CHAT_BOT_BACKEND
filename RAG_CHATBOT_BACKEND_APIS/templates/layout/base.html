@@ -119,7 +119,7 @@
                                     Create Chatbot</a>
                             </li>
                             {% for chatbot in global_chatbots.chatbot %}
-                            <li class="pc-item text-capitalize"><a class="pc-link" href="">{{chatbot.chatbot_name}}</a>
+                            <li class="pc-item text-capitalize  "><a class="pc-link active" href="{% url 'admin.user.chatbot.dashboard' user_uuid=request.user.uuid  chatbot_id=chatbot.chatbot_id view_type='document-list' %}">{{chatbot.chatbot_name}}</a>
                             </li>
                             {% endfor %}
                         </ul>
@@ -127,7 +127,7 @@
                     </li>
                     <div class="card pc-user-card">
                         <div class="card-body">
-                            <a href="">
+                            <a class="" href="{% url 'admin.profile.setting.profile' user_uuid=request.user.uuid %}">
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0">
                                         <img src="{% static 'backend/image/pp.jpg' %}" alt="user-image"
@@ -157,9 +157,6 @@
             </div>
         </div>
     </nav>
-    <div class="toggle">
-        <i class="fas fa-bars"></i>
-    </div>
     <div class="pc-container">
         <div class="pc-content">
 

@@ -5,10 +5,10 @@ from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.AdminDashboardControl
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.AuthController import AuthController
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.AuthProfileController import ProfileSettingController
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.ForgetPasswordController import ForgetPasswordController
-from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.ChatBot.ChatBotController import ChatBotController
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.ResetPasswordController import ResetPasswordController
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Modules.ChatBot.ChatBotController import ChatBotController
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Modules.ChatBot.ChatbotDashboardController import ChatbotDashboardController
 
-from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.ChatBot.ChatbotDashboardController import ChatbotDashboardController
 
 
 urlpatterns = [

@@ -18,7 +18,6 @@ class ChatBotController:
         openai_key = getattr(settings, "OPENAI_API_KEY", "")
         if not openai_key:
             messages.error(request, "Please fill your OpenAI API key first.")
-            return redirect(f"/dashboard/user/{user_uuid}/chatbot/create/")
         chatbots = ChatBotService.get_user_chatbots(user.id)
         # Pass destination in context
         context = {"chatbot": chatbots, "data": {"user_chatbots": chatbots}}
@@ -60,4 +59,4 @@ class ChatBotController:
             messages.success(request, response["success"])
         else:
             messages.error(request, response["error"])
-        return redirect(f"/dashboard/user/{user_uuid}/chatbot/")
+        return render(request, 'admin/page/chatbot/CreateChatBotForm.html')
