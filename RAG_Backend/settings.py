@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from django.conf.urls.static import static
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 import pymysql
@@ -23,33 +25,35 @@ AUTH_USER_MODEL = 'RAG_CHATBOT_BACKEND_APIS.CustomUser'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-4rui8%q0xhb&$s3ju5-yp^j0i5&@i(pyrople(9y^9g723q@5y'
-BASE_API_URL = os.getenv("BASE_API_URL", "http://127.0.0.1:8000")  # Default to localhost
+BASE_APP_URL = os.getenv("BASE_APP_URL", "http://127.0.0.1:8000")  # Default to localhost
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = ['*']
 BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    # os.path.join(BASE_DIR, "static"),
     os.path.join(BASE_DIR, 'RAG_CHATBOT_BACKEND_APIS/static'),
+]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",  # Example: Frontend app
+    "https://yourdomain.com",
+]
+CORS_ALLOW_ALL_ORIGINS = True  # Allows all domains to access the API
+CORS_ALLOW_HEADERS = [
+    "content-type",
+    "authorization",
+    "x-requested-with",
+    "accept",
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Application definition
 APPEND_SLASH =False
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/uploads/')
-MEDIA_URL = '/media/'
-
-# Ensure the directory exists
+MEDIA_URL = f'/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+COPY_ROOT = os.path.join(BASE_DIR, 'Copy_Records/')
 if not os.path.exists(MEDIA_ROOT):
     os.makedirs(MEDIA_ROOT)
-# Ensure this is added in DEBUG mode only
-if DEBUG:
-    from django.conf.urls.static import static
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-INSTALLED_APPS = [
+INSTALLED_APPS: list[str] = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,8 +64,8 @@ INSTALLED_APPS = [
     'RAG_CHATBOT_BACKEND_APIS',
     'rest_framework_swagger',
     'drf_yasg',
-    'django.contrib.humanize'
-    
+    'django.contrib.humanize',
+    "corsheaders"    
 ]
 
 MIDDLEWARE = [
@@ -72,6 +76,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+      'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'RAG_Backend.urls'
@@ -88,6 +93,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                  'django.template.context_processors.media',
+                 'RAG_CHATBOT_BACKEND_APIS.app.http.context_processors.chatbot_context'
             ],
         },
     },
@@ -124,10 +130,24 @@ else:
         'PORT': os.getenv('DB_PORT'),
         'OPTIONS': {
             'charset': 'utf8mb4',
-            # 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }
     }
     }
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.hostinger.com"
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True  # Since we use port 465
+EMAIL_USE_TLS = False  # Must be False when using SSL
+EMAIL_HOST_USER = "pythonweb@exoticaitsolutions.com"
+EMAIL_HOST_PASSWORD = "Webpython@123#"  # Ensure this is correct
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
+# EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
+# EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
+# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "pk@12gmail.com")
+# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "Prateek@123")
 
 
 # Password validation
@@ -135,10 +155,7 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValgit idator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -146,7 +163,11 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
 ]
+
 
 
 # Internationalization
@@ -181,44 +202,42 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'console': {
-            'level': 'INFO',  # Log level (e.g., DEBUG, INFO, WARNING, ERROR, CRITICAL)
+            'level': 'INFO',  # Adjust this to DEBUG, INFO, WARNING, ERROR, or CRITICAL as needed
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
-        },
-        'file': {
-            'level': 'INFO',  # Log level
-            'class': 'logging.FileHandler',
-            'filename': 'django_debug.log',  # Log file location
-            'formatter': 'verbose',
-        },
-    },
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],  # Log to console and file
-            'level': 'INFO',  # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+            'handlers': ['console'],
+            'level': 'INFO',  # You can change this to a different level like 'INFO'
             'propagate': True,
+        },
+        'your_custom_logger': {  # For your custom loggers
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
         },
     },
 }
-LOGIN_URL = '/login/'
-# BASE_API_URL = "http://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.com"
 
-BASE_API_URL = "http://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.com"
 
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  #  Ensure this is set
 SESSION_COOKIE_AGE = 1209600  # adjust as needed
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = True
+APPEND_SLASH = True
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:8000",  # Localhost
+    "http://localhost:8000",
+    "https://yourdomain.com",  # Add your production domain if needed
+]
 
-# AUTH_USER_MODEL = 'rag_chatbot_backend_apis.CustomUser'
+
+EMAIL_HOST_USER = "pythonweb@exoticaitsolutions.com"
+DEFAULT_FROM_EMAIL = "pythonweb@exoticaitsolutions.com"
+SERVER_EMAIL = "pythonweb@exoticaitsolutions.com"
+# Session expires after 30 minutes of inactivity
+SESSION_COOKIE_AGE = 1800  # 30 minutes in seconds
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Logout on browser close
+SESSION_SAVE_EVERY_REQUEST = True  # Reset session timer on activity

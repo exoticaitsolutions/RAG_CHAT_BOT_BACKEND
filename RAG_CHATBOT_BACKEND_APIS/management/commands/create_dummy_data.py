@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from faker import Faker
 from django.contrib.auth.hashers import make_password
+from RAG_CHATBOT_BACKEND_APIS.models import CustomUser
 from django.contrib.auth.models import User
 import uuid
 
@@ -17,7 +18,7 @@ class Command(BaseCommand):
         openai_key = getattr(settings, "OPENAI_API_KEY", "")  # Use environment variables for security
 
         # Step 1: Create a single user
-        user = User.objects.create(
+        user = CustomUser.objects.create(
             username=fake.user_name(),
             email=fake.email(),
             password=make_password("Password@123")  # Hashing the password
@@ -41,7 +42,6 @@ class Command(BaseCommand):
         # Step 4: Create ChatBotDB entry
         chatbot_db = ChatBotDB.objects.create(
             chatbot_name="TestBot",
-            chatbot_id=chatbot_id,
             user=user,  # Assign user instance instead of user.id
             chatbot_appearance=chatbot_appearance,  # Assign instance instead of id
             openai_key=openai_key,
