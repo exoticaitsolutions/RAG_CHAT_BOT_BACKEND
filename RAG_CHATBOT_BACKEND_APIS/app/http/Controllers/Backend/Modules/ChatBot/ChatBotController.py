@@ -59,4 +59,5 @@ class ChatBotController:
             messages.success(request, response["success"])
         else:
             messages.error(request, response["error"])
-        return render(request, 'admin/page/chatbot/CreateChatBotForm.html')
+        return redirect(f"/dashboard/user/{user_uuid}/chatbot/")
+        # return render(request, 'admin/page/chatbot/CreateChatBotForm.html')

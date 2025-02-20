@@ -48,7 +48,6 @@ class ChatBotService:
         except ObjectDoesNotExist:
             return None  # Returns None if no chatbot is found for the given user
         
-
     @staticmethod
     def get_chatbot_by_user_and_id(chat_id, user_id):
         try:
@@ -56,8 +55,6 @@ class ChatBotService:
             return chatbot
         except ChatBotDB.DoesNotExist:
             return None
-
-
     @staticmethod
     def get_user_chatbots(user_id):
         """Fetch all chatbots for a given user."""

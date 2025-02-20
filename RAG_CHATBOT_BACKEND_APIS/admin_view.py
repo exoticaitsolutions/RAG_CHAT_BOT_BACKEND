@@ -38,8 +38,11 @@ def admin_dashborad_chatbot_setting_apperence(request, c_id):
     # print(f"User authenticated: {request.user.is_authenticated}")  # Debugging
     return render(request, 'admin/page/chatbot/pages/chat_setting_apperence.html')
 
+# @login_required(login_url='/login/')
+# def admin_dashborad_chatbot_delete(request, c_id):  # Add chatbot
+#     return render(request, 'admin/page/chatbot/pages/chatbot_delete.html')
 @login_required(login_url='/login/')
-def admin_dashborad_chatbot_delete(request, c_id):  # Add chatbot
+def admin_dashborad_chatbot_delete(request):  # Remove c_id
     return render(request, 'admin/page/chatbot/pages/chatbot_delete.html')
 
 @login_required(login_url='/login/')
