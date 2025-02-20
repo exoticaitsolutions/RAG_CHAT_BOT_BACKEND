@@ -37,6 +37,11 @@ path("dashboard/user/<str:user_uuid>/chatbot/", ChatBotController().chatbot_dash
 path('dashboard/chatbot/fetch-modal-content/', ChatBotController().fetch_modal_content, name='admin.fetch_modal_content_for_chat_bot'),
 path("dashboard/user/<str:user_uuid>/chatbot/post/<str:curd_type>", ChatBotController().handle_chatbot_action, name="admin.user.chatbot.manage"),
 path("dashboard/user/<str:user_uuid>/chatbot/<str:chatbot_id>/<str:view_type>/", ChatbotDashboardController().view_chatbot_dashboard, name="admin.user.chatbot.dashboard"),
+
+# Upload Documents Chatborad 
+path("dashboard/user/<str:user_uuid>/chatbot/<str:chatbot_id>/upload/<str:upload_type>", ChatbotDashboardController().upload_and_start_training, name="admin.user.chatbot.upload-document"),
+
+
 ]
 public_urls = [
 
