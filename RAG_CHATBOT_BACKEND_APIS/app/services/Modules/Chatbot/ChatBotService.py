@@ -6,7 +6,7 @@ import string
 from rest_framework.fields import ObjectDoesNotExist
 from RAG_Backend import settings
 from RAG_CHATBOT_BACKEND_APIS.models import ChatBotDB, ChatbotAppearance, CustomUser
-from RAG_CHATBOT_BACKEND_APIS.utils import copy_directory_contents, delete_folder, format_name
+from RAG_CHATBOT_BACKEND_APIS.utils import copy_directory_contents, create_directories, delete_folder, format_name
 
 logger = logging.getLogger(__name__)
 
@@ -79,15 +79,11 @@ class ChatBotService:
 
     @staticmethod
     def chat_bot_folder_strucuture(user_data , chat_bot_name):
-        chat_bot_media_path = os.path.join(settings.MEDIA_ROOT,format_name(user_data.username),"uploads", format_name(chat_bot_name))
-        chat_bot_chroma_db_path = os.path.join(settings.MEDIA_ROOT,format_name(user_data.username),"chroma_db", format_name(chat_bot_name))
-        print('chat_bot_chroma_db_path',chat_bot_chroma_db_path)
+        smedia_file, media_bot_ = create_directories(str(user_data.username), str(chat_bot_name))
         copy_path = os.path.join(settings.COPY_ROOT, 'chat_bot')
         try:
-            os.makedirs(os.path.join(chat_bot_media_path, "upload_Documents"), exist_ok=True)
-            os.makedirs(os.path.join(chat_bot_chroma_db_path), exist_ok=True)
-            copy_directory_contents(copy_path, chat_bot_media_path)
-            return [True, chat_bot_media_path, chat_bot_chroma_db_path]
+            copy_directory_contents(copy_path, smedia_file)
+            return [True, smedia_file, media_bot_]
         except Exception as e:
             logger.error(f"❌ Error creating new chatbot directories: {e}")
             return [False,'' , '']

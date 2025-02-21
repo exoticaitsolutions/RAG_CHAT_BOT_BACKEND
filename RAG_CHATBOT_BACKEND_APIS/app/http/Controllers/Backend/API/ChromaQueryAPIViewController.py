@@ -59,7 +59,6 @@ class ChromaQueryAPIViewController(APIView):
         if not chatbot:
             return JsonResponse({"status": "failed", "message": "Invalid chat_id"}, status=404)
         user = CustomUser.objects.get(id=chatbot.user.id) # type: ignore
-        # print('user',user)
         try:
             results = GetResponseFromQuery(chatbot, user, query)
             return JsonResponse({"results": results}, safe=False, status=200)

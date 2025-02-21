@@ -5,8 +5,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
+from rest_framework.exceptions import JsonResponse
 from RAG_CHATBOT_BACKEND_APIS.app.services.Modules.Chatbot.ChatBotService import ChatBotService
-from RAG_CHATBOT_BACKEND_APIS.views import JsonResponse
 logger = logging.getLogger(__name__)
 
 class ChatBotController:
