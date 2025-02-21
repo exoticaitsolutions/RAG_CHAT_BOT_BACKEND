@@ -61,7 +61,6 @@ def user_directory_path(instance, filename):
 
 class CustomUser(AbstractUser):
     uuid = models.CharField(max_length=255,default=get_random_str,editable=False, unique=True)
-    # uuid = models.UUIDField(default=uuid.uuid4,max_length=10, editable=False, unique=True)
     slug = models.SlugField(default="", allow_unicode=True, blank=True, )
     phone_code = models.CharField(max_length=10, default="", blank=True, )
     phone_number = models.CharField(max_length=15, default="", blank=True, )
@@ -198,28 +197,6 @@ class DocumentNamespaceIds(models.Model):
     user = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null=True)
     document = models.ForeignKey("Document", on_delete=models.CASCADE)
 
-class FileUpload(models.Model):
-    file = models.FileField(upload_to='uploads/')
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-    created_at = models.DateTimeField(auto_now=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    pdf_embedding_status = models.CharField(max_length=20, default="pending")
-    pdf_embadding_error_or_message = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return f"File: {self.file.name}, Uploaded: {self.uploaded_at}"
-
-class UrlUpload(models.Model):
-    url = models.URLField()
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    url_embedding_status = models.CharField(max_length=50, default='pending')
-    url_embedding_error_or_message = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return f"URL Upload {self.url}"
-
 class DocumentCollectionIds(models.Model):
     doc_id = models.CharField(default="", max_length=100)
     doc_name = models.CharField(default="", max_length=500)
@@ -282,8 +259,9 @@ class WebsiteDB(models.Model):
     url = models.TextField(default="")
     no_of_characters = models.PositiveIntegerField(default=0, blank=True)
     no_of_chunks = models.PositiveIntegerField(default=0, blank=True)
-    status = models.CharField(default="pending", max_length=10)
+    status = models.CharField(default="pending", max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
+    status_message = models.TextField(default="The website has been successfully inserted into the database.", max_length=5000)
     last_updated = models.DateTimeField(auto_now_add=True, blank=True)
 
 class WebsiteCollectionIds(models.Model):

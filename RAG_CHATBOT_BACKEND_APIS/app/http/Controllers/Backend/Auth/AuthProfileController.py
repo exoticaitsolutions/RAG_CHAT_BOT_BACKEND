@@ -1,13 +1,13 @@
 from django.contrib import messages
-from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render,redirect
-from RAG_CHATBOT_BACKEND_APIS.admin_view import login_required
 from django.utils.decorators import method_decorator
 
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.AuthController import AuthServices
 from RAG_CHATBOT_BACKEND_APIS.models import Country
-from RAG_CHATBOT_BACKEND_APIS.views import JsonResponse
-
 
 class ProfileSettingController:
     """Controller for profile settings."""

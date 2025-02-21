@@ -62,7 +62,6 @@ INSTALLED_APPS: list[str] = [
     'django.contrib.staticfiles',
     'rest_framework',
     'RAG_CHATBOT_BACKEND_APIS',
-    'rest_framework_swagger',
     'drf_yasg',
     'django.contrib.humanize',
     "corsheaders"    
