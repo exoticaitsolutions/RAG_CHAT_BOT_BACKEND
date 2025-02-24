@@ -43,7 +43,6 @@ class AuthController:
             else:
                 messages.error(request, "Invalid username/email or password.")
                 return redirect("/login/")
-
         return render(request, "admin/auth/login.html")
     
     

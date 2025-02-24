@@ -4,13 +4,8 @@ import string
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from RAG_CHATBOT_BACKEND_APIS.utils import format_name  # Update if using a custom model
+from RAG_CHATBOT_BACKEND_APIS.utils import format_name, get_random_str  # Update if using a custom model
 from django.db import models
-
-
-def get_random_str():
-    random_str = ''.join(random.choices(string.ascii_uppercase + string.digits, k=15))
-    return random_str
 
 class Country(models.Model):
     name = models.CharField(max_length=100)
@@ -85,35 +80,7 @@ class CustomUser(AbstractUser):
     language = models.CharField(max_length=250, default="", blank=True)
     status = models.BooleanField(default=True)
 
-class ChatbotAppearance(models.Model):
-    chatbot_id = models.CharField(max_length=50)
-    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null=True)
-    display_name = models.TextField(max_length=2000)
-    footer_name = models.TextField(max_length=2000, default="Powered by My AI Solutions.")
-    initial_message = models.TextField(blank=True, default="Hi! What can I help with you?")
-    chatbot_theme = models.CharField(max_length=10, default="#8d54a2", blank=True)
-    chatbot_mode = models.BooleanField(default=False)
-    suggested_messages = models.TextField(blank=True)
-    destination = models.TextField(blank=True)
-    chatbot_image = models.ImageField(upload_to='chatbot_images/', default='default_images/chatbot_image.png', null=True, blank=True,max_length=255)
-    chatbot_launcher_icon = models.ImageField(upload_to='launcher_icon/', default='default_images/avatar-1.png', null=True, blank=True,max_length=255)
-    top_bar_background = models.CharField(max_length=10, default="#8d54a2")
-    top_bar_textcolor = models.CharField(max_length=10, default="#000000")
-    bot_message_background = models.CharField(max_length=10, default="#ffffff")
-    bot_message_color = models.CharField(max_length=10, default="#46464e")
-    user_message_background = models.CharField(max_length=10, default="#ffffff")
-    user_message_color = models.CharField(max_length=10, default="#46464e")
-    chatbot_background_color = models.CharField(max_length=10, default="#e6e6e6")
-    chatbot_background_pattern = models.ImageField(upload_to='chatbot_background_patterns/', blank=True,max_length=255,)
-    font_family = models.CharField(max_length=255, default="Arial")
-    font_size = models.PositiveIntegerField(blank=True, default=14)
-    widget_width = models.PositiveIntegerField(blank=True, default=25)
-    widget_height = models.PositiveIntegerField(blank=True, default=450)
-    widget_position = models.CharField(max_length=5, default="right")  # Assumes 'right' or 'left, blank=True'
-    show_popup_notification = models.BooleanField(default=True)
-    delay_showing_popup_notification = models.PositiveIntegerField(default=1)
-    status = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+
 
 PINECONE_INDEX_NAME = str(os.getenv("PINECONE_INDEX_NAME"))
 
@@ -164,7 +131,35 @@ class ChatBotDB(models.Model):
     status = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-
+class ChatbotAppearance(models.Model):
+    chatbot_id = models.CharField(max_length=50)
+    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null=True)
+    display_name = models.TextField(max_length=2000)
+    footer_name = models.TextField(max_length=2000, default="Powered by My AI Solutions.")
+    initial_message = models.TextField(blank=True, default="Hi! What can I help with you?")
+    chatbot_theme = models.CharField(max_length=10, default="#8d54a2", blank=True)
+    chatbot_mode = models.BooleanField(default=False)
+    suggested_messages = models.TextField(blank=True)
+    destination = models.TextField(blank=True)
+    chatbot_image = models.ImageField(upload_to='chatbot_images/', default='default_images/chatbot_image.png', null=True, blank=True,max_length=255)
+    chatbot_launcher_icon = models.ImageField(upload_to='launcher_icon/', default='default_images/avatar-1.png', null=True, blank=True,max_length=255)
+    top_bar_background = models.CharField(max_length=10, default="#8d54a2")
+    top_bar_textcolor = models.CharField(max_length=10, default="#000000")
+    bot_message_background = models.CharField(max_length=10, default="#ffffff")
+    bot_message_color = models.CharField(max_length=10, default="#46464e")
+    user_message_background = models.CharField(max_length=10, default="#ffffff")
+    user_message_color = models.CharField(max_length=10, default="#46464e")
+    chatbot_background_color = models.CharField(max_length=10, default="#e6e6e6")
+    chatbot_background_pattern = models.ImageField(upload_to='chatbot_background_patterns/', blank=True,max_length=255,)
+    font_family = models.CharField(max_length=255, default="Arial")
+    font_size = models.PositiveIntegerField(blank=True, default=14)
+    widget_width = models.PositiveIntegerField(blank=True, default=25)
+    widget_height = models.PositiveIntegerField(blank=True, default=450)
+    widget_position = models.CharField(max_length=5, default="right")  # Assumes 'right' or 'left, blank=True'
+    show_popup_notification = models.BooleanField(default=True)
+    delay_showing_popup_notification = models.PositiveIntegerField(default=1)
+    status = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class Document(models.Model):
     chatbot = models.ForeignKey("ChatBotDB", on_delete=models.CASCADE, blank=True)
@@ -222,8 +217,7 @@ class Chat(models.Model):
 
 
 class VisitorVisits(models.Model):
-    visitor_id = models.CharField(max_length=255,
-                                  default=get_random_str)
+    visitor_id = models.CharField(max_length=255, default=get_random_str)
     chatbot_id = models.CharField(max_length=255)
     ip_address = models.GenericIPAddressField(blank=True, null=True)
     geo_location = models.CharField(max_length=255, blank=True)
