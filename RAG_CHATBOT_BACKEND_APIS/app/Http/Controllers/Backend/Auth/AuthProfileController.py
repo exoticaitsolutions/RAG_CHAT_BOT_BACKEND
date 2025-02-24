@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
-from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.AuthController import AuthServices
+from RAG_CHATBOT_BACKEND_APIS.app.services.Auth.AuthServices import AuthServices
 from RAG_CHATBOT_BACKEND_APIS.models import Country
 
 class ProfileSettingController:

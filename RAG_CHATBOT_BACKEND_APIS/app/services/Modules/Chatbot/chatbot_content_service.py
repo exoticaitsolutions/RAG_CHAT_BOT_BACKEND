@@ -1,7 +1,7 @@
 import logging
 import os
 from concurrent.futures import ThreadPoolExecutor
-from RAG_CHATBOT_BACKEND_APIS.app.http.Serializers.Modules.Chatbot.document_website_serializers import DocumentUploadSerializer, WebsiteURLSerializer
+from RAG_CHATBOT_BACKEND_APIS.app.Http.Serializers.Modules.Chatbot.document_website_serializers import DocumentUploadSerializer, WebsiteURLSerializer
 from RAG_CHATBOT_BACKEND_APIS.app.services.Langchain_Models.LangchainEmbeddingService import LangchainEmbeddingService
 from RAG_CHATBOT_BACKEND_APIS.utils import create_directories
 

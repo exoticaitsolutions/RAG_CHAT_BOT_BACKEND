@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse
 
-from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.AuthController import AuthServices
+from RAG_CHATBOT_BACKEND_APIS.app.Http.Controllers.Backend.Auth.AuthController import AuthServices
 from RAG_CHATBOT_BACKEND_APIS.app.services.Modules.Chatbot.ChatBotService import ChatBotService
 from RAG_CHATBOT_BACKEND_APIS.app.services.Modules.Chatbot.chatbot_content_service import ChatbotContentManagementService
 from RAG_CHATBOT_BACKEND_APIS.models import Chat, ChatBotDB, ChatHistory, ChatbotAppearance, Document, WebsiteDB
