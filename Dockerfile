@@ -1,17 +1,26 @@
-# Use official Python image
-FROM python:3.13
+# Use a stable Python image
+FROM python:3.12
 
-# Set the working directory inside the container
-WORKDIR /var/www/html
+# Set working directory inside the container
+WORKDIR /app
 
-# Copy project files to the working directory
-COPY . /var/www/html
+# Copy project files
+COPY . /app
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
 
 # Expose port 8000
 EXPOSE 8000
 
-# Default command to run the Django app
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Set execute permissions for the script
+RUN chmod +x /app/entrypoint.sh
+
+# Use the script as the container's entry point
+ENTRYPOINT ["bash", "/app/entrypoint.sh"]
+

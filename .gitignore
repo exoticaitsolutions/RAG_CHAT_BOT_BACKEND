@@ -142,3 +142,4 @@ chroma_db/
 /pip_install_log.txt
 # Django Migrations
 migrations/
+compose-dev.yaml

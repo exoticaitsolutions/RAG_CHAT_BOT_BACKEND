@@ -1,38 +1,47 @@
+# version: '3.8'
 
 services:
-  web:
-    build: .
-    container_name: django_app
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/var/www/html
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
-    env_file:
-      - .env
 
   db:
     image: mysql:8.0
-    container_name: mysql_db
-    restart: always
-    environment:
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-    ports:
-      - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - mysql_config:/etc/mysql
-      - mysql_logs:/var/log/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"  # Expose port only if you need to access from outside docker network. Remove for production.
+
+  rag_app_portal:
+    build: .
+    depends_on:
+      - db
+    environment:
+      MYSQL_HOST: ${DB_HOST}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_PORT: ${DB_PORT}
+      DJANGO_SETTINGS_MODULE: RAG_Backend.settings  # Replace your_project
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rag_app_portal.rule=Host(`portal.chatbot.localhost.com`)"
+      - "traefik.http.services.rag_app_portal.loadbalancer.server.port=8000"
+
+  traefik:
+    image: traefik:v2.5
+    container_name: traefik
+    command:
+      - "--api.insecure=true"  # Enables the Traefik dashboard (not recommended for production)
+      - "--providers.docker=true"  # Enable Docker provider
+      - "--entryPoints.web.address=:80"  # HTTP entrypoint on port 80
+    ports:
+      - "80:80"  # Expose Traefik on port 80 for http://portal.chatbot.localhost.com
+      - "8080:8080"  # Expose Traefik dashboard on port 8080 (optional)
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"  # Needed for Traefik to access Docker API
 
 volumes:
   mysql_data:
-    driver: local
-  mysql_config:
-    driver: local
-  mysql_logs:
-    driver: local
