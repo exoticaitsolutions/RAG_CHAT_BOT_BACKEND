@@ -1,23 +1,17 @@
-# Use Python 3.12 as the base image
-FROM python:3.12
+# Use official Python image
+FROM python:3.13
 
-# Set the working directory in the container
-WORKDIR /app
+# Set the working directory inside the container
+WORKDIR /var/www/html
 
-# Copy the application code to the container
-COPY . /app/
+# Copy project files to the working directory
+COPY . /var/www/html
 
 # Install dependencies
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose the port for Django
+# Expose port 8000
 EXPOSE 8000
 
-# Run database migrations and start the server
-CMD ["sh", "-c", "
-    python manage.py makemigrations RAG_CHATBOT_BACKEND_APIS &&
-    python manage.py migrate &&
-    python manage.py seed_data &&
-    python manage.py runserver 0.0.0.0:8000
-"]
+# Default command to run the Django app
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
