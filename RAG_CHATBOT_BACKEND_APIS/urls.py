@@ -1,6 +1,8 @@
+from django.urls.resolvers import URLPattern
 from RAG_Backend import settings
 from django.urls import path, re_path
 
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.API.Chatbot.ChatbotQueryApiController import ChatbotQueryApiController
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.AdminDashboardController import AdminDashboardController
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.AuthController import AuthController
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.AuthProfileController import ProfileSettingController
@@ -8,6 +10,7 @@ from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.ForgetPasswordCo
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.ResetPasswordController import ResetPasswordController
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Modules.ChatBot.ChatBotController import ChatBotController
 from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Modules.ChatBot.ChatbotDashboardController import ChatbotDashboardController
+from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.ChatBotFrontendController import ChatBotFrontendController
 
 
 
@@ -37,17 +40,17 @@ path("dashboard/user/<str:user_uuid>/chatbot/", ChatBotController().chatbot_dash
 path('dashboard/chatbot/fetch-modal-content/', ChatBotController().fetch_modal_content, name='admin.fetch_modal_content_for_chat_bot'),
 path("dashboard/user/<str:user_uuid>/chatbot/post/<str:curd_type>", ChatBotController().handle_chatbot_action, name="admin.user.chatbot.manage"),
 path("dashboard/user/<str:user_uuid>/chatbot/<str:chatbot_id>/<str:view_type>/", ChatbotDashboardController().view_chatbot_dashboard, name="admin.user.chatbot.dashboard"),
-
 # Upload Documents Chatborad 
 path("dashboard/user/<str:user_uuid>/chatbot/<str:chatbot_id>/upload/<str:upload_type>", ChatbotDashboardController().upload_and_start_training, name="admin.user.chatbot.upload-document"),
 
+path("chatbot/", ChatBotFrontendController().intChatbot, name="chatbot.init"),
 
 ]
 public_urls = [
 
 ]
-api_urls = [
-
+api_urls: list[URLPattern] = [
+    path("api/v2/chatbot/query/", ChatbotQueryApiController.as_view(), name="chatbot-query"),
 ]
 urlpatterns += admin_auth_urls + admin_dashboard_urls + public_urls + api_urls
 # Serve media files in development
