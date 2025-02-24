@@ -1,31 +1,20 @@
 import logging
-import re
-import time
+import random
+import string
 import os
 import shutil
-import hashlib
-from urllib.parse import urljoin
 from django.conf import settings
-from django.db import transaction
-
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_community.embeddings import OpenAIEmbeddings
-from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_chroma import Chroma
 
 
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.embeddings.openai import OpenAIEmbeddings
-from langchain_community.vectorstores import Chroma
+
 
 # Create a logger instance
 logger = logging.getLogger(__name__)
+
+
+def get_random_str():
+    random_str = ''.join(random.choices(string.ascii_uppercase + string.digits, k=15))
+    return random_str
 
 def create_folder(folder_name):
     os.makedirs(folder_name, exist_ok=True)

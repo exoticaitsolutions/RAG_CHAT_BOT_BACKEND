@@ -15,4 +15,5 @@ urlpatterns = [
     path('', RedirectView.as_view(url='/login/', permanent=False)),
     # Main application URLs
     path("", include("RAG_CHATBOT_BACKEND_APIS.urls")),
+    path("api/v2/", include("RAG_CHATBOT_BACKEND_APIS.api_routes")),
 ]

@@ -20,6 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 import pymysql
 pymysql.install_as_MySQLdb()
 AUTH_USER_MODEL = 'RAG_CHATBOT_BACKEND_APIS.CustomUser'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -75,7 +76,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-      'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'RAG_Backend.urls'
