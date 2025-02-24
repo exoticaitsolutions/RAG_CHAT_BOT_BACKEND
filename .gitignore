@@ -143,3 +143,4 @@ chroma_db/
 # Django Migrations
 migrations/
 compose-dev.yaml
+.idea/*
