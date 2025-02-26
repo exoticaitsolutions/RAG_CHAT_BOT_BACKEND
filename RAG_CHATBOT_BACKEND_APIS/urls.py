@@ -41,6 +41,7 @@ admin_dashboard_urls = [
     # Upload Documents and Website Data  for Chatbot
     path("dashboard/user/<str:user_uuid>/chatbot/post/<str:curd_type>", custom_login_required(ChatBotController().handle_chatbot_action), name="admin.user.chatbot.manage"),
     path("dashboard/user/<str:user_uuid>/chatbot/<str:chatbot_id>/upload/<str:upload_type>", custom_login_required(ChatbotDashboardController().upload_and_start_training), name="admin.user.chatbot.upload-document"),
+    path("dashboard/profile/deactivate-account/", ProfileSettingController().deactivate_account, name="deactivate-account"),
     
 
 ]

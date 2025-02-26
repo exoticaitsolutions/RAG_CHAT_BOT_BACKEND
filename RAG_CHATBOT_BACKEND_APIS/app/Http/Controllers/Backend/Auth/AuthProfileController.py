@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render,redirect
 from django.utils.decorators import method_decorator
+from django.contrib.auth import logout
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -52,3 +53,20 @@ class ProfileSettingController:
                 messages.error(request, "Old password is incorrect")
                 return redirect(f"/dashboard/profile/{login_user_uuid}/setting-security/")
         return render(request, "admin/auth/profile/change_password.html")
+    
+
+    @method_decorator(login_required(login_url='/login/'))
+    def deactivate_account(self, request):  # <-- user_uuid 
+        if request.method == "POST":
+            user = request.user
+            if user.is_authenticated:
+                user.is_active = False
+                user.save()
+
+                # Log the user out after deactivation
+                logout(request)
+
+                # Redirect to the login page
+                return redirect('/login/')
+
+        return render(request, 'admin/auth/profile/accountSetting.html')

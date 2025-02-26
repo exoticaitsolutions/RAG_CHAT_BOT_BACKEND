@@ -99,7 +99,7 @@
                             <h6 class="alert-heading">Are you sure you want to delete your account?</h6>
                             <p>Once deleted, your account cannot be recovered.</p>
                         </div>
-                        <form action="" method="post">
+                        <form action="{% url 'deactivate-account' %}" method="post">
                             {% csrf_token %}
                             <div class="form-check text-center">
                                 <input class="form-check-input" type="checkbox" name="accountActivation" id="accountActivation">
@@ -108,6 +108,7 @@
                             <div class="text-center mt-3">
                                 <button type="submit" class="btn btn-danger">Deactivate Account</button>
                             </div>
+                        </form>
                     </div>
                 </div>
             </div>
