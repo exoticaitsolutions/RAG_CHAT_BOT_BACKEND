@@ -1,5 +1,7 @@
+import os
 import openai
 from uuid import uuid4
+from django.conf import settings
 from langchain_community.document_loaders import CSVLoader, Docx2txtLoader, PyPDFLoader, TextLoader, UnstructuredExcelLoader
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
@@ -68,12 +70,12 @@ class LangchainEmbeddingService:
 
             
     @staticmethod
-    def uploaded_document_and_train_llm(document_data, file_name, chat_data, user_data,ChromaDb_Dir):
+    def uploaded_document_and_train_llm(document, chat_data, user_data,ChromaDb_Dir):
         print(f"Processing document upload for user: {user_data.username}, chatbot: {chat_data.chatbot_name}")
-        document = None  # Initialize document to avoid reference before assignment
         try:
-            document_id=  document_data.get('id')
-            document = Document.objects.filter(id=document_id).first()
+            file_name = os.path.join(settings.MEDIA_ROOT, str(document.filepath))
+            print("📂 Full File Path:", file_name)
+            print("File Exists:", os.path.exists(file_name))  # Should print True       
             if document:
                 document.status = "Processing.."
             if file_name.endswith('.xlsx'):
@@ -130,6 +132,7 @@ class LangchainEmbeddingService:
                     document.status = "error"    
             
         except Exception as e:
+            print(f"Error processing file : {str(e)}")
             if document:
                 document.status = "error"
         

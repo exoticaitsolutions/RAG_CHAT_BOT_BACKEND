@@ -34,7 +34,7 @@
       maxFilesize: 100, // 100MB max file size
       addRemoveLinks: true,
       autoProcessQueue: false, // Disable auto upload
-      acceptedFiles: ".pdf,.csv,.txt,.xlsx" // Only allow PDF, CSV, and TXT files
+      acceptedFiles: ".pdf,.csv,.txt,.xlsx,.docx" // Only allow PDF, CSV, and TXT files
     });
 
     // Success event listener: reloads page when all files are uploaded

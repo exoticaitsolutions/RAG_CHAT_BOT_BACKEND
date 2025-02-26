@@ -144,3 +144,4 @@ chroma_db/
 migrations/
 compose-dev.yaml
 .idea/*
+downloaded_files/*

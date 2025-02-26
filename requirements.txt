@@ -4,6 +4,9 @@ Pillow
 python-dotenv
 PyMySQL
 djangorestframework
+docx2txt
+pypdf
+seleniumbase
 drf-yasg
 django-cors-headers
 langchain-community
@@ -14,7 +17,6 @@ webdriver-manager
 django-filter
 openai
 fake-useragent
-screeninfo
 pandas
 langchain_openai
 watchdog

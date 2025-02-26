@@ -183,6 +183,7 @@ STATICFILES_DIRS = [
 APPEND_SLASH =False
 MEDIA_URL = f'/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 COPY_ROOT = os.path.join(BASE_DIR, 'Copy_Records/')
 if not os.path.exists(MEDIA_ROOT):
     os.makedirs(MEDIA_ROOT)
