@@ -1,5 +1,4 @@
 from django.urls import path
-from RAG_Backend import settings
 
 # Import Controllers
 from RAG_CHATBOT_BACKEND_APIS.app.Http.Controllers.Backend.AdminDashboardController import AdminDashboardController
@@ -55,5 +54,4 @@ public_urls = [
 urlpatterns += admin_auth_urls + admin_dashboard_urls + public_urls 
 
 # Serve media files in development mode
-if settings.DEBUG:
-    urlpatterns += settings.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

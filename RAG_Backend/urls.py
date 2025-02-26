@@ -8,6 +8,7 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic.base import RedirectView
+from RAG_Backend import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -17,3 +18,8 @@ urlpatterns = [
     path("", include("RAG_CHATBOT_BACKEND_APIS.urls")),
     path("api/v2/", include("RAG_CHATBOT_BACKEND_APIS.api_routes")),
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += settings.static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += settings.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,58 +1,25 @@
-# version: '3.8'
+version: '3.8'
 
 services:
-  db:
-    container_name: mysql-container
-    image: mysql:8.0
-    restart: always
-    volumes:
-      - ./mysql:/var/lib/mysql
-      - db_data:/var/lib/mysql
-    env_file:
-      - .env
-    environment:
-      - MYSQL_ROOT_PASSWORD=${SQL_ROOT_PASSWORD}
-      - MYSQL_USER=${DB_USER}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
-      - MYSQL_DATABASE=${DB_NAME}
-    networks:
-      - rag-network
-    ports:
-      - 3306:3306
-
   rag_app_portal:
     container_name: django-web
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
-      - ./app/static:/app/static
-      - ./app/media:/app/media
+      - ./static:/app/static  # Fix static volume
+      - ./media:/app/media  # Fix media volume
       - app_logs:/app/logs
     env_file:
       - .env
     ports:
       - 8000:8000
-    depends_on:
-      - db
-    networks:
-      - rag-network
-
-  nginx:
-    container_name: nginx-proxy
-    image: nginx:latest
-    restart: always
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    ports:
-      - "80:80"
-    depends_on:
-      - rag_app_portal
     networks:
       - rag-network
 
 volumes:
-  db_data:
   app_logs:
 
 networks:
