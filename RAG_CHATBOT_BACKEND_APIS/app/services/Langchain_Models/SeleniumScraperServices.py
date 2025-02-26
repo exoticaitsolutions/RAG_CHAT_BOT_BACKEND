@@ -1,8 +1,13 @@
+import os
 from urllib.parse import urljoin
+from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from fake_useragent import UserAgent
-from seleniumbase import Driver
+from webdriver_manager.chrome import ChromeDriverManager
+from screeninfo import get_monitors
 import time
 
 # Set HEADLESS mode
@@ -19,10 +24,30 @@ class SeleniumScraperServices:
         Initializes and returns a Selenium WebDriver instance.
         """
         try:
-            options = {"uc": True, "headless": True}
+            options = Options()
+            window_size = f"{get_monitors()[0].width},{get_monitors()[0].height}"
+            print(f"Window Size: {window_size}")
+            options.add_argument(f"--window-size={window_size}")
+            
+            if HEADLESS:
+                options.add_argument("--headless")
+            
             user_agent = UserAgent().random
-            driver = Driver(**options)
-            driver.execute_script(f"Object.defineProperty(navigator, 'userAgent', {{get: function() {{ return '{user_agent}'; }} }});")
+            print(f"User Agent: {user_agent}")
+            options.add_argument(f"--user-agent={user_agent}")
+            
+            # Disable unnecessary features for a faster and smoother experience
+            options.add_argument("--disable-notifications")
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-software-rasterizer")
+            options.add_argument("--disable-dev-shm-usage")
+            driver_path = '/app/chromedriver'  # Replace with the actual path to your custom chromedriver
+            if not os.path.exists(driver_path):
+                print(f"Custom ChromeDriver not found at {driver_path}. Using default driver.")
+                driver_path = ChromeDriverManager().install()  # Use WebDriverManager to install the default ChromeDriver
+            service = Service(driver_path)
+            # Initialize WebDriver
+            driver = webdriver.Chrome(service=service, options=options)
             return driver
         except Exception as e:
             print(f"An error occurred while initializing the web driver: {e}")

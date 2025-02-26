@@ -21,9 +21,9 @@ RUN apt-get update && apt-get install -y \
     libgtk-3-0 \
     libgbm1 \
     xdg-utils \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Google Chrome
 RUN apt-get update && apt-get install -y wget gnupg2 \
     && wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google-chrome.list \
@@ -35,7 +35,16 @@ WORKDIR /app
 
 # Copy application files (including requirements.txt) to the container
 COPY . /app
+# Install Google Chrome
 
+
+# Download ChromeDriver and unzip it to a folder within the app
+RUN wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip -P /tmp \
+    && unzip /tmp/chromedriver_linux64.zip -d /app/chromedriver/ \
+    && rm /tmp/chromedriver_linux64.zip
+
+# Add chromedriver to PATH
+ENV PATH="/app/chromedriver:${PATH}"
 # Install Python dependencies including Django and watchdog
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r /app/requirements.txt \
@@ -47,5 +56,4 @@ RUN chmod +x /app/docker-entrypoint.sh
 # Define the entrypoint for the container
 ENTRYPOINT ["bash", "/app/docker-entrypoint.sh"]
 
-# Expose ports (for web server and MySQL database)
-EXPOSE 8000 3306
+

@@ -12,12 +12,14 @@ fi
 # Décommenter pour supprimer la bdd à chaque redémarrage (danger)
 # echo "Clear entire database"
 # python manage.py flush --no-input
+chromedriver --url-base=/wd/hub &
 
 echo "Appling database migrations..."
 python manage.py makemigrations  RAG_CHATBOT_BACKEND_APIS
 python manage.py migrate
 python manage.py seed_data
 # Collect static files (if needed)
+
 echo "Collecting static files..."
 python manage.py collectstatic --noinput
 # Start the Django server
