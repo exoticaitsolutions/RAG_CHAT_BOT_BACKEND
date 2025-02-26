@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+load_dotenv()
 from django.conf.urls.static import static
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,9 +29,9 @@ AUTH_USER_MODEL = 'RAG_CHATBOT_BACKEND_APIS.CustomUser'
 SECRET_KEY = 'django-insecure-4rui8%q0xhb&$s3ju5-yp^j0i5&@i(pyrople(9y^9g723q@5y'
 BASE_APP_URL = os.getenv("BASE_APP_URL", "http://127.0.0.1:8000")  # Default to localhost
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "portal.chatbot.localhost.com"]
-
+DEBUG = int(os.environ.get("DEBUG", default=0))
+env_allowed_hosts = os.environ.get("DJANGO_ALLOWED_HOSTS")
+ALLOWED_HOSTS =["*"]
 BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
@@ -94,27 +95,15 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                  'django.template.context_processors.media',
-                 'RAG_CHATBOT_BACKEND_APIS.app.http.context_processors.chatbot_context'
+                 'RAG_CHATBOT_BACKEND_APIS.app.Http.context_processors.chatbot_context'
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'RAG_Backend.wsgi.application'
-
-load_dotenv()
 DB_TYPE = os.getenv('DB_TYPE')
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-
-# 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-# __import__('pysqlite3')
-# import sys
-
-# sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-
-
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 if DB_TYPE == 'sqlite3':
     print('Using SQLite3')
     DATABASES = {
@@ -124,9 +113,9 @@ else:
     DATABASES = {
         'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('MYSQL_DATABASE'),
-        'USER': os.getenv('MYSQL_USER'),
-        'PASSWORD': os.getenv('MYSQL_PASSWORD'),
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
         'OPTIONS': {
@@ -134,21 +123,6 @@ else:
         }
     }
     }
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.hostinger.com"
-EMAIL_PORT = 465
-EMAIL_USE_SSL = True  # Since we use port 465
-EMAIL_USE_TLS = False  # Must be False when using SSL
-EMAIL_HOST_USER = "pythonweb@exoticaitsolutions.com"
-EMAIL_HOST_PASSWORD = "Webpython@123#"  # Ensure this is correct
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
-# EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
-# EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
-# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "pk@12gmail.com")
-# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "Prateek@123")
 
 
 # Password validation
@@ -229,12 +203,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = True
 APPEND_SLASH = True
 CSRF_TRUSTED_ORIGINS = [
-    "http://127.0.0.1:8000",  # Localhost
-    "http://localhost:8000",
-    "https://yourdomain.com",  # Add your production domain if needed
 ]
-
-
 EMAIL_HOST_USER = "pythonweb@exoticaitsolutions.com"
 DEFAULT_FROM_EMAIL = "pythonweb@exoticaitsolutions.com"
 SERVER_EMAIL = "pythonweb@exoticaitsolutions.com"
@@ -242,3 +211,13 @@ SERVER_EMAIL = "pythonweb@exoticaitsolutions.com"
 SESSION_COOKIE_AGE = 1800  # 30 minutes in seconds
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Logout on browser close
 SESSION_SAVE_EVERY_REQUEST = True  # Reset session timer on activity
+
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.hostinger.com"
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True  # Since we use port 465
+EMAIL_USE_TLS = False  # Must be False when using SSL
+EMAIL_HOST_USER = "pythonweb@exoticaitsolutions.com"
+EMAIL_HOST_PASSWORD = "Webpython@123#"  # Ensure this is correct
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

@@ -9,6 +9,7 @@ django-cors-headers
 langchain-community
 langchain-chroma
 selenium
+mysqlclient
 webdriver-manager
 django-filter
 openai
@@ -16,3 +17,4 @@ fake-useragent
 screeninfo
 pandas
 langchain_openai
+watchdog

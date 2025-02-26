@@ -1,26 +1,51 @@
 # Use a stable Python image
 FROM python:3.12
 
+# Set environment variables to prevent Python from writing bytecode and ensure unbuffered output
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Install dependencies required for Google Chrome and other utilities
+RUN apt-get update && apt-get install -y \
+    netcat-openbsd \
+    wget \
+    gnupg2 \
+    curl \
+    ca-certificates \
+    sudo \
+    libx11-6 \
+    libnss3 \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libatk1.0-0 \
+    libgtk-3-0 \
+    libgbm1 \
+    xdg-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Google Chrome
+RUN apt-get update && apt-get install -y wget gnupg2 \
+    && wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google-chrome.list \
+    && apt-get update && apt-get install -y google-chrome-stable \
+    && rm -rf /var/lib/apt/lists/*
+
 # Set working directory inside the container
 WORKDIR /app
 
-# Copy project files
+# Copy application files (including requirements.txt) to the container
 COPY . /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Python dependencies
+# Install Python dependencies including Django and watchdog
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir -r /app/requirements.txt \
+    && pip install watchdog
 
-# Expose port 8000
-EXPOSE 8000
+# Set executable permissions for the entrypoint script
+RUN chmod +x /app/docker-entrypoint.sh
 
-# Set execute permissions for the script
-RUN chmod +x /app/entrypoint.sh
+# Define the entrypoint for the container
+ENTRYPOINT ["bash", "/app/docker-entrypoint.sh"]
 
-# Use the script as the container's entry point
-ENTRYPOINT ["bash", "/app/entrypoint.sh"]
-
+# Expose ports (for web server and MySQL database)
+EXPOSE 8000 3306

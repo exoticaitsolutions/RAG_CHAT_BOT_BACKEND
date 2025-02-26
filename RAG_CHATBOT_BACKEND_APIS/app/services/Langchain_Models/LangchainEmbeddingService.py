@@ -1,7 +1,7 @@
 import openai
 from uuid import uuid4
 from langchain_community.document_loaders import CSVLoader, Docx2txtLoader, PyPDFLoader, TextLoader, UnstructuredExcelLoader
-from langchain.embeddings import OpenAIEmbeddings
+from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from RAG_CHATBOT_BACKEND_APIS.app.services.Langchain_Models.SeleniumScraperServices import SeleniumScraperServices
