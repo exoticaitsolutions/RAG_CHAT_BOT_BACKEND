@@ -57,10 +57,22 @@
     document.body.appendChild(launcherIcon);
 
     // Function to send a message to the API
-    function sendMessageToAPI(message,baseUrl) {
-        let chatbotId = document.querySelector('script[chatbot-id]').getAttribute('chatbot-id');
-        const apiUrl = `${baseUrl}/api/v2/query/?chat_id=${chatbotId}`; // Adjust the API endpoint as needed
-        console.log(apiUrl);
+    function sendMessageToAPI(message) {
+        // Get chatbot ID and base URL from script attributes
+        let chatbotId = document.querySelector('script[chatbot-id]')?.getAttribute('chatbot-id');
+        let base_url = document.querySelector('script[base_url]')?.getAttribute('base_url');
+    
+        if (!chatbotId || !base_url) {
+            console.error("Missing chatbot ID or base URL.");
+            displayMessage("Configuration error: Missing chatbot ID or base URL.", "bot");
+            return;
+        }
+    
+        // Construct the API URL
+        const apiUrl = `${base_url}/api/v2/chatbot/query/?chat_id=${chatbotId}`;
+        console.log("API URL:", apiUrl);
+    
+        // Send the POST request
         fetch(apiUrl, {
             method: "POST",
             headers: {
@@ -68,16 +80,28 @@
             },
             body: JSON.stringify({ query: message })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
-            console.log(data);
-            // displayMessage(data.results[0].text, "bot");  
+            console.log("API Response:", data);
+            
+            // Extract and display chatbot's response
+            if (data.results) {
+                displayMessage(data.results.response, "bot");
+            } else {
+                displayMessage("No response from chatbot.", "bot");
+            }
         })
         .catch(error => {
             console.error("Error:", error);
             displayMessage("Error fetching response.", "bot");
         });
     }
+    
 
     // Function to display messages
     function displayMessage(message, sender) {
@@ -108,13 +132,9 @@
         
         if (userMessage) {
             displayMessage(userMessage, "user");
-    
             // Get the dynamic base URL
-            const baseUrl = `${window.location.protocol}//${window.location.host}`;
-            console.log("Base URL:", baseUrl);
-    
             // Pass the base URL to the function if needed
-            sendMessageToAPI(userMessage, baseUrl);
+            sendMessageToAPI(userMessage);
     
             // Clear input field after sending message
             chatInput.value = "";
