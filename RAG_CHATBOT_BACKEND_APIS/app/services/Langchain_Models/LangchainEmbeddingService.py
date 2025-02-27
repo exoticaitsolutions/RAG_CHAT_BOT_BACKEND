@@ -45,13 +45,16 @@ class LangchainEmbeddingService:
                 smedia_file, ChromaDb_Dir = create_directories(str(user.username), str(chatbot.chatbot_name))
                 collection_name = f"{formatted_username}_{formatted_chat_name}"
                 print("[INFO] ChromaDb_Dir Name:", ChromaDb_Dir)
-
-                # Load ChromaDB with OpenAI Embeddings
-                embed_fun = OpenAIEmbeddings(model='text-embedding-3-small')
-                vectordb = Chroma(persist_directory=ChromaDb_Dir, embedding_function=embed_fun, collection_name=collection_name)
+                vectordb = Chroma(
+                    persist_directory=ChromaDb_Dir, 
+                    embedding_function=embed_fun, 
+                    collection_name=collection_name
+                )
                 # Initialize LLM (GPT Model)
+                
                 llm = ChatOpenAI(model_name=chatbot.model, temperature=chatbot.temperature, openai_api_key=chatbot.openai_key) # type: ignore
                 # Create RetrievalQA Chain
+               
                 retriever = vectordb.as_retriever(search_kwargs={"k": 5})  # Ensure valid k
                 qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)
                 # Generate Answer
