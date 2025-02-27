@@ -28,14 +28,14 @@ AUTH_USER_MODEL = 'RAG_CHATBOT_BACKEND_APIS.CustomUser'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-4rui8%q0xhb&$s3ju5-yp^j0i5&@i(pyrople(9y^9g723q@5y'
-BASE_APP_URL = os.getenv("BASE_APP_URL", "http://127.0.0.1:8000")  # Default to localhost
+# BASE_APP_URL = os.getenv("BASE_APP_URL", "http://127.0.0.1:8000")  # Default to localhost
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=1))
 
 
 env_allowed_hosts = os.environ.get("DJANGO_ALLOWED_HOSTS")
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-ALLOWED_HOSTS = ['3.96.160.107', '0.0.0.0']
+ALLOWED_HOSTS = ['3.96.160.107', '0.0.0.0','127.0.0.1']
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent

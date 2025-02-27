@@ -301,7 +301,7 @@
                         </p>
                         <div class="row g-2">
                             <textarea class="form-control textarea-md" rows="4" style="resize: none; color: black;"
-                                      id="exampleFormControlTextarea_1" placeholder="Chatbot Integration Code" readonly><script src="http://127.0.0.1:8000/static/chat-widget/chat-loader.js" chatbot-id="{{data.user_chatbots.chat_bot_id}}" type="application/javascript"></script> {{ int_code.jquery }}{{ int_code.chatbot_code }}
+                                      id="exampleFormControlTextarea_1" placeholder="Chatbot Integration Code" readonly><script src="{{ request.scheme }}://{{ request.get_host }}/static/chat-widget/chat-loader.js" chatbot-id="{{data.user_chatbots.chat_bot_id}}" type="application/javascript"></script> {{ int_code.jquery }}{{ int_code.chatbot_code }}
                             </textarea>
                         </div>
                     </div>

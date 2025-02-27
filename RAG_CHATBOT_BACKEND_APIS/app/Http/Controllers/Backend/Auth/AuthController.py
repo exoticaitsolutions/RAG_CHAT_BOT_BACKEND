@@ -3,9 +3,14 @@ from django.shortcuts import redirect, render
 from RAG_CHATBOT_BACKEND_APIS.app.services.Auth.AuthServices import AuthServices
 from django.contrib.auth import logout, authenticate, login
 
+from RAG_CHATBOT_BACKEND_APIS.utils import get_base_url
+
 class AuthController:
     def auth_register_page(self, request):
+        
         if request.method == "POST":
+            base_url = get_base_url(request)
+            print('get_base_url', )
             username = request.POST.get("username", "").strip()
             email = request.POST.get("email", "").strip()
             password1 = request.POST.get("password1", "")
@@ -19,12 +24,13 @@ class AuthController:
             elif AuthServices.check_user_existence('email', email):
                 messages.error(request, "Email is already registered.")
             else:
-                status ,message= AuthServices.RegisterUser(username,email,password1)
+                status ,message= AuthServices.RegisterUser(username,email,password1,base_url)
                 if not status:
                     messages.error(request, message)
                 messages.success(request, message)
                 return redirect("/login/")
             return redirect("/register/")
+        
         return render(request, "admin/auth/register.html")
     
     def auth_login_page(self, request):
