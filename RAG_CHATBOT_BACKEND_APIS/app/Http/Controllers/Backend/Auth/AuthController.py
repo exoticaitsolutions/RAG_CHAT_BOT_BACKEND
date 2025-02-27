@@ -45,6 +45,7 @@ class AuthController:
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
+                messages.success(request, 'Login  Succussfully')
                 return redirect("/dashboard/")
             else:
                 messages.error(request, "Invalid username/email or password.")
@@ -54,5 +55,6 @@ class AuthController:
     
     def auth_logoutSession(self, request):
         logout(request)  # Logs out the user and removes session data
+        messages.success(request, 'Logout Succussfully')
         request.session.flush()  # Completely clears the session
-        return redirect("/admin/auth/login/")  # Redirects to the login page
+        return redirect("/login/")

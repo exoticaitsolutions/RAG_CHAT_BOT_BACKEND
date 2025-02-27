@@ -133,7 +133,6 @@
                                     <div class="flex-shrink-0">
                                         <img src="{% static 'backend/image/pp.jpg' %}" alt="user-image"
                                             class="user-avtar wid-45 rounded-circle" />
-
                                     </div>
                                     <div class="flex-grow-1 ms-3 me-2">
                                         <h6 class="mb-0 text-capitalize">Settings/Billing</h6>
@@ -149,7 +148,7 @@
                             <img src="{{ request.user.profile_url|default:request.user.profile_pic.url }}" alt="user-image" class="user-avtar"
                                 style="border: 1px solid #9f9f9f;width: 44px; height: 44px; border-radius: 58px; color: var(--pc-header-color); overflow: hidden;" />
                         </a> 
-                        <a href="/">
+                        <a href="{% url 'logout' %}">
                             <img src="{% static 'backend/image/off.png' %}" alt="off" class="user-avtar"
                                 style="border: 1px solid #9f9f9f;width: 44px; height: 44px; border-radius: 58px; color: var(--pc-header-color); overflow: hidden;" />
                         </a>
@@ -164,32 +163,6 @@
             <div class="row">
                 {% block content %}
                 {% endblock %}
-            </div>
-        </div>
-    </div>
-    <!-- Delete modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true" data-bs-whatever="">
-        <div class="modal-dialog modal-dialog-centered1 modal-simple modal-add-new-cc">
-            <div class="modal-content p-3 p-md-5">
-                <div class="modal-body p-md-0">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="text-center mb-4">
-                        <h3 class="mb-2 pb-1">Are you sure?</h3>
-                        <p>You won't be able to revert!</p>
-                    </div>
-                    <form id="addNewCCForm" class="row g-4">
-                        <div class="col-12 text-center">
-                            <input type='hidden' id="delete-type"></input>
-                            <input type='hidden' id="delete-id"></input>
-                            <button type="submit" class="btn btn-primary me-sm-3 me-1" data-bs-dismiss="modal">Delete
-                            </button>
-                            <button type="reset" class="btn btn-outline-secondary btn-reset" data-bs-dismiss="modal"
-                                aria-label="Close">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
             </div>
         </div>
     </div>
@@ -286,22 +259,22 @@
 <!-- Main JS -->
 <script src="{% static 'backend/js/main.js' %}"></script>
 
-<!-- Page JS -->
-{% comment %} <script src="{% static 'backend/js/app-chat.js' %}"></script> {% endcomment %}
-<script src="{% static 'backend/packeges/jquery.min.js' %}"></script>
-<script src="{% static 'backend/packeges/jquery.validate.min.js' %}"></script>
-<script src="{% static 'backend/packeges/additional-methods.min.js' %}"></script>
-<script src="{% static 'backend/js/custom.js' %}"></script>
-<script src="{% static 'backend/js/commonjs.js' %}"></script>
-<script type="text/javascript">
-    var csrfToken1 = "{{ csrf_token }}";  // Embedding CSRF token from Django context
-</script>
-<script>
-    function getCSRFToken() {
-        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+    <!-- Page JS -->
+    {% comment %} <script src="{% static 'backend/js/app-chat.js' %}"></script> {% endcomment %}
+    <script src="{% static 'backend/packeges/jquery.min.js' %}"></script>
+    <script src="{% static 'backend/packeges/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'backend/packeges/additional-methods.min.js' %}"></script>
+    <script src="{% static 'backend/js/custom.js' %}"></script>
+    <script src="{% static 'backend/js/commonjs.js' %}"></script>
+    <script type="text/javascript">
+        var csrfToken1 = "{{ csrf_token }}";  // Embedding CSRF token from Django context
+    </script>
+    <script>
+        function getCSRFToken() {
+            return document.querySelector('[name=csrfmiddlewaretoken]').value;
+        }
         
-    }
-</script>
+    </script>
 
 {% block script %}
 {% endblock %}

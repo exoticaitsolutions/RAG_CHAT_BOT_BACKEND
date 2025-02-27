@@ -1,11 +1,9 @@
 (function() {
-   
     document.head.insertAdjacentHTML('beforeend', 
         '<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.16/tailwind.min.css" rel="stylesheet" />'
     );
-
-
     var chatbotContainer = document.createElement("div");
+    let base_url = document.querySelector('script[base_url]')?.getAttribute('base_url');
     chatbotContainer.id = "chatbot-container";
     chatbotContainer.style.position = "fixed";
     chatbotContainer.style.bottom = "73px";
@@ -24,7 +22,7 @@
           padding: 12px; text-align: center; font-weight: bold;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     display: flex; align-items: center; justify-content: center;">
-    <img src="/static/backend/image/ai_logo.png" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+    <img src="${base_url}/static/backend/image/ai_logo.png" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
             Chatbot
         </div>
         <div id="chat-messages" style="height: 386px; overflow-y: auto; padding: 10px;">
@@ -37,7 +35,6 @@
         </div>
     `;
     document.body.appendChild(chatbotContainer);
-
     // Create the launcher icon
     var launcherIcon = document.createElement("div");
     launcherIcon.id = "launcher-icon";
@@ -55,19 +52,24 @@
     launcherIcon.style.boxShadow = "0px 4px 6px rgba(0, 0, 0, 0.1)";
     launcherIcon.innerHTML = `<span style="color: white; font-size: 24px;">💬</span>`;  // You can replace this with an image
     document.body.appendChild(launcherIcon);
-
     // Function to send a message to the API
     function sendMessageToAPI(message) {
         // Get chatbot ID and base URL from script attributes
-        let chatbotId = document.querySelector('script[chatbot-id]')?.getAttribute('chatbot-id');
-        let base_url = document.querySelector('script[base_url]')?.getAttribute('base_url');
-    
+        let scriptTag = document.querySelector('script[chatbot-id]');
+        if (!scriptTag) {
+            console.error("Chatbot script not found.");
+            displayMessage("Configuration error: Chatbot script not found.", "bot");
+            return;
+        }
+        let chatbotId = scriptTag.getAttribute('chatbot-id');
+        let base_url = scriptTag.getAttribute('base_url');
+        console.log("Chatbot ID:", chatbotId);
+        console.log("Base URL:", base_url);
         if (!chatbotId || !base_url) {
             console.error("Missing chatbot ID or base URL.");
             displayMessage("Configuration error: Missing chatbot ID or base URL.", "bot");
             return;
         }
-    
         // Construct the API URL
         const apiUrl = `${base_url}/api/v2/chatbot/query/?chat_id=${chatbotId}`;
         console.log("API URL:", apiUrl);
@@ -146,7 +148,8 @@
         if (chatbotContainer.style.display === "none") {
             chatbotContainer.style.display = "block";  
         } else {
-            chatbotContainer.style.display = "none"; 
+            chatbotContainer.stconsole.log(document.querySelectorAll('script')); // See if your script is in the list
+            yle.display = "none"; 
         }
     });
 

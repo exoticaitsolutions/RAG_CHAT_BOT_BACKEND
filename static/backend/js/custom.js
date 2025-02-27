@@ -8,9 +8,9 @@ jQuery(document).ready(function(){
 
     if (messages.length > 0) {
         let messageText = messages.map(m => m.text).join("\n");
-
         Swal.fire({
             title: "📢 Notifications",
+            
             text: messageText,
             icon: messages.some(m => m.type === 'error') ? 'error' :
                 messages.some(m => m.type === 'success') ? 'success' :
@@ -20,7 +20,6 @@ jQuery(document).ready(function(){
             console.log("Notification displayed.");
         });
     }
-
     // Toggle sidebar
     var $sidebar = $('nav');
     jQuery('.toggle').on('click', function () {

@@ -11,6 +11,13 @@ from RAG_CHATBOT_BACKEND_APIS.utils import copy_directory_contents, create_direc
 logger = logging.getLogger(__name__)
 
 class ChatBotService:
+
+    @staticmethod
+    def int_code_generate(c_id: str, base_url: str):
+        return {
+            "chatbot_code" :f'<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script><script src="{base_url}static/chat-widget/chat-loader.js" chatbot-id="{c_id}" base_url="{base_url}" type="application/javascript"></script>',
+            "chatbot_share_link": f'{base_url}share-public/{c_id}'
+        }
     @staticmethod
     def ChatbotDetails(c_id: int, user_id: int):
         """

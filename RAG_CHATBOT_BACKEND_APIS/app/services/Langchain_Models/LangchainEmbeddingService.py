@@ -1,5 +1,6 @@
 import os
 
+from langchain_core.runnables import chain
 import openai
 from uuid import uuid4
 from django.conf import settings
@@ -55,7 +56,7 @@ class LangchainEmbeddingService:
                 retriever = vectordb.as_retriever(search_kwargs={"k": 5})  # Ensure valid k
                 qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)
                 # Generate Answer
-                response = qa_chain.run(query_text)
+                response = chain.invoke(query_text)
                 return {"query": query_text, "response": response}
             except Exception as e:
                 print(f"[ERROR] Error querying ChromaDB or LLM: {str(e)}")
