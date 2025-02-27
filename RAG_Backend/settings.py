@@ -35,7 +35,7 @@ DEBUG = int(os.environ.get("DEBUG", default=1))
 
 env_allowed_hosts = os.environ.get("DJANGO_ALLOWED_HOSTS")
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-ALLOWED_HOSTS = ['https://3.96.160.107/', '0.0.0.0']
+ALLOWED_HOSTS = ['3.96.160.107', '0.0.0.0']
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
