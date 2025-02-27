@@ -39,12 +39,15 @@ COPY . /app
 
 
 # Download ChromeDriver and unzip it to a folder within the app
-RUN wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip -P /tmp \
-    && unzip /tmp/chromedriver_linux64.zip -d /app/chromedriver/ \
-    && rm /tmp/chromedriver_linux64.zip
+RUN wget https://storage.googleapis.com/chrome-for-testing-public/133.0.6943.141/linux64/chromedriver-linux64.zip -P /tmp \
+    && unzip /tmp/chromedriver-linux64.zip -d /app/chromedriver/ \
+    && mv /app/chromedriver/chromedriver-linux64/chromedriver /app/chromedriver/chromedriver \
+    && chmod +x /app/chromedriver/chromedriver \
+    && rm -rf /tmp/chromedriver-linux64.zip /app/chromedriver/chromedriver-linux64
 
 # Add chromedriver to PATH
 ENV PATH="/app/chromedriver:${PATH}"
+
 # Install Python dependencies including Django and watchdog
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r /app/requirements.txt \

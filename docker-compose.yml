@@ -2,8 +2,9 @@
 
 services:
   rag_app_portal:
+  
     container_name: django-web
-    image: rohitashaery/rag_chat_bot_backend:latest
+    image: rohitashaery/ragchatbot:latest
     command: >
       sh -c "python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
