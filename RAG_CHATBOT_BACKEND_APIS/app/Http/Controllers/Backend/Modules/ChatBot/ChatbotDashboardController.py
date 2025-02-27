@@ -8,10 +8,11 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse
 
-from RAG_CHATBOT_BACKEND_APIS.app.http.Controllers.Backend.Auth.AuthController import AuthServices
+from RAG_CHATBOT_BACKEND_APIS.app.Http.Controllers.Backend.Auth.AuthController import AuthServices
 from RAG_CHATBOT_BACKEND_APIS.app.services.Modules.Chatbot.ChatBotService import ChatBotService
 from RAG_CHATBOT_BACKEND_APIS.app.services.Modules.Chatbot.chatbot_content_service import ChatbotContentManagementService
 from RAG_CHATBOT_BACKEND_APIS.models import Chat, ChatBotDB, ChatHistory, ChatbotAppearance, Document, WebsiteDB
+from RAG_CHATBOT_BACKEND_APIS.utils import get_base_url
 # Configure logger
 logger = logging.getLogger(__name__)
 
@@ -28,6 +29,7 @@ class ChatbotDashboardController:
         Retrieves chatbot details, chat history, and associated documents/websites.
         """
         try:
+            base_url = get_base_url(request)
             user_id = request.user.id
             chatbot_instance = ChatBotDB.objects.filter(chatbot_id=chatbot_id).first()
             if not chatbot_instance:
@@ -40,6 +42,9 @@ class ChatbotDashboardController:
             cfg = ChatbotAppearance.objects.filter(chatbot_id=chatbot_id).first()
             documents = Document.objects.filter(chatbot=chatbot_instance, user=user_id)
             websites = WebsiteDB.objects.filter(chatbot=chatbot_instance, user=user_id)
+            icode = ChatBotService.int_code_generate(chatbot_id,base_url) # type: ignore
+            print('zxcxzcxz', icode)
+            # random_string = chatbot_data['chat_bot_id']
 
             context = {
                 "data": {
@@ -49,6 +54,7 @@ class ChatbotDashboardController:
                     "cfg": cfg,
                     "documents_data": {"documents": documents, "doc_count": documents.count()},
                     "websites_data": {"websites": websites, "web_count": websites.count()},
+                    "int_code":icode
                 }
             }
             logger.info("✅ Dashboard data prepared successfully.")

@@ -112,7 +112,7 @@ python manage.py runserver
 Or, to run on a specific port:
 
 ```bash
-python manage.py runserver 8080  # Example: runs on port 8080
+python manage.py runserver 9000  # Example: runs on port 8080
 ```
 
 After successfully completing the setup (automatic or manual), you can start the development server using the command:

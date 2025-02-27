@@ -53,7 +53,8 @@ class AuthServices:
             return False
         
     @staticmethod
-    def RegisterUser(username, email, password):
+    def RegisterUser(username, email, password, base_url):
+        print('base_url', base_url)
         try:
             user_slug = format_name(username)
             logger.debug(f"user_slug = {user_slug}")
@@ -77,7 +78,7 @@ class AuthServices:
             if not copy_directory_contents(original_path, user_profile_dir):
                 return False, "Failed to copy user profile directory."
             # Profile image URL
-            profile_url = f"{settings.BASE_APP_URL}{settings.MEDIA_URL}{user_slug}/user_profile/user_profile_pic.jpg"
+            profile_url = f"{base_url}{settings.MEDIA_URL}{user_slug}/user_profile/user_profile_pic.jpg"
             # Create user
             user = CustomUser.objects.create_user(username=username, email=email, password=password)
             # Assign user directories

@@ -1,7 +1,7 @@
 import logging
 from rest_framework.exceptions import JsonResponse
 from rest_framework.views import APIView
-from RAG_CHATBOT_BACKEND_APIS.app.services.Langchain_Models.RAGQueryService import RAGQueryService
+from RAG_CHATBOT_BACKEND_APIS.app.services.Langchain_Models.LangchainEmbeddingService import LangchainEmbeddingService
 from RAG_CHATBOT_BACKEND_APIS.models import ChatBotDB, CustomUser
 
 
@@ -20,7 +20,7 @@ class ChatbotQueryApiController(APIView):
             return JsonResponse({"status": "failed", "message": "Invalid chat_id"}, status=404)
         user = CustomUser.objects.get(id=chatbot.user.id)  # type: ignore
         try:
-            results = RAGQueryService.GetResponseFromQuery(chatbot,user,query)
+            results = LangchainEmbeddingService.GetResponseFromQuery(chatbot,user,query)
             return JsonResponse({"results": results}, safe=False, status=200)
         except Exception as e:
             logger.error(f"Error processing query: {str(e)}")

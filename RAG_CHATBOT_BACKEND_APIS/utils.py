@@ -12,6 +12,10 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 
+def get_base_url(request):
+    """Returns the base URL dynamically"""
+    return request.build_absolute_uri('/')
+
 def get_random_str():
     random_str = ''.join(random.choices(string.ascii_uppercase + string.digits, k=15))
     return random_str

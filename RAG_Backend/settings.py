@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+load_dotenv()
 from django.conf.urls.static import static
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,35 +27,23 @@ AUTH_USER_MODEL = 'RAG_CHATBOT_BACKEND_APIS.CustomUser'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-4rui8%q0xhb&$s3ju5-yp^j0i5&@i(pyrople(9y^9g723q@5y'
-BASE_APP_URL = os.getenv("BASE_APP_URL", "http://127.0.0.1:8000")  # Default to localhost
+# BASE_APP_URL = os.getenv("BASE_APP_URL", "http://127.0.0.1:8000")  # Default to localhost
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = ['*']
+DEBUG = int(os.environ.get("DEBUG", default=1))
+
+
+env_allowed_hosts = os.environ.get("DJANGO_ALLOWED_HOSTS")
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+ALLOWED_HOSTS = ['3.96.160.107', '0.0.0.0','127.0.0.1']
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'RAG_CHATBOT_BACKEND_APIS/static'),
-]
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",  # Example: Frontend app
-    "https://yourdomain.com",
-]
-CORS_ALLOW_ALL_ORIGINS = True  # Allows all domains to access the API
-CORS_ALLOW_HEADERS = [
-    "content-type",
-    "authorization",
-    "x-requested-with",
-    "accept",
-]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# Application definition
-APPEND_SLASH =False
-MEDIA_URL = f'/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-COPY_ROOT = os.path.join(BASE_DIR, 'Copy_Records/')
-if not os.path.exists(MEDIA_ROOT):
-    os.makedirs(MEDIA_ROOT)
-INSTALLED_APPS: list[str] = [
+CORS_ALLOW_ALL_ORIGINS = True  # Allows all domains to access your API
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS","fetch"]
+
+CORS_ALLOW_HEADERS = ["*"]
+
+INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -69,14 +58,14 @@ INSTALLED_APPS: list[str] = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # Add this at the top
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
 ROOT_URLCONF = 'RAG_Backend.urls'
@@ -93,7 +82,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                  'django.template.context_processors.media',
-                 'RAG_CHATBOT_BACKEND_APIS.app.http.context_processors.chatbot_context'
+                 'RAG_CHATBOT_BACKEND_APIS.app.Http.context_processors.chatbot_context'
             ],
         },
     },
@@ -101,19 +90,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'RAG_Backend.wsgi.application'
 
-load_dotenv()
-DB_TYPE = os.getenv('DB_TYPE')
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
-# 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 # __import__('pysqlite3')
 # import sys
 
 # sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 
+
+
+DB_TYPE = os.getenv('DB_TYPE')
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 if DB_TYPE == 'sqlite3':
     print('Using SQLite3')
     DATABASES = {
@@ -133,21 +120,6 @@ else:
         }
     }
     }
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.hostinger.com"
-EMAIL_PORT = 465
-EMAIL_USE_SSL = True  # Since we use port 465
-EMAIL_USE_TLS = False  # Must be False when using SSL
-EMAIL_HOST_USER = "pythonweb@exoticaitsolutions.com"
-EMAIL_HOST_PASSWORD = "Webpython@123#"  # Ensure this is correct
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
-# EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
-# EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
-# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "pk@12gmail.com")
-# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "Prateek@123")
 
 
 # Password validation
@@ -182,11 +154,30 @@ USE_I18N = True
 USE_TZ = True
 
 
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT =''
+# This should be the directory where collectstatic will store files
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+# These are directories where Django will look for static files
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+
+]
+
+# Application definition
+APPEND_SLASH =False
+MEDIA_URL = f'/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+COPY_ROOT = os.path.join(BASE_DIR, 'Copy_Records/')
+if not os.path.exists(MEDIA_ROOT):
+    os.makedirs(MEDIA_ROOT)
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -228,12 +219,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = True
 APPEND_SLASH = True
 CSRF_TRUSTED_ORIGINS = [
-    "http://127.0.0.1:8000",  # Localhost
-    "http://localhost:8000",
-    "https://yourdomain.com",  # Add your production domain if needed
 ]
-
-
 EMAIL_HOST_USER = "pythonweb@exoticaitsolutions.com"
 DEFAULT_FROM_EMAIL = "pythonweb@exoticaitsolutions.com"
 SERVER_EMAIL = "pythonweb@exoticaitsolutions.com"
@@ -241,3 +227,13 @@ SERVER_EMAIL = "pythonweb@exoticaitsolutions.com"
 SESSION_COOKIE_AGE = 1800  # 30 minutes in seconds
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Logout on browser close
 SESSION_SAVE_EVERY_REQUEST = True  # Reset session timer on activity
+
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.hostinger.com"
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True  # Since we use port 465
+EMAIL_USE_TLS = False  # Must be False when using SSL
+EMAIL_HOST_USER = "pythonweb@exoticaitsolutions.com"
+EMAIL_HOST_PASSWORD = "Webpython@123#"  # Ensure this is correct
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

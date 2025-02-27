@@ -21,7 +21,7 @@ class ChatBotController:
         chatbots = ChatBotService.get_user_chatbots(user.id)
         # Pass destination in context
         context = {"chatbot": chatbots, "data": {"user_chatbots": chatbots}}
-        return render(request, 'admin/page/chatbot/CreateChatBotForm.html', context)
+        return render(request, 'admin/Pages/ChatBot/CreateChatBotForm.html', context)
     
     @method_decorator(login_required(login_url='/login/'))
     @csrf_exempt  # Disable CSRF protection

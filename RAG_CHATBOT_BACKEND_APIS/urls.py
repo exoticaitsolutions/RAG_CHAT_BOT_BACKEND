@@ -1,5 +1,4 @@
 from django.urls import path
-from RAG_Backend import settings
 
 # Import Controllers
 from RAG_CHATBOT_BACKEND_APIS.app.Http.Controllers.Backend.AdminDashboardController import AdminDashboardController
@@ -19,8 +18,10 @@ urlpatterns = []
 admin_auth_urls = [
     path('register/', redirect_if_authenticated(AuthController().auth_register_page), name='register'),
     path('login/', redirect_if_authenticated(AuthController().auth_login_page), name='login'),
+    path('logout/', AuthController().auth_logoutSession, name='logout'),
     path("forget-password/", redirect_if_authenticated(ForgetPasswordController().forget_password_page), name="forget-password"),
     path('reset-password/<uidb64>/<token>/', redirect_if_authenticated(ResetPasswordController().reset_password_page), name='reset_password'),
+
 ]
 
 # Admin Dashboard URLs
@@ -49,11 +50,11 @@ admin_dashboard_urls = [
 public_urls = [
     # Chatbot Frontend
     path("chatbot/", ChatBotFrontendController().intChatbot, name="chatbot.init"),
+     path("share-public/<str:cc_id>", ChatBotFrontendController().Share_Links, name="chatbot.share_links"),
 ]
 
 # Combine all URL patterns
 urlpatterns += admin_auth_urls + admin_dashboard_urls + public_urls 
 
 # Serve media files in development mode
-if settings.DEBUG:
-    urlpatterns += settings.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
