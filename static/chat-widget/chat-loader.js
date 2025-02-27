@@ -57,9 +57,11 @@
     document.body.appendChild(launcherIcon);
 
     // Function to send a message to the API
-    function sendMessageToAPI(message) {
+    function sendMessageToAPI(message,baseUrl) {
         let chatbotId = document.querySelector('script[chatbot-id]').getAttribute('chatbot-id');
-        fetch(`http://127.0.0.1:8000/api/v2/query/?chat_id=${chatbotId}`, {
+        const apiUrl = `${baseUrl}/api/v2/query/?chat_id=${chatbotId}`; // Adjust the API endpoint as needed
+        console.log(apiUrl);
+        fetch(apiUrl, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -68,7 +70,8 @@
         })
         .then(response => response.json())
         .then(data => {
-            displayMessage(data.results[0].text, "bot");  
+            console.log(data);
+            // displayMessage(data.results[0].text, "bot");  
         })
         .catch(error => {
             console.error("Error:", error);
@@ -102,9 +105,18 @@
     document.getElementById("chat-submit").addEventListener("click", function() {
         var chatInput = document.getElementById("chat-input");
         var userMessage = chatInput.value.trim();
+        
         if (userMessage) {
             displayMessage(userMessage, "user");
-            sendMessageToAPI(userMessage);
+    
+            // Get the dynamic base URL
+            const baseUrl = `${window.location.protocol}//${window.location.host}`;
+            console.log("Base URL:", baseUrl);
+    
+            // Pass the base URL to the function if needed
+            sendMessageToAPI(userMessage, baseUrl);
+    
+            // Clear input field after sending message
             chatInput.value = "";
         }
     });

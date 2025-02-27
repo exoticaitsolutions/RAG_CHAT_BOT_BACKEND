@@ -18,7 +18,6 @@ from django.conf.urls.static import static
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-print(BASE_DIR,"BASE_DIR====================================")
 import pymysql
 pymysql.install_as_MySQLdb()
 AUTH_USER_MODEL = 'RAG_CHATBOT_BACKEND_APIS.CustomUser'
@@ -39,18 +38,10 @@ ALLOWED_HOSTS = ['3.96.160.107', '0.0.0.0','127.0.0.1']
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+CORS_ALLOW_ALL_ORIGINS = True  # Allows all domains to access your API
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS","fetch"]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",  # Example: Frontend app
-    "https://yourdomain.com",
-]
-CORS_ALLOW_ALL_ORIGINS = True  # Allows all domains to access the API
-CORS_ALLOW_HEADERS = [
-    "content-type",
-    "authorization",
-    "x-requested-with",
-    "accept",
-]
+CORS_ALLOW_HEADERS = ["*"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -67,14 +58,14 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # Add this at the top
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
 ROOT_URLCONF = 'RAG_Backend.urls'

@@ -1,17 +1,66 @@
 import os
+
 import openai
 from uuid import uuid4
 from django.conf import settings
 from langchain_community.document_loaders import CSVLoader, Docx2txtLoader, PyPDFLoader, TextLoader, UnstructuredExcelLoader
-from langchain_community.embeddings import OpenAIEmbeddings
-from langchain_community.vectorstores import Chroma
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain_openai import  ChatOpenAI  # Updated imports
+from langchain.chains import RetrievalQA
+from langchain_chroma import Chroma
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from RAG_CHATBOT_BACKEND_APIS.app.services.Langchain_Models.SeleniumScraperServices import SeleniumScraperServices
 from RAG_CHATBOT_BACKEND_APIS.models import Document, DocumentCollectionIds, WebsiteCollectionIds, WebsiteDB
-from RAG_CHATBOT_BACKEND_APIS.utils import format_name
+from RAG_CHATBOT_BACKEND_APIS.utils import create_directories, format_name
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+
+
 embed_fun = OpenAIEmbeddings()
 class LangchainEmbeddingService:
+    @staticmethod
+    def GetResponseFromQuery(chatbot, user, query_text):
+        """
+        Queries the ChromaDB to find relevant documents and generates a response using an LLM.
+
+        :param chatbot: Chatbot instance containing config details.
+        :param user: User instance requesting the query.
+        :param query_text: The text query to search for in the vector database.
+        :return: A generated response from the LLM model based on retrieved documents.
+        """
+
+        print("[INFO] Query Text:", query_text)
+
+        # Validate OpenAI API Key
+        if not chatbot.openai_key:
+            print("[ERROR] Missing OpenAI API key.")
+            return {"query": query_text, "response": "OpenAI API key is missing."}
+
+        openai.api_key = chatbot.openai_key
+
+        if chatbot.vector_database == "chroma":
+            try:
+                # Define ChromaDB directory
+                formatted_username = format_name(str(user.username))
+                formatted_chat_name = format_name(str(chatbot.chatbot_name))
+                smedia_file, ChromaDb_Dir = create_directories(str(user.username), str(chatbot.chatbot_name))
+                collection_name = f"{formatted_username}_{formatted_chat_name}"
+                print("[INFO] ChromaDb_Dir Name:", ChromaDb_Dir)
+
+                # Load ChromaDB with OpenAI Embeddings
+                embed_fun = OpenAIEmbeddings(model='text-embedding-3-small')
+                vectordb = Chroma(persist_directory=ChromaDb_Dir, embedding_function=embed_fun, collection_name=collection_name)
+                # Initialize LLM (GPT Model)
+                llm = ChatOpenAI(model_name=chatbot.model, temperature=chatbot.temperature, openai_api_key=chatbot.openai_key) # type: ignore
+                # Create RetrievalQA Chain
+                retriever = vectordb.as_retriever(search_kwargs={"k": 5})  # Ensure valid k
+                qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)
+                # Generate Answer
+                response = qa_chain.run(query_text)
+                return {"query": query_text, "response": response}
+            except Exception as e:
+                print(f"[ERROR] Error querying ChromaDB or LLM: {str(e)}")
+                return {"query": query_text, "response": f"An error occurred while processing your query: {str(e)}"}
+        return {"query": query_text, "response": "Vector database not supported."}
     @staticmethod
     def process_urls_for_training(website_id, chat_data, user_data, ChromaDb_Dir):
         print(f"Processing website with ID {website_id} for user: {user_data.username}, chatbot: {chat_data.chatbot_name}.")
